@@ -11,7 +11,7 @@ from module_utils.pureport_crud import item_crud, deep_compare
 def retrieve_connection(module, client, connection):
     """
     Retrieve the Connection from the Ansible inferred Connection
-    :param AnsibleModule module: the Ansible module
+    :param ansible.module_utils.basic.AnsibleModule module: the Ansible module
     :param pureport.api.client.Client client: the Pureport client
     :param Connection connection: the Ansible inferred Connection
     :rtype: Connection|None
@@ -29,7 +29,7 @@ def retrieve_connection(module, client, connection):
 def create_connection(module, client, connection):
     """
     Create a new connection
-    :param AnsibleModule module: the Ansible module
+    :param ansible.module_utils.basic.AnsibleModule module: the Ansible module
     :param pureport.api.client.Client client: the Pureport client
     :param Connection connection: the Ansible inferred Connection
     :rtype: Connection
@@ -44,7 +44,7 @@ def create_connection(module, client, connection):
 def update_connection(module, client, connection, existing_connection):
     """
     Update a Connection
-    :param AnsibleModule module: the Ansible module
+    :param ansible.module_utils.basic.AnsibleModule module: the Ansible module
     :param pureport.api.client.Client client: the Pureport client
     :param Connection connection: the Ansible inferred Connection
     :param Connection existing_connection: the Connection obtained from the server
@@ -61,11 +61,11 @@ def update_connection(module, client, connection, existing_connection):
 def delete_connection(module, client, connection, existing_connection):
     """
     Delete a connection
-    :param AnsibleModule module: the Ansible module
+    :param ansible.module_utils.basic.AnsibleModule module: the Ansible module
     :param pureport.api.client.Client client: the Pureport client
     :param Connection connection: the Ansible inferred Connection
     :param Connection existing_connection: the Connection obtained from the server
-    :rtype: Network
+    :rtype: Connection
     """
     # Copy over href, the client needs it to properly execute the call
     connection['href'] = existing_connection['href']
@@ -80,7 +80,7 @@ def connection_crud(module,
                     compare_item_fn=deep_compare):
     """
     Handle a basic connection's Ansible CRUD operations
-    :param AnsibleModule module: the Ansible module
+    :param ansible.module_utils.basic.AnsibleModule module: the Ansible module
     :param () -> T construct_item_fn:
         A function that creates the item from the Ansible module params
     :param (T, T) -> boolean compare_item_fn:

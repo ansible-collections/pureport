@@ -22,7 +22,7 @@ def get_client_argument_spec():
 def get_client(module):
     """
     Get a Pureport Client instance
-    :param AnsibleModule module: the Ansible module
+    :param ansible.module_utils.basic.AnsibleModule module: the Ansible module
     :rtype: Client
     """
     if not HAS_PUREPORT_CLIENT:
@@ -59,7 +59,7 @@ def get_account_mutually_exclusive():
 def get_account(module, client):
     """
     Get the account from the passed in module
-    :param AnsibleModule module: the Ansible module
+    :param ansible.module_utils.basic.AnsibleModule module: the Ansible module
     :param Client client: the Pureport client
     :rtype: Account
     """
@@ -100,7 +100,7 @@ def get_network_mutually_exclusive():
 def get_network(module, client):
     """
     Get the account from the passed in module
-    :param AnsibleModule module: the Ansible module
+    :param ansible.module_utils.basic.AnsibleModule module: the Ansible module
     :param Client client: the Pureport client
     :rtype: Network
     """

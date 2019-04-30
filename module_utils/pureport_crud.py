@@ -27,7 +27,7 @@ def item_crud(module,
     """
     Handle a basic item's Ansible CRUD operations with state
     and changed functionality
-    :param AnsibleModule module: the Ansible module
+    :param ansible.module_utils.basic.AnsibleModule module: the Ansible module
     :param () -> T construct_item_fn:
         A function that creates the item from the Ansible module params
     :param (T) -> T|None retrieve_existing_item_fn:
@@ -48,12 +48,15 @@ def item_crud(module,
     # Retrieve the existing item if applicable
     existing_item = retrieve_existing_item_fn(item)
 
-    # Perform a simple comparison of the passed in network and existing network
+    # Perform a simple comparison of the passed in item and existing item
     items_differ = compare_item_fn(item, existing_item)
 
     state = module.params['state']
     changed = (state == 'present' and items_differ) or \
-              (state == 'absent' and existing_item is None)
+              (state == 'absent' and existing_item is not None)
+
+    if module.check_mode:
+        module.exit_json(changed=changed)
 
     updated_item = item
     if state == 'present':
@@ -63,7 +66,7 @@ def item_crud(module,
         # Update item
         elif items_differ:
             updated_item = update_item_fn(item, existing_item)
-    # Delete Network
+    # Delete item
     elif state == 'absent' and existing_item is not None:
         delete_item_fn(item, existing_item)
         updated_item = existing_item
