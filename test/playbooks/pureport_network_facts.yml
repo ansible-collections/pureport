@@ -1,0 +1,43 @@
+---
+- hosts: all
+  tasks:
+    - name: Test works with an account
+      pureport_network_facts:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+        account: "{{ account }}"
+      register: result
+    - debug: var=result
+
+    - name: Test works with an account id
+      pureport_network_facts:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+        account_id: "{{ account_id }}"
+      register: result
+    - debug: var=result
+
+    - name: Test that my module fails when passing both account & account_id
+      pureport_network_facts:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+        account: "{{ account }}"
+        account_id: "{{ account_id }}"
+      register: result
+      ignore_errors: yes
+    - debug: var=result
+
+    - name: Test that a filter works for the networks
+      pureport_network_facts:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+        account: "{{ account }}"
+      register: result
+    - name: Display all network ids
+      debug:
+        var: item
+      loop: "{{ result.networks | json_query('[*].id') }}"

@@ -2,7 +2,7 @@
 - hosts: all
   tasks:
     - name: Test works with an account
-      connection_facts:
+      pureport_connection_facts:
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
@@ -11,7 +11,7 @@
     - debug: var=result
 
     - name: Test works with an account id
-      connection_facts:
+      pureport_connection_facts:
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
@@ -20,7 +20,7 @@
     - debug: var=result
 
     - name: Test that my module fails when passing both account & account_id
-      connection_facts:
+      pureport_connection_facts:
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
@@ -31,7 +31,7 @@
     - debug: var=result
 
     - name: Test works with an network
-      connection_facts:
+      pureport_connection_facts:
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
@@ -40,7 +40,7 @@
     - debug: var=result
 
     - name: Test works with an network id
-      connection_facts:
+      pureport_connection_facts:
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
@@ -49,7 +49,7 @@
     - debug: var=result
 
     - name: Test that my module fails when passing both network & network_id
-      connection_facts:
+      pureport_connection_facts:
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
@@ -60,7 +60,7 @@
     - debug: var=result
 
     - name: Test that my module fails when passing both account & network_id
-      connection_facts:
+      pureport_connection_facts:
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
@@ -71,7 +71,7 @@
     - debug: var=result
 
     - name: Test that my module fails when passing none of account, account_id, network, network_id
-      connection_facts:
+      pureport_connection_facts:
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
@@ -80,7 +80,7 @@
     - debug: var=result
 
     - name: Test that a filter works for the connections
-      connection_facts:
+      pureport_connection_facts:
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"

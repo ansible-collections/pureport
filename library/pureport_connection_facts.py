@@ -8,7 +8,7 @@ ANSIBLE_METADATA = {
 
 DOCUMENTATION = '''
 ---
-module: connection_facts
+module: pureport_connection_facts
 
 short_description: Retrieve a list of Connections
 
@@ -22,30 +22,37 @@ options:
         description:
             - The host url for the Pureport API
         required: false
+        type: str
     api_key:
         description:
             - This is the pre-configured API Key for a Pureport Account
         required: true
+        type: str
     api_secret:
         description:
             - This is the pre-configured API Secret for a Pureport Account
         required: true
+        type: str
     account:
         description:
             - The account to retrieve connections for
         required: false
+        type: dict
     account_id:
         description:
             - The account id to retrieve connections for
         required: false
+        type: str
     network:
         description:
             - The network to retrieve connections for
         required: false
+        type: dict
     network_id:
         description:
             - The network id to retrieve connections for
         required: false
+        type: str
 
 extends_documentation_fragment:
     - pureport
@@ -56,13 +63,13 @@ author:
 
 EXAMPLES = '''
 - name: List connections for an account
-  connection_facts:
+  pureport_connection_facts:
     api_key: abc
     api_secret: xyz
     account_id: 123
 
 - name: List connection for a network
-  connection_facts:
+  pureport_connection_facts:
     api_key: abc
     api_secret: xyz
     network_id: 123
@@ -70,7 +77,7 @@ EXAMPLES = '''
 ### List connections for a network and display their names using json query filter
 ### https://docs.ansible.com/ansible/latest/user_guide/playbooks_filters.html#json-query-filter
 - name: List connections for a network
-  connection_facts:
+  pureport_connection_facts:
     api_key: abc
     api_secret: xyz
     network_id: 123
