@@ -1,0 +1,92 @@
+---
+- hosts: all
+  tasks:
+    - name: Test works with an account
+      connection_facts:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+        account: "{{ account }}"
+      register: result
+    - debug: var=result
+
+    - name: Test works with an account id
+      connection_facts:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+        account_id: "{{ account_id }}"
+      register: result
+    - debug: var=result
+
+    - name: Test that my module fails when passing both account & account_id
+      connection_facts:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+        account: "{{ account }}"
+        account_id: "{{ account_id }}"
+      register: result
+      ignore_errors: yes
+    - debug: var=result
+
+    - name: Test works with an network
+      connection_facts:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+        network: "{{ network }}"
+      register: result
+    - debug: var=result
+
+    - name: Test works with an network id
+      connection_facts:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+        network_id: "{{ network_id }}"
+      register: result
+    - debug: var=result
+
+    - name: Test that my module fails when passing both network & network_id
+      connection_facts:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+        network: "{{ network }}"
+        network_id: "{{ network_id }}"
+      register: result
+      ignore_errors: yes
+    - debug: var=result
+
+    - name: Test that my module fails when passing both account & network_id
+      connection_facts:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+        account: "{{ account }}"
+        network_id: "{{ network_id }}"
+      register: result
+      ignore_errors: yes
+    - debug: var=result
+
+    - name: Test that my module fails when passing none of account, account_id, network, network_id
+      connection_facts:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+      register: result
+      ignore_errors: yes
+    - debug: var=result
+
+    - name: Test that a filter works for the connections
+      connection_facts:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+        account: "{{ account }}"
+      register: result
+    - name: Display all connection ids
+      debug:
+        var: item
+      loop: "{{ result.connections | json_query('[*].id') }}"

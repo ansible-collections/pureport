@@ -1,0 +1,4 @@
+include *.md
+include *requirements.txt
+include meta/main.yml
+recursive-include docs *.md

@@ -1,0 +1,10 @@
+*~
+*.swp
+*.iml
+*.egg-info/
+.tox/
+ansible.cfg
+inventory.ini
+build/
+dist/
+__pycache__

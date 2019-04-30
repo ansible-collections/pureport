@@ -1,0 +1,10 @@
+---
+galaxy_info:
+  author: Matt Traynham
+  description: Ansible modules to support interaction with the Pureport ReST API
+  company: Pureport
+  license: GPLv3
+  min_ansible_version: 2.4
+  galaxy_tags:
+    - networking
+dependencies: []
