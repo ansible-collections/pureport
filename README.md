@@ -37,13 +37,23 @@ module_utils = roles.galaxy/pureport-ansible-modules/module_utils
 ```
 
 ## Module Documentation
+**NOTE**: This will only work with Ansible 2.8 (via this [PR](https://github.com/ansible/ansible/pull/50172)) which opens up
+the `ANSIBLE_DOC_FRAGMENT_PLUGINS` environment variable for shared documentation in modules.
+
+**NOTE**: Second note, getting an exception with Ansible 2.8 for some reason...  Removing the `extends_documentation_fragment`
+on the module works, but kind of weird this doesn't work as I expected..
+```bash
+nsible-doc pureport_network_facts
+ERROR! module pureport_network_facts has a documentation error formatting or is missing documentation.
+```
+
 Because the modules for this are external to Ansible and some of the documentation is shared via 
 [doc_fragments](https://docs.ansible.com/ansible/2.8/dev_guide/developing_modules_documenting.html#documentation-fragments), for 
 documentation to work with the `ansible-doc`, simply do the following:
 ```bash
 PROJECT_DIRECTORY="YOUR PROJECT DIRECTORY HERE"
 PUREPORT_ANSIBLE_MODULES_DIR=${PROJECT_DIRECTORY}/roles.galaxy/pureport-ansible-modules
-export ANSIBLE_MODULE_UTILS=${PUREPORT_ANSIBLE_MODULES_DIR}/module_utils
+export ANSIBLE_DOC_FRAGMENT_PLUGINS=${PUREPORT_ANSIBLE_MODULES_DIR}/plugins/doc_fragments
 ```
 
 You can then 
