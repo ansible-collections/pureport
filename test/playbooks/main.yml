@@ -1,2 +1,4 @@
 ---
 - import_playbook: pureport_connection_facts.yml
+- import_playbook: pureport_network_facts.yml
+- import_playbook: pureport_network.yml

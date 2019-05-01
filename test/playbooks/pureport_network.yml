@@ -1,0 +1,70 @@
+---
+- hosts: localhost
+  tasks:
+    - name: Test create network (without id)
+      pureport_network:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+        account_id: "{{ account_id }}"
+        name: Create
+      register: result
+    - debug: var=result
+
+    - name: Test update network (no changes)
+      pureport_network:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+        account_id: "{{ account_id }}"
+        id: "{{ result.network.id }}"
+        name: "{{ result.network.name }}"
+      register: result
+    - debug: var=result
+
+    - name: Test update network
+      pureport_network:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+        account_id: "{{ account_id }}"
+        id: "{{ result.network.id }}"
+        name: "{{ result.network.name }}"
+        description: Update
+      register: result
+    - debug: var=result
+
+    - name: Test update network (remove property)
+      pureport_network:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+        account_id: "{{ account_id }}"
+        id: "{{ result.network.id }}"
+        name: "{{ result.network.name }}"
+      register: result
+    - debug: var=result
+
+    - name: Test update network (bad name)
+      pureport_network:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+        account_id: "{{ account_id }}"
+        id: "{{ result.network.id }}"
+        name: "12341234123412341234123412341234123412341234123412341234123412341234123412341234123412341234123412341234123412341234123412341234"
+      register: bad_result
+      ignore_errors: yes
+    - debug: var=result
+
+    - name: Test delete network
+      pureport_network:
+        state: absent
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+        account_id: "{{ account_id }}"
+        id: "{{ result.network.id }}"
+        name: "{{ result.network.name }}"
+      register: result
+    - debug: var=result

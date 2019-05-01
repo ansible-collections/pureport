@@ -17,35 +17,9 @@ version_added: "2.7"
 description:
     - "Retrieve a list of Networks"
 
-options:
-    api_base_url:
-        description:
-            - The host url for the Pureport API
-        required: false
-        type: str
-    api_key:
-        description:
-            - This is the pre-configured API Key for a Pureport Account
-        required: true
-        type: str
-    api_secret:
-        description:
-            - This is the pre-configured API Secret for a Pureport Account
-        required: true
-        type: str
-    account:
-        description:
-            - The account to retrieve connections for
-        required: false
-        type: dict
-    account_id:
-        description:
-            - The account id to retrieve connections for
-        required: false
-        type: str
-
 extends_documentation_fragment:
-    - pureport
+    - pureport_client
+    - pureport_account
 
 author:
     - Matt Traynham (@mtraynham)
@@ -86,7 +60,7 @@ try:
     from pureport.exception.api import ClientHttpException
 except ImportError:
     pass
-from module_utils.pureport import \
+from ansible.module_utils.pureport.pureport import \
     get_client_argument_spec, \
     get_client, \
     get_account_argument_spec, \

@@ -18,31 +18,6 @@ description:
     - "Create, update or delete a Network"
 
 options:
-    api_base_url:
-        description:
-            - The host url for the Pureport API
-        required: false
-        type: str
-    api_key:
-        description:
-            - This is the pre-configured API Key for a Pureport Account
-        required: true
-        type: str
-    api_secret:
-        description:
-            - This is the pre-configured API Secret for a Pureport Account
-        required: true
-        type: str
-    account:
-        description:
-            - The account for newly created networks
-        required: false
-        type: dict
-    account_id:
-        description:
-            - The account id for newly created networks
-        required: false
-        type: str
     id:
         description:
             - The id of the network (required if updating/deleting)
@@ -60,7 +35,9 @@ options:
         type: str
 
 extends_documentation_fragment:
-    - pureport
+    - pureport_client
+    - pureport_account
+    - pureport_state
 
 author:
     - Matt Traynham (@mtraynham)
@@ -83,13 +60,15 @@ try:
     from pureport.exception.api import ClientHttpException, NotFoundException
 except ImportError:
     pass
-from module_utils.pureport import \
+from ansible.module_utils.pureport.pureport import \
     get_client_argument_spec, \
     get_client, \
     get_account_argument_spec, \
     get_account_mutually_exclusive, \
     get_account
-from module_utils.pureport_crud import item_crud
+from ansible.module_utils.pureport.pureport_crud import \
+    get_state_argument_spec, \
+    item_crud
 
 
 def construct_network(module):
@@ -173,10 +152,11 @@ def main():
     argument_spec = dict()
     argument_spec.update(get_client_argument_spec())
     argument_spec.update(get_account_argument_spec())
+    argument_spec.update(get_state_argument_spec())
     argument_spec.update(
         dict(
             id=dict(type="str"),
-            name=dict(type="str"),
+            name=dict(type="str", required=True),
             description=dict(type="str")
         )
     )
@@ -189,7 +169,12 @@ def main():
     )
     client = get_client(module)
     # Using partials to fill in the method params
-    (changed, changed_network, network, existing_network) = item_crud(
+    (
+        changed,
+        changed_network,
+        argument_network,
+        existing_network
+    ) = item_crud(
         module,
         partial(construct_network, module),
         partial(retrieve_network, module, client),
@@ -197,7 +182,12 @@ def main():
         partial(update_network, module, client),
         partial(delete_network, module, client)
     )
-    module.exit_json(changed=changed, network=changed_network)
+    module.exit_json(
+        changed=changed,
+        network=changed_network,
+        argument_network=argument_network,
+        existing_network=existing_network
+    )
 
 
 if __name__ == '__main__':
