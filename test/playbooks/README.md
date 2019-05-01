@@ -3,8 +3,9 @@
 ## Setup
 Export the library/module_utils to your Ansible environment, so Ansible can find them.
 ```bash
-export ANSIBLE_LIBRARY=$HOME/pureport-ansible-modules/library
-export ANSIBLE_MODULE_UTILS=$HOME/pureport-ansible-modules/module_util
+PUREPORT_ANSIBLE_MODULES_DIR="YOUR PROJECT DIRECTORY HERE"
+export ANSIBLE_LIBRARY=${PUREPORT_ANSIBLE_MODULES_DIR}/modules
+export ANSIBLE_MODULE_UTILS=${PUREPORT_ANSIBLE_MODULES_DIR}/module_utils
 ```
 
 ## Add a `group-vars/all.yml` using the following template:

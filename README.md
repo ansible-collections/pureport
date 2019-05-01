@@ -1,18 +1,144 @@
-Structure of project similar to
-https://github.com/Apstra/aos-ansible/tree/migrate-rest-api
+## Description
+This is a collection of Ansible [library modules](https://docs.ansible.com/ansible/2.8/user_guide/modules_intro.html) which can
+interact with the [Pureport](https://www.pureport.com/) ReST API.
 
-https://docs.ansible.com/ansible/latest/dev_guide/developing_locally.html#developing-locally
-https://docs.ansible.com/ansible/latest/dev_guide/developing_modules_checklist.html
-https://docs.ansible.com/ansible/devel/dev_guide/developing_module_utilities.html
+It provides the following modules you can use in your own roles:
+- pureport_network_facts - used to list a set of networks
+- pureport_network - used to create/update/delete a network
+- pureport_connection_facts - used to list a set of connections
+- pureport_aws_direct_connect_connection - used to create/update/delete a Pureport AWS connection
 
-> However, contributing to the main project isn't the only way to distribute a module - 
-you can embed modules in roles on Galaxy or simply share copies of your module code for local use.
+## Installation
+This "role" is distributed via [ansible-galaxy](https://galaxy.ansible.com/) (bundled with Ansible).
 
+```bash
+ansible-galaxy install pureport-ansible-modules
+```
 
-https://docs.ansible.com/ansible/latest/dev_guide/developing_locally.html#adding-a-module-locally
-https://docs.ansible.com/ansible/latest/reference_appendices/config.html?highlight=module_utils#envvar-ANSIBLE_MODULE_UTILS
-> any directory added to the `ANSIBLE_LIBRARY` environment variable (`$ANSIBLE_LIBRARY` takes a colon-separated list like `$PATH`)
-> any directory added to the `ANSIBLE_MODULE_UTILS` environment variable (`$ANSIBLE_MODULE_UTILS` takes a colon-separated list like `$PATH`)
+Because this is not a collection of "roles" and is instead intended to be used within your own roles, you'll need to tell
+Ansible where to find these modules and their utilities.
 
-Relevant links:
-https://stackoverflow.com/questions/44786473/how-to-get-ansible-module-utils-to-resolve-my-custom-directory/44790883#44790883
+This can be done via Environment variables ([1](https://docs.ansible.com/ansible/2.8/dev_guide/developing_locally.html#adding-a-module-locally),
+[1.1](https://docs.ansible.com/ansible/2.8/reference_appendices/config.html#envvar-ANSIBLE_LIBRARY),
+[2](https://docs.ansible.com/ansible/2.8/reference_appendices/config.html?highlight=module_utils#envvar-ANSIBLE_MODULE_UTILS)):
+
+```bash
+PROJECT_DIRECTORY="YOUR PROJECT DIRECTORY HERE"
+PUREPORT_ANSIBLE_MODULES_DIR=${PROJECT_DIRECTORY}/roles.galaxy/pureport-ansible-modules
+export ANSIBLE_LIBRARY=${PUREPORT_ANSIBLE_MODULES_DIR}/modules
+export ANSIBLE_MODULE_UTILS=${PUREPORT_ANSIBLE_MODULES_DIR}/module_utils
+```
+
+It can also be done via `ansible.cfg` file ([1](https://docs.ansible.com/ansible/2.8/reference_appendices/config.html#default-module-path),
+[2](https://docs.ansible.com/ansible/2.8/reference_appendices/config.html#default-module-utils-path)):
+```ini
+library = roles.galaxy/pureport-ansible-modules/modules
+module_utils = roles.galaxy/pureport-ansible-modules/module_utils
+```
+
+## Module Documentation
+Because the modules for this are external to Ansible and some of the documentation is shared via 
+[doc_fragments](https://docs.ansible.com/ansible/2.8/dev_guide/developing_modules_documenting.html#documentation-fragments), for 
+documentation to work with the `ansible-doc`, simply do the following:
+```bash
+PROJECT_DIRECTORY="YOUR PROJECT DIRECTORY HERE"
+PUREPORT_ANSIBLE_MODULES_DIR=${PROJECT_DIRECTORY}/roles.galaxy/pureport-ansible-modules
+export ANSIBLE_MODULE_UTILS=${PUREPORT_ANSIBLE_MODULES_DIR}/module_utils
+```
+
+You can then 
+```bash
+ansible-docs pureport_network_facts
+ansible-docs pureport_network
+ansible-docs pureport_connection_facts
+ansible-docs pureport_aws_direct_connect_connection
+```
+
+## Development
+This project uses:
+- [tox](https://tox.readthedocs.io/en/latest/) - A generic virtualenv management and test command line tool
+- [pytest](https://docs.pytest.org/en/latest/) - A Python testing framework
+- [flake8](http://flake8.pycqa.org/en/latest/) - A Python lint tool
+- [yamllint](https://yamllint.readthedocs.io/en/stable/) - A YAML lint tool
+
+To build from scratch, first install `tox`.
+
+```bash
+pip install tox
+```
+
+Then run tox from the root directory.
+
+```bash
+tox
+```
+
+### Writing a Module
+We should follow these guidelines for writing/maintaining Modules:
+- Follow the documentation on [writing your own module](https://docs.ansible.com/ansible/2.8/dev_guide/developing_locally.html).
+- Follow the documentation on the [module checklist](https://docs.ansible.com/ansible/latest/dev_guide/developing_modules_checklist.html).
+- Write good documentation for the module [using this as a guide](https://docs.ansible.com/ansible/2.8/dev_guide/developing_modules_documenting.html).
+
+#### Writing a shared Module Utility
+[Module utilities](https://docs.ansible.com/ansible/latest/dev_guide/developing_module_utilities.html) are a great way to share 
+code between modules.  They should be located in the `module_utils/pureport` package.
+
+When importing a `module_util` into a module, use an `ansible` prefixed path to import it.
+
+```python
+# like this
+import ansible.module_utils.pureport.pureport
+
+# or like this
+from ansible.module_utils.pureport.pureport import get_client
+```
+
+#### Writing shared Documentation
+Ansible supports a documentation feature called 
+[`extends_documentation_fragment`](https://docs.ansible.com/ansible/2.8/dev_guide/developing_modules_documenting.html#documentation-fragments), 
+which basically merges the documentation of a module and a fragment or list of fragments.
+
+A documentation fragment should live in the `plugins/doc_fragments` directory.  The documentation fragment module should be a file 
+with a single class called `ModuleDocFragment` and it should contain a variable called `DOCUMENTATION`.
+
+For example:
+
+*plugins/doc_fragments/pureport_my_parameter.py*
+```python
+class ModuleDocFragment(object):
+    DOCUMENTATION = r'''
+options:
+    my_parameter:
+        description:
+            - A simple shared parameter
+        required: false
+        type: bool
+    '''
+```
+
+You can then use the documentation fragment in a module, referencing it via module name:
+```python
+DOCUMENTATION = '''
+---
+...
+
+extends_documentation_fragment:
+    - pureport_my_parameter
+'''
+```
+
+### Testing a Module
+There are two ways to test a module, either run a Playbook with it or write a PyTest script.  A Playbook is likely easier, but
+PyTest's allow you to mock and act as unit tests.
+
+#### Writing a Playbook
+The `test/playbooks` directory contains a set of playbook tests which interact with our modules.  Feel free to write your own
+and attach them to the `main.yml` playbook.  There is also a secondary [README.md](test/playbooks/README.md) which discusses
+setup, such as configuring defaults with `group_vars`.
+
+To run those, you will need to perform the directions mentioned in the [Installation](#Installation) section, but
+instead of installing with ansible-galaxy, just point the environment variables to the local paths.
+
+#### Writing a PyTest
+Coming soon!
+
