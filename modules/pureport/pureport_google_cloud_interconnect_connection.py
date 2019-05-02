@@ -20,12 +20,12 @@ description:
 options:
     primary_pairing_key:
         description:
-            - The Google Cloud Interconnect Attachment's primary pairing key. 
+            - The Google Cloud Interconnect Attachment's primary pairing key.
         required: true
         type: str
     secondary_pairing_key:
         description:
-            - The Google Cloud Interconnect Attachment's secondary pairing key (HA). 
+            - The Google Cloud Interconnect Attachment's secondary pairing key (HA).
         required: false
         type: str
 
@@ -61,7 +61,6 @@ from ansible.module_utils.pureport.pureport_connection_crud import \
     get_wait_for_server_argument_spec, \
     get_connection_argument_spec, \
     get_cloud_connection_argument_spec, \
-    get_peering_connection_argument_spec, \
     connection_crud
 
 

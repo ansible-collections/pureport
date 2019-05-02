@@ -3,7 +3,7 @@ class ModuleDocFragment(object):
 options:
     wait_for_server:
         description:
-            - These create/update/delete calls are typically async.  If you wish to wait until the 
+            - These create/update/delete calls are typically async.  If you wish to wait until the
             - server has completed it's task, set this to True.
         required: false
         type: bool

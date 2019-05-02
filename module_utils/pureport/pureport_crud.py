@@ -41,12 +41,12 @@ def deep_compare(item, existing_item):
                 return False
         # Compare the item to the existing item.  There's also a special case here
         # where the item may have been None, but the server returns a empty list or empty dict.
-        return sub_item == sub_existing_item or \
-               sub_item is None and \
-               (
-                   isinstance(sub_existing_item, dict) and len(sub_existing_item.items()) == 0 or
-                   isinstance(sub_existing_item, list) and len(sub_existing_item) == 0
-               )
+        if sub_item == sub_existing_item:
+            return True
+        elif sub_item is None:
+            return (isinstance(sub_existing_item, dict) and len(sub_existing_item.items()) == 0) or \
+                   (isinstance(sub_existing_item, list) and len(sub_existing_item) == 0)
+        return False
 
     return compare(item, existing_item)
 
