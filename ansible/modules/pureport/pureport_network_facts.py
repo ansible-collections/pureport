@@ -12,7 +12,7 @@ module: pureport_network_facts
 
 short_description: Retrieve a list of Networks
 
-version_added: "2.7"
+version_added: "2.8"
 
 description:
     - "Retrieve a list of Networks"

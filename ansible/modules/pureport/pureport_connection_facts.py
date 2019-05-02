@@ -12,7 +12,7 @@ module: pureport_connection_facts
 
 short_description: Retrieve a list of Connections
 
-version_added: "2.7"
+version_added: "2.8"
 
 description:
     - "Retrieve a list of Connections"

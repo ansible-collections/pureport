@@ -12,7 +12,7 @@ module: pureport_network
 
 short_description: Create, update or delete a Network
 
-version_added: "2.7"
+version_added: "2.8"
 
 description:
     - "Create, update or delete a Network"

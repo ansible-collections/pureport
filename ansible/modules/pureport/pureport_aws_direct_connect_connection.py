@@ -12,7 +12,7 @@ module: pureport_aws_direct_connect_connection
 
 short_description: Create, update or delete an AWS Direct Connect connection
 
-version_added: "2.7"
+version_added: "2.8"
 
 description:
     - "Create, update or delete an AWS Direct Connect connection"
@@ -55,9 +55,9 @@ connection:
     type: Connection
 '''
 
-from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.ec2 import snake_dict_to_camel_dict
 from functools import partial
+from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils.common.dict_transformations import snake_dict_to_camel_dict
 
 from ansible.module_utils.pureport.pureport import \
     get_client_argument_spec, \
