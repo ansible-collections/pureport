@@ -88,7 +88,7 @@ We should follow these guidelines for writing/maintaining Modules:
 - Write good documentation for the module [using this as a guide](https://docs.ansible.com/ansible/2.8/dev_guide/developing_modules_documenting.html).
 
 #### Writing a shared Module Utility
-[Module utilities](https://docs.ansible.com/ansible/latest/dev_guide/developing_module_utilities.html) are a great way to share 
+[Module utilities](https://docs.ansible.com/ansible/2.8/dev_guide/developing_module_utilities.html) are a great way to share 
 code between modules.  They should be located in the `module_utils/pureport` package.
 
 When importing a `module_util` into a module, use an `ansible` prefixed path to import it.
