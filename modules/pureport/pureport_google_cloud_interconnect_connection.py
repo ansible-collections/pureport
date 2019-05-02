@@ -8,39 +8,32 @@ ANSIBLE_METADATA = {
 
 DOCUMENTATION = '''
 ---
-module: pureport_aws_direct_connect_connection
+module: pureport_google_cloud_interconnect_connection
 
-short_description: Create, update or delete an AWS Direct Connect connection
+short_description: Create, update or delete a Google Cloud Interconnect connection
 
 version_added: "2.7"
 
 description:
-    - "Create, update or delete an AWS Direct Connect connection"
+    - "Create, update or delete a Google Cloud Interconnect connection"
 
 options:
-    aws_account_id:
+    primary_pairing_key:
         description:
-            - The AWS account Id associated with the connection
+            - The Google Cloud Interconnect Attachment's primary pairing key. 
         required: true
         type: str
-    aws_region:
+    secondary_pairing_key:
         description:
-            - The AWS region associated with the connection
-        required: true
-        type: str
-    cloud_services:
-        description:
-            - A list of cloud services for the connection (Link object)
+            - The Google Cloud Interconnect Attachment's secondary pairing key (HA). 
         required: false
-        type: list
-        default: []
+        type: str
 
 extends_documentation_fragment:
     - pureport_client
     - pureport_network
     - pureport_wait_for_server
     - pureport_connection_args
-    - pureport_peering_connection_args
 
 author:
     - Matt Traynham (@mtraynham)
@@ -86,16 +79,12 @@ def construct_connection(module):
         'high_availability',
         'location',
         'billing_term',
-        'aws_account_id',
-        'aws_region',
-        'cloud_services',
+        'primary_pairing_key',
+        'secondary_pairing_key',
         'customer_networks',
         'nat'
     ))
-    connection.update(dict(
-        type="AWS_DIRECT_CONNECT",
-        peering=dict(type=module.params.get('peering_type'))
-    ))
+    connection.update(dict(type="GOOGLE_CLOUD_INTERCONNECT"))
     connection = snake_dict_to_camel_dict(connection)
     return connection
 
@@ -108,12 +97,10 @@ def main():
     argument_spec.update(get_wait_for_server_argument_spec())
     argument_spec.update(get_connection_argument_spec())
     argument_spec.update(get_cloud_connection_argument_spec())
-    argument_spec.update(get_peering_connection_argument_spec())
     argument_spec.update(
         dict(
-            aws_account_id=dict(type="str", required=True, no_log=True),
-            aws_region=dict(type="str", required=True),
-            cloud_services=dict(type="list", default=[])
+            primary_pairing_key=dict(type="str", required=True, no_log=True),
+            secondary_pairing_key=dict(type="str", no_log=True)
         )
     )
     mutually_exclusive = []

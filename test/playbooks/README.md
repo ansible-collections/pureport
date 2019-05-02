@@ -9,7 +9,7 @@ export ANSIBLE_MODULE_UTILS=${PUREPORT_ANSIBLE_MODULES_DIR}/module_utils
 export ANSIBLE_DOC_FRAGMENT_PLUGINS=${PUREPORT_ANSIBLE_MODULES_DIR}/plugins/doc_fragments
 ```
 
-## Add a `group-vars/all.yml` using the following template:
+## Add a `host-vars/localhost.yml` using the following template:
 ```yaml
 api_base_url: ""
 api_key: ""
@@ -25,6 +25,16 @@ network:
   id: ""
   href: /networks/""
 
+aws_account_id: ""
+location:
+  href: /locations/""
+  id: ""
+  title: ""
+
+cloud_services:
+  - href: /cloudServices/""
+    id: ""
+    title: ""
 ```
 
 ## Run the tests

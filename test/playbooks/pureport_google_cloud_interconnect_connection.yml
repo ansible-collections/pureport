@@ -1,123 +1,28 @@
 ---
 - hosts: localhost
   tasks:
-    - name: Test create Public AWS connection
-      pureport_aws_direct_connect_connection:
+    - name: Test create Non-HA GCI connection
+      pureport_google_cloud_interconnect_connection:
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
         network_id: "{{ network_id }}"
         wait_for_server: true
-        name: "Test AWS Direct Connect"
+        name: "Test Google Cloud Interconnect"
         speed: 50
-        high_availability: true
-        peering_type: PUBLIC
         location: "{{ location }}"
         billing_term: HOURLY
-        aws_account_id: "{{ aws_account_id }}"
-        aws_region: us-west-2
-        cloud_services: "{{ cloud_services }}"
-      register: result
-    - debug: var=result
-    - fail:
-      when: result.changed != true
-
-    - name: Test update Public AWS connection (no changes)
-      pureport_aws_direct_connect_connection:
-        api_base_url: "{{ api_base_url }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret }}"
-        network_id: "{{ network_id }}"
-        wait_for_server: true
-        id: "{{ result.connection.id }}"
-        name: "{{ result.connection.name }}"
-        speed: "{{ result.connection.speed }}"
-        high_availability: "{{ result.connection.highAvailability }}"
-        peering_type: "{{ result.connection.peering.type }}"
-        location: "{{ location }}"
-        billing_term: "{{ result.connection.billingTerm }}"
-        aws_account_id: "{{ aws_account_id }}"
-        aws_region: "{{ result.connection.awsRegion }}"
-        cloud_services: "{{ cloud_services }}"
-      register: result
-    - debug: var=result
-    - fail:
-      when: result.changed == true
-
-    - name: Test update Public AWS connection (changes)
-      pureport_aws_direct_connect_connection:
-        api_base_url: "{{ api_base_url }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret }}"
-        network_id: "{{ network_id }}"
-        wait_for_server: true
-        id: "{{ result.connection.id }}"
-        name: "{{ result.connection.name }}"
-        speed: 100
-        high_availability: "{{ result.connection.highAvailability }}"
-        peering_type: "{{ result.connection.peering.type }}"
-        location: "{{ location }}"
-        billing_term: "{{ result.connection.billingTerm }}"
-        aws_account_id: "{{ aws_account_id }}"
-        aws_region: "{{ result.connection.awsRegion }}"
-        cloud_services: "{{ cloud_services }}"
-      register: result
-    - debug: var=result
-    - fail:
-      when: result.changed != true
-
-    - name: Test delete Public AWS connection
-      pureport_aws_direct_connect_connection:
-        api_base_url: "{{ api_base_url }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret }}"
-        network_id: "{{ network_id }}"
-        state: 'absent'
-        wait_for_server: true
-        id: "{{ result.connection.id }}"
-        name: "{{ result.connection.name }}"
-        speed: "{{ result.connection.speed }}"
-        high_availability: "{{ result.connection.highAvailability }}"
-        peering_type: "{{ result.connection.peering.type }}"
-        location: "{{ location }}"
-        billing_term: "{{ result.connection.billingTerm }}"
-        aws_account_id: "{{ aws_account_id }}"
-        aws_region: "{{ result.connection.awsRegion }}"
-        cloud_services: "{{ cloud_services }}"
-      register: result
-    - debug: var=result
-    - fail:
-      when: result.changed != true
-
-    - name: Test create Private AWS connection
-      pureport_aws_direct_connect_connection:
-        api_base_url: "{{ api_base_url }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret }}"
-        network_id: "{{ network_id }}"
-        wait_for_server: true
-        name: "Test AWS Direct Connect"
-        speed: 50
-        high_availability: true
-        peering_type: PRIVATE
-        location: "{{ location }}"
-        billing_term: HOURLY
+        primary_pairing_key: "{{ gci_primary_pairing_key }}"
         customer_networks:
           - address: 192.167.1.1/32
             name: My Custom Address
-        nat:
-          enabled: true
-          mappings:
-            - native_cidr: 192.167.1.1/32
-        aws_account_id: "{{ aws_account_id }}"
-        aws_region: us-west-2
       register: result
     - debug: var=result
     - fail:
       when: result.changed != true
 
-    - name: Test update Private AWS connection (no changes)
-      pureport_aws_direct_connect_connection:
+    - name: Test update Non-HA GCI connection (no changes)
+      pureport_google_cloud_interconnect_connection:
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
@@ -127,20 +32,17 @@
         name: "{{ result.connection.name }}"
         speed: "{{ result.connection.speed }}"
         high_availability: "{{ result.connection.highAvailability }}"
-        peering_type: "{{ result.connection.peering.type }}"
         location: "{{ location }}"
         billing_term: "{{ result.connection.billingTerm }}"
+        primary_pairing_key: "{{ gci_primary_pairing_key }}"
         customer_networks: "{{ result.connection.customerNetworks }}"
-        nat: "{{ result.connection.nat }}"
-        aws_account_id: "{{ aws_account_id }}"
-        aws_region: "{{ result.connection.awsRegion }}"
       register: result
     - debug: var=result
     - fail:
       when: result.changed == true
 
-    - name: Test update Private AWS connection (changes)
-      pureport_aws_direct_connect_connection:
+    - name: Test update Non-HA GCI connection (changes)
+      pureport_google_cloud_interconnect_connection:
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
@@ -148,22 +50,21 @@
         wait_for_server: true
         id: "{{ result.connection.id }}"
         name: "{{ result.connection.name }}"
-        speed: 100
+        speed: "{{ result.connection.speed }}"
         high_availability: "{{ result.connection.highAvailability }}"
-        peering_type: "{{ result.connection.peering.type }}"
         location: "{{ location }}"
         billing_term: "{{ result.connection.billingTerm }}"
-        customer_networks: "{{ result.connection.customerNetworks }}"
-        nat: "{{ result.connection.nat }}"
-        aws_account_id: "{{ aws_account_id }}"
-        aws_region: "{{ result.connection.awsRegion }}"
+        primary_pairing_key: "{{ gci_primary_pairing_key }}"
+        customer_networks:
+          - address: 192.167.1.2/32
+            name: My Custom Address
       register: result
     - debug: var=result
     - fail:
       when: result.changed != true
 
-    - name: Test delete Private AWS connection
-      pureport_aws_direct_connect_connection:
+    - name: Test delete Non-HA GCI connection
+      pureport_google_cloud_interconnect_connection:
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
@@ -174,13 +75,98 @@
         name: "{{ result.connection.name }}"
         speed: "{{ result.connection.speed }}"
         high_availability: "{{ result.connection.highAvailability }}"
-        peering_type: "{{ result.connection.peering.type }}"
         location: "{{ location }}"
         billing_term: "{{ result.connection.billingTerm }}"
+        primary_pairing_key: "{{ gci_primary_pairing_key }}"
         customer_networks: "{{ result.connection.customerNetworks }}"
-        nat: "{{ result.connection.nat }}"
-        aws_account_id: "{{ aws_account_id }}"
-        aws_region: "{{ result.connection.awsRegion }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test create HA GCI connection
+      pureport_google_cloud_interconnect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+        network_id: "{{ network_id }}"
+        wait_for_server: true
+        name: "Test Google Cloud Interconnect"
+        speed: 50
+        high_availability: true
+        location: "{{ location }}"
+        billing_term: HOURLY
+        primary_pairing_key: "{{ gci_primary_pairing_key }}"
+        secondary_pairing_key: "{{ gci_secondary_pairing_key }}"
+        customer_networks:
+          - address: 192.167.1.1/32
+            name: My Custom Address
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test update Non-HA GCI connection (no changes)
+      pureport_google_cloud_interconnect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+        network_id: "{{ network_id }}"
+        wait_for_server: true
+        id: "{{ result.connection.id }}"
+        name: "{{ result.connection.name }}"
+        speed: "{{ result.connection.speed }}"
+        high_availability: "{{ result.connection.highAvailability }}"
+        location: "{{ location }}"
+        billing_term: "{{ result.connection.billingTerm }}"
+        primary_pairing_key: "{{ gci_primary_pairing_key }}"
+        secondary_pairing_key: "{{ gci_secondary_pairing_key }}"
+        customer_networks: "{{ result.connection.customerNetworks }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed == true
+
+    - name: Test update Non-HA GCI connection (changes)
+      pureport_google_cloud_interconnect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+        network_id: "{{ network_id }}"
+        wait_for_server: true
+        id: "{{ result.connection.id }}"
+        name: "{{ result.connection.name }}"
+        speed: "{{ result.connection.speed }}"
+        high_availability: "{{ result.connection.highAvailability }}"
+        location: "{{ location }}"
+        billing_term: "{{ result.connection.billingTerm }}"
+        primary_pairing_key: "{{ gci_primary_pairing_key }}"
+        secondary_pairing_key: "{{ gci_secondary_pairing_key }}"
+        customer_networks:
+          - address: 192.167.1.2/32
+            name: My Custom Address
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test delete Non-HA GCI connection
+      pureport_google_cloud_interconnect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+        network_id: "{{ network_id }}"
+        state: 'absent'
+        wait_for_server: true
+        id: "{{ result.connection.id }}"
+        name: "{{ result.connection.name }}"
+        speed: "{{ result.connection.speed }}"
+        high_availability: "{{ result.connection.highAvailability }}"
+        location: "{{ location }}"
+        billing_term: "{{ result.connection.billingTerm }}"
+        primary_pairing_key: "{{ gci_primary_pairing_key }}"
+        secondary_pairing_key: "{{ gci_secondary_pairing_key }}"
+        customer_networks: "{{ result.connection.customerNetworks }}"
       register: result
     - debug: var=result
     - fail:

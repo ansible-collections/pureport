@@ -10,6 +10,8 @@
         name: Create
       register: result
     - debug: var=result
+    - fail:
+      when: result.changed != true
 
     - name: Test update network (no changes)
       pureport_network:
@@ -21,6 +23,8 @@
         name: "{{ result.network.name }}"
       register: result
     - debug: var=result
+    - fail:
+      when: result.changed == true
 
     - name: Test update network
       pureport_network:
@@ -33,6 +37,8 @@
         description: Update
       register: result
     - debug: var=result
+    - fail:
+      when: result.changed != true
 
     - name: Test update network (remove property)
       pureport_network:
@@ -44,6 +50,8 @@
         name: "{{ result.network.name }}"
       register: result
     - debug: var=result
+    - fail:
+      when: result.changed != true
 
     - name: Test update network (bad name)
       pureport_network:
@@ -68,3 +76,5 @@
         name: "{{ result.network.name }}"
       register: result
     - debug: var=result
+    - fail:
+      when: result.changed != true

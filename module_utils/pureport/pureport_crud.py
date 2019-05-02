@@ -20,21 +20,33 @@ def deep_compare(item, existing_item):
     :rtype: bool
     """
     def compare(sub_item, sub_existing_item):
+        # Compare dicts
         if isinstance(sub_item, dict) and isinstance(sub_existing_item, dict):
             for k in sub_item:
                 try:
                     if compare(sub_item[k], sub_existing_item[k]) is False:
                         return False
                 except KeyError:
+                    # If the item has a key, but the existing one does not, check
+                    # if the item's value is None
                     if compare(sub_item[k], None) is False:
                         return False
             return True
+        # Compare lists
         if isinstance(sub_item, list) and isinstance(sub_existing_item, list):
             try:
                 return all(compare(sub_item[i], sub_existing_item[i]) for i in range(len(sub_item)))
             except IndexError:
+                # Lists were of different size
                 return False
-        return sub_item == sub_existing_item
+        # Compare the item to the existing item.  There's also a special case here
+        # where the item may have been None, but the server returns a empty list or empty dict.
+        return sub_item == sub_existing_item or \
+               sub_item is None and \
+               (
+                   isinstance(sub_existing_item, dict) and len(sub_existing_item.items()) == 0 or
+                   isinstance(sub_existing_item, list) and len(sub_existing_item) == 0
+               )
 
     return compare(item, existing_item)
 
@@ -45,7 +57,8 @@ def item_crud(module,
               create_item_fn,
               update_item_fn,
               delete_item_fn,
-              compare_item_fn=deep_compare):
+              compare_item_fn=deep_compare,
+              copy_existing_item_properties_fn=lambda item, existing_item: item):
     """
     Handle a basic item's Ansible CRUD operations with state
     and changed functionality
@@ -56,13 +69,16 @@ def item_crud(module,
         A function that retrieves the existing item if applicable, otherwise None
     :param (T) -> T create_item_fn:
         A function that creates the item
-    :param (T, T) -> T update_item_fn:
+    :param (T) -> T update_item_fn:
         A function that updates the existing item
-    :param (T, T) -> T delete_item_fn:
+    :param (T) -> T delete_item_fn:
         A function that updates the existing item
     :param (T, T) -> boolean compare_item_fn:
         A function that compares the Ansible item with the retrieved item.  Should
         return True if the items are the same.
+    :param (T, T) -> T copy_existing_item_properties_fn:
+        A function that copies existing properties from the retrieved item to the
+        new item if the retrieved item exists.
     :rtype: (bool, T, T, T)
     """
     # Construct item object from the parameters
@@ -87,9 +103,9 @@ def item_crud(module,
     if create_item:
         changed_item = create_item_fn(item)
     elif update_item:
-        changed_item = update_item_fn(item, existing_item)
+        changed_item = update_item_fn(copy_existing_item_properties_fn(item, existing_item))
     elif delete_item:
-        delete_item_fn(item, existing_item)
+        delete_item_fn(copy_existing_item_properties_fn(item, existing_item))
         changed_item = existing_item
 
     return changed, changed_item, item, existing_item

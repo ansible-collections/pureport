@@ -34,27 +34,25 @@ def get_connection_argument_spec():
         cloud_services=dict(type="list"),
         customerASN=dict(type="long"),
         customer_networks=dict(type="list", default=[]),
-        nat=dict(type="dict")
+        nat=dict(type="dict", default=dict(enabled=False))
     )
+
+
+def get_cloud_connection_argument_spec():
+    """
+    Return basic params for a cloud connection
+    :rtype: dict[str, dict]
+    """
+    return dict()
 
 
 def get_peering_connection_argument_spec():
     """
-    Return basic params for a connection
+    Return basic params for a peering connection
     :rtype: dict[str, dict]
     """
     return dict(
         peering_type=dict(type="str", choices=['PRIVATE', 'PUBLIC'], default='PRIVATE'),
-        name=dict(type="str", required=True),
-        description=dict(type="str"),
-        speed=dict(type="int", required=True, choices=[50, 100, 200, 300, 400, 500, 1000, 1000]),
-        high_availability=dict(type="bool"),
-        location=dict(type="dict", required=True),
-        billing_term=dict(type="str", required=True, choices=['HOURLY']),
-        cloud_services=dict(type="list"),
-        customerASN=dict(type="long"),
-        customer_networks=dict(type="list", default=[]),
-        nat=dict(type="dict")
     )
 
 
@@ -76,6 +74,23 @@ def __retrieve_connection(module, client, connection):
             module.fail_json(msg=e.response.text, exception=format_exc())
 
 
+def __copy_existing_connection_properties(connection, existing_connection):
+    """
+    Copy properties from the existing connection to the new Ansible defined
+    Connection, notably the network and the href.
+    :param Connection connection:
+    :param Connection existing_connection:
+    :rtype: Connection
+    """
+    copied_connection = dict()
+    copied_connection.update(connection)
+    copied_connection.update(dict(
+        network=existing_connection.get('network'),
+        href=existing_connection.get('href')
+    ))
+    return copied_connection
+
+
 def __create_connection(module, client, wait_for_server, connection):
     """
     Create a new connection
@@ -92,36 +107,30 @@ def __create_connection(module, client, wait_for_server, connection):
         module.fail_json(msg=e.response.text, exception=format_exc())
 
 
-def __update_connection(module, client, wait_for_server, connection, existing_connection):
+def __update_connection(module, client, wait_for_server, connection):
     """
     Update a Connection
     :param ansible.module_utils.basic.AnsibleModule module: the Ansible module
     :param pureport.api.client.Client client: the Pureport client
     :param bool wait_for_server: should the client wait for the server to finish
     :param Connection connection: the Ansible inferred Connection
-    :param Connection existing_connection: the Connection obtained from the server
     :rtype: Connection
     """
-    # Copy over href, the client needs it to properly execute the call
-    connection['href'] = existing_connection['href']
     try:
         return client.connections.update(connection, wait_until_active=wait_for_server)
     except ClientHttpException as e:
         module.fail_json(msg=e.response.text, exception=format_exc())
 
 
-def __delete_connection(module, client, wait_for_server, connection, existing_connection):
+def __delete_connection(module, client, wait_for_server, connection):
     """
     Delete a connection
     :param ansible.module_utils.basic.AnsibleModule module: the Ansible module
     :param pureport.api.client.Client client: the Pureport client
     :param bool wait_for_server: should the client wait for the server to finish
     :param Connection connection: the Ansible inferred Connection
-    :param Connection existing_connection: the Connection obtained from the server
     :rtype: Connection
     """
-    # Copy over href, the client needs it to properly execute the call
-    connection['href'] = existing_connection['href']
     try:
         return client.connections.delete(connection, wait_until_deleted=wait_for_server)
     except ClientHttpException as e:
@@ -149,5 +158,6 @@ def connection_crud(module,
         partial(__create_connection, module, client, wait_for_server),
         partial(__update_connection, module, client, wait_for_server),
         partial(__delete_connection, module, client, wait_for_server),
-        compare_item_fn
+        compare_item_fn=compare_item_fn,
+        copy_existing_item_properties_fn=__copy_existing_connection_properties
     )

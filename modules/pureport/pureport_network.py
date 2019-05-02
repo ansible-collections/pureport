@@ -99,6 +99,22 @@ def retrieve_network(module, client, network):
             module.fail_json(msg=e.response.text, exception=format_exc())
 
 
+def copy_existing_network_properties(network, existing_network):
+    """
+    Copy properties from the existing network to the new Ansible defined
+    Network.
+    :param Network network:
+    :param Network existing_network:
+    :rtype: Network
+    """
+    copied_network = dict()
+    copied_network.update(network)
+    copied_network.update(dict(
+        href=existing_network.get('href')
+    ))
+    return copied_network
+
+
 def create_network(module, client, network):
     """
     Create a new network
@@ -114,34 +130,30 @@ def create_network(module, client, network):
         module.fail_json(msg=e.response.text, exception=format_exc())
 
 
-def update_network(module, client, network, existing_network):
+def update_network(module, client, network):
     """
     Update a network
     :param AnsibleModule module: the Ansible module
     :param pureport.api.client.Client client: the Pureport client
     :param Network network: the Ansible inferred Network
-    :param Network existing_network: the network obtained from the server
     :rtype: Network
     """
     # Copy over href, the client needs it to properly execute the call
-    network['href'] = existing_network['href']
     try:
         return client.networks.update(network)
     except ClientHttpException as e:
         module.fail_json(msg=e.response.text, exception=format_exc())
 
 
-def delete_network(module, client, network, existing_network):
+def delete_network(module, client, network):
     """
     Delete a network
     :param AnsibleModule module: the Ansible module
     :param pureport.api.client.Client client: the Pureport client
     :param Network network: the Ansible inferred Network
-    :param Network existing_network: the network obtained from the server
     :rtype: Network
     """
     # Copy over href, the client needs it to properly execute the call
-    network['href'] = existing_network['href']
     try:
         return client.networks.delete(network)
     except ClientHttpException as e:
@@ -180,7 +192,8 @@ def main():
         partial(retrieve_network, module, client),
         partial(create_network, module, client),
         partial(update_network, module, client),
-        partial(delete_network, module, client)
+        partial(delete_network, module, client),
+        copy_existing_item_properties_fn=copy_existing_network_properties
     )
     module.exit_json(
         changed=changed,
