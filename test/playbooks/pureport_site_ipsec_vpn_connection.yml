@@ -17,14 +17,11 @@
         secondary_customer_router_ip: 192.167.1.2
         customer_asn: 1231
         ike_version: V1
-        ike_v1:
-          ike:
-            encryption: AES_256
-            integrity: SHA512_HMAC
-            dh_group: MODP_2048
-          esp:
-            encryption: AES_256_GCM_128
-            dh_group: MODP_2048
+        ike_v1_ike_encryption: AES_256
+        ike_v1_ike_dh_group: MODP_2048
+        ike_v1_esp_encryption: AES_256_GCM_128
+        ike_v1_esp_integrity: SHA512_HMAC
+        ike_v1_esp_dh_group: MODP_2048
         customer_networks:
           - address: 192.167.1.1/32
             name: My Custom Address
@@ -55,7 +52,11 @@
         secondary_customer_router_ip: "{{ result.connection.secondaryCustomerRouterIP }}"
         customer_asn: "{{ result.connection.customerASN }}"
         ike_version: "{{ result.connection.ikeVersion }}"
-        ike_v1: "{{ result.connection.ikeV1 }}"
+        ike_v1_ike_encryption: "{{ result.connection.ikeV1.ike.encryption }}"
+        ike_v1_ike_integrity: "{{ result.connection.ikeV1.ike.integrity }}"
+        ike_v1_ike_dh_group: "{{ result.connection.ikeV1.ike.dhGroup }}"
+        ike_v1_esp_encryption: "{{ result.connection.ikeV1.esp.encryption }}"
+        ike_v1_esp_dh_group: "{{ result.connection.ikeV1.esp.dhGroup }}"
         customer_networks: "{{ result.connection.customerNetworks }}"
         nat: "{{ result.connection.nat }}"
         enable_bgp_password: "{{ result.connection.enableBGPPassword }}"
@@ -81,7 +82,11 @@
         secondary_customer_router_ip: "{{ result.connection.secondaryCustomerRouterIP }}"
         customer_asn: "{{ result.connection.customerASN }}"
         ike_version: "{{ result.connection.ikeVersion }}"
-        ike_v1: "{{ result.connection.ikeV1 }}"
+        ike_v1_ike_encryption: "{{ result.connection.ikeV1.ike.encryption }}"
+        ike_v1_ike_integrity: "{{ result.connection.ikeV1.ike.integrity }}"
+        ike_v1_ike_dh_group: "{{ result.connection.ikeV1.ike.dhGroup }}"
+        ike_v1_esp_encryption: "{{ result.connection.ikeV1.esp.encryption }}"
+        ike_v1_esp_dh_group: "{{ result.connection.ikeV1.esp.dhGroup }}"
         customer_networks: "{{ result.connection.customerNetworks }}"
         nat: "{{ result.connection.nat }}"
         enable_bgp_password: "{{ result.connection.enableBGPPassword }}"
@@ -108,7 +113,11 @@
         secondary_customer_router_ip: "{{ result.connection.secondaryCustomerRouterIP }}"
         customer_asn: "{{ result.connection.customerASN }}"
         ike_version: "{{ result.connection.ikeVersion }}"
-        ike_v1: "{{ result.connection.ikeV1 }}"
+        ike_v1_ike_encryption: "{{ result.connection.ikeV1.ike.encryption }}"
+        ike_v1_ike_integrity: "{{ result.connection.ikeV1.ike.integrity }}"
+        ike_v1_ike_dh_group: "{{ result.connection.ikeV1.ike.dhGroup }}"
+        ike_v1_esp_encryption: "{{ result.connection.ikeV1.esp.encryption }}"
+        ike_v1_esp_dh_group: "{{ result.connection.ikeV1.esp.dhGroup }}"
         customer_networks: "{{ result.connection.customerNetworks }}"
         nat: "{{ result.connection.nat }}"
         enable_bgp_password: "{{ result.connection.enableBGPPassword }}"
