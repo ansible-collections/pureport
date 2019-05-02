@@ -78,7 +78,7 @@ options:
             - Enable a BGP password for the 'ROUTE_BASED_BGP' VPN connection gateways.
         required: false
         type: bool
-        
+
 extends_documentation_fragment:
     - pureport_client
     - pureport_network
