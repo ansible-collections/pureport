@@ -86,17 +86,22 @@ def construct_connection(module):
         'high_availability',
         'location',
         'billing_term',
+        'customer_asn',
+        'customer_networks',
+        'nat',
         'aws_account_id',
         'aws_region',
-        'cloud_services',
-        'customer_networks',
-        'nat'
+        'cloud_services'
     ))
     connection.update(dict(
         type="AWS_DIRECT_CONNECT",
         peering=dict(type=module.params.get('peering_type'))
     ))
     connection = snake_dict_to_camel_dict(connection)
+    # Correct naming
+    connection.update(dict(
+        customerASN=connection.pop('customerAsn')
+    ))
     return connection
 
 
@@ -111,7 +116,7 @@ def main():
     argument_spec.update(get_peering_connection_argument_spec())
     argument_spec.update(
         dict(
-            aws_account_id=dict(type="str", required=True, no_log=True),
+            aws_account_id=dict(type="str", required=True),
             aws_region=dict(type="str", required=True),
             cloud_services=dict(type="list", default=[])
         )

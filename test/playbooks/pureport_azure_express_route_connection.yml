@@ -8,7 +8,7 @@
         api_secret: "{{ api_secret }}"
         network_id: "{{ network_id }}"
         wait_for_server: true
-        name: "Test Google Cloud Interconnect"
+        name: "Test Azure Express Route"
         speed: 50
         high_availability: true
         location: "{{ location }}"

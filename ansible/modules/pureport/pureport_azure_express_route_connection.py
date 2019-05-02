@@ -75,9 +75,9 @@ def construct_connection(module):
         'high_availability',
         'location',
         'billing_term',
-        'service_key',
         'customer_networks',
-        'nat'
+        'nat',
+        'service_key'
     ))
     connection.update(dict(
         type="AZURE_EXPRESS_ROUTE",
@@ -98,7 +98,7 @@ def main():
     argument_spec.update(get_peering_connection_argument_spec())
     argument_spec.update(
         dict(
-            service_key=dict(type="str", required=True, no_log=True)
+            service_key=dict(type="str", required=True)
         )
     )
     mutually_exclusive = []

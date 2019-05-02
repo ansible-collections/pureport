@@ -32,7 +32,7 @@ def get_connection_argument_spec():
         location=dict(type="dict", required=True),
         billing_term=dict(type="str", required=True, choices=['HOURLY']),
         cloud_services=dict(type="list"),
-        customerASN=dict(type="long"),
+        customer_asn=dict(type="int"),
         customer_networks=dict(type="list", default=[]),
         nat=dict(type="dict", default=dict(enabled=False))
     )

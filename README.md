@@ -7,7 +7,9 @@ It provides the following modules you can use in your own roles:
 - `pureport_network` - used to create/update/delete a network
 - `pureport_connection_facts` - used to list a set of connections
 - `pureport_aws_direct_connect_connection` - used to create/update/delete a Pureport AWS connection
+- `pureport_azure_express_route_connection` - used to create/update/delete a Pureport Azure Express Route connection
 - `pureport_google_cloud_interconnect_connection` - used to create/update/delete a Pureport Google Cloud Interconnect connection
+- `pureport_site_ipsec_vpn_connection` - used to create/update/delete a Pureport Site IPSec VPN connection
 
 ## Installation
 This "role" is distributed via [ansible-galaxy](https://galaxy.ansible.com/) (bundled with Ansible).
@@ -57,11 +59,13 @@ doc_fragment_plugins = roles.galaxy/pureport-ansible-modules/ansible/plugins/doc
 
 You can then 
 ```bash
-ansible-docs pureport_network_facts
-ansible-docs pureport_network
-ansible-docs pureport_connection_facts
-ansible-docs pureport_aws_direct_connect_connection
-ansible-docs pureport_google_cloud_interconnect_connection
+ansible-doc pureport_network_facts
+ansible-doc pureport_network
+ansible-doc pureport_connection_facts
+ansible-doc pureport_aws_direct_connect_connection
+ansible-doc pureport_azure_express_route_connection
+ansible-doc pureport_google_cloud_interconnect_connection
+ansible-doc pureport_site_ipsec_vpn_connection
 ```
 
 ## Development

@@ -1,0 +1,118 @@
+---
+- hosts: localhost
+  tasks:
+    - name: Test create Site IPSec VPN connection
+      pureport_site_ipsec_vpn_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+        network_id: "{{ network_id }}"
+        wait_for_server: true
+        name: "Test Site IPSec VPN Connection"
+        speed: 50
+        high_availability: true
+        location: "{{ location }}"
+        billing_term: HOURLY
+        primary_customer_router_ip: 192.167.1.1
+        secondary_customer_router_ip: 192.167.1.2
+        customer_asn: 1231
+        ike_version: V1
+        ike_v1:
+          ike:
+            encryption: AES_256
+            integrity: SHA512_HMAC
+            dh_group: MODP_2048
+          esp:
+            encryption: AES_256_GCM_128
+            dh_group: MODP_2048
+        customer_networks:
+          - address: 192.167.1.1/32
+            name: My Custom Address
+        nat:
+          enabled: true
+          mappings:
+            - native_cidr: 192.167.1.1/32
+        enable_bgp_password: true
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test update Site IPSec VPN connection (no changes)
+      pureport_site_ipsec_vpn_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+        network_id: "{{ network_id }}"
+        wait_for_server: true
+        id: "{{ result.connection.id }}"
+        name: "{{ result.connection.name }}"
+        speed: "{{ result.connection.speed }}"
+        high_availability: "{{ result.connection.highAvailability }}"
+        location: "{{ location }}"
+        billing_term: "{{ result.connection.billingTerm }}"
+        primary_customer_router_ip: "{{ result.connection.primaryCustomerRouterIP }}"
+        secondary_customer_router_ip: "{{ result.connection.secondaryCustomerRouterIP }}"
+        customer_asn: "{{ result.connection.customerASN }}"
+        ike_version: "{{ result.connection.ikeVersion }}"
+        ike_v1: "{{ result.connection.ikeV1 }}"
+        customer_networks: "{{ result.connection.customerNetworks }}"
+        nat: "{{ result.connection.nat }}"
+        enable_bgp_password: "{{ result.connection.enableBGPPassword }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed == true
+
+    - name: Test update Site IPSec VPN connection (changes)
+      pureport_site_ipsec_vpn_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+        network_id: "{{ network_id }}"
+        wait_for_server: true
+        id: "{{ result.connection.id }}"
+        name: "{{ result.connection.name }}"
+        speed: 100
+        high_availability: "{{ result.connection.highAvailability }}"
+        location: "{{ location }}"
+        billing_term: "{{ result.connection.billingTerm }}"
+        primary_customer_router_ip: "{{ result.connection.primaryCustomerRouterIP }}"
+        secondary_customer_router_ip: "{{ result.connection.secondaryCustomerRouterIP }}"
+        customer_asn: "{{ result.connection.customerASN }}"
+        ike_version: "{{ result.connection.ikeVersion }}"
+        ike_v1: "{{ result.connection.ikeV1 }}"
+        customer_networks: "{{ result.connection.customerNetworks }}"
+        nat: "{{ result.connection.nat }}"
+        enable_bgp_password: "{{ result.connection.enableBGPPassword }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test delete Site IPSec VPN connection
+      pureport_site_ipsec_vpn_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+        network_id: "{{ network_id }}"
+        wait_for_server: true
+        state: 'absent'
+        id: "{{ result.connection.id }}"
+        name: "{{ result.connection.name }}"
+        speed: "{{ result.connection.speed }}"
+        high_availability: "{{ result.connection.highAvailability }}"
+        location: "{{ location }}"
+        billing_term: "{{ result.connection.billingTerm }}"
+        primary_customer_router_ip: "{{ result.connection.primaryCustomerRouterIP }}"
+        secondary_customer_router_ip: "{{ result.connection.secondaryCustomerRouterIP }}"
+        customer_asn: "{{ result.connection.customerASN }}"
+        ike_version: "{{ result.connection.ikeVersion }}"
+        ike_v1: "{{ result.connection.ikeV1 }}"
+        customer_networks: "{{ result.connection.customerNetworks }}"
+        nat: "{{ result.connection.nat }}"
+        enable_bgp_password: "{{ result.connection.enableBGPPassword }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true

@@ -78,10 +78,10 @@ def construct_connection(module):
         'high_availability',
         'location',
         'billing_term',
-        'primary_pairing_key',
-        'secondary_pairing_key',
         'customer_networks',
-        'nat'
+        'nat',
+        'primary_pairing_key',
+        'secondary_pairing_key'
     ))
     connection.update(dict(type="GOOGLE_CLOUD_INTERCONNECT"))
     connection = snake_dict_to_camel_dict(connection)
@@ -98,8 +98,8 @@ def main():
     argument_spec.update(get_cloud_connection_argument_spec())
     argument_spec.update(
         dict(
-            primary_pairing_key=dict(type="str", required=True, no_log=True),
-            secondary_pairing_key=dict(type="str", no_log=True)
+            primary_pairing_key=dict(type="str", required=True),
+            secondary_pairing_key=dict(type="str")
         )
     )
     mutually_exclusive = []
