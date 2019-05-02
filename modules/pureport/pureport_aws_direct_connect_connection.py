@@ -23,7 +23,7 @@ options:
             - The AWS account Id associated with the connection
         required: true
         type: str
-    aws_region_id:
+    aws_region:
         description:
             - The AWS region associated with the connection
         required: true
@@ -37,7 +37,6 @@ options:
 extends_documentation_fragment:
     - pureport_client
     - pureport_network
-    - pureport_state
     - pureport_wait_for_server
     - pureport_connection_args
     - pureport_peering_connection_args
@@ -86,7 +85,7 @@ def construct_connection(module):
         'location',
         'billing_term',
         'aws_account_id',
-        'aws_region_id',
+        'aws_region',
         'cloud_services',
         'customer_networks',
         'nat'
@@ -109,9 +108,9 @@ def main():
     argument_spec.update(get_peering_connection_argument_spec())
     argument_spec.update(
         dict(
-            aws_account_id=dict(type="str", required=True),
-            aws_region_id=dict(type="str", required=True),
-            cloud_services=dict(type="list")
+            aws_account_id=dict(type="str", required=True, no_log=True),
+            aws_region=dict(type="str", required=True),
+            cloud_services=dict(type="list", no_log=True)
         )
     )
     mutually_exclusive = []

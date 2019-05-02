@@ -3,8 +3,8 @@ class ModuleDocFragment(object):
 options:
     state:
         description:
-            - The state of the object, where 'present' indicates it should
-            should exist and 'absent' indicates it should not exist.
+            - The state of the object, where 'present' indicates it should should
+            - exist and 'absent' indicates it should not exist.
         required: false
         type: str
         choices: ['present', 'absent']

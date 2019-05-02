@@ -3,10 +3,10 @@ This is a collection of Ansible [library modules](https://docs.ansible.com/ansib
 interact with the [Pureport](https://www.pureport.com/) ReST API.
 
 It provides the following modules you can use in your own roles:
-- pureport_network_facts - used to list a set of networks
-- pureport_network - used to create/update/delete a network
-- pureport_connection_facts - used to list a set of connections
-- pureport_aws_direct_connect_connection - used to create/update/delete a Pureport AWS connection
+- `pureport_network_facts` - used to list a set of networks
+- `pureport_network` - used to create/update/delete a network
+- `pureport_connection_facts` - used to list a set of connections
+- `pureport_aws_direct_connect_connection` - used to create/update/delete a Pureport AWS connection
 
 ## Installation
 This "role" is distributed via [ansible-galaxy](https://galaxy.ansible.com/) (bundled with Ansible).
@@ -40,13 +40,6 @@ module_utils = roles.galaxy/pureport-ansible-modules/module_utils
 **NOTE**: This will only work with Ansible 2.8 (via this [PR](https://github.com/ansible/ansible/pull/50172)) which opens up
 the `ANSIBLE_DOC_FRAGMENT_PLUGINS` environment variable for shared documentation in modules.
 
-**NOTE**: Second note, getting an exception with Ansible 2.8 for some reason...  Removing the `extends_documentation_fragment`
-on the module works, but kind of weird this doesn't work as I expected..
-```bash
-nsible-doc pureport_network_facts
-ERROR! module pureport_network_facts has a documentation error formatting or is missing documentation.
-```
-
 Because the modules for this are external to Ansible and some of the documentation is shared via 
 [doc_fragments](https://docs.ansible.com/ansible/2.8/dev_guide/developing_modules_documenting.html#documentation-fragments), for 
 documentation to work with the `ansible-doc`, simply do the following:
@@ -54,6 +47,11 @@ documentation to work with the `ansible-doc`, simply do the following:
 PROJECT_DIRECTORY="YOUR PROJECT DIRECTORY HERE"
 PUREPORT_ANSIBLE_MODULES_DIR=${PROJECT_DIRECTORY}/roles.galaxy/pureport-ansible-modules
 export ANSIBLE_DOC_FRAGMENT_PLUGINS=${PUREPORT_ANSIBLE_MODULES_DIR}/plugins/doc_fragments
+```
+
+It can also be done via `ansible.cfg` file ([1](https://docs.ansible.com/ansible/2.8/reference_appendices/config.html#doc-fragment-plugin-path))
+```yaml
+doc_fragment_plugins = roles.galaxy/pureport-ansible-modules/plugins/doc_fragments
 ```
 
 You can then 
@@ -137,6 +135,26 @@ extends_documentation_fragment:
 '''
 ```
 
+##### Documentation Errors
+I encountered one or two errors while writing documentation.  If you see the following, it's likely because of a formatting error
+with an `options` description field.
+```bash
+ansible-doc pureport_network_facts
+ERROR! module pureport_network_facts has a documentation error formatting or is missing documentation.
+```
+
+Description fields should use a line continuation with prefixed with `- `, like so:
+```yaml
+options:
+    my_parameter:
+        description:
+            - A simple shared parameter that does X, Y, Z.  This is
+            - required if you need A, B, C.  # The continuation here starts with `- `
+        required: false
+        type: bool
+```
+
+
 ### Testing a Module
 There are two ways to test a module, either run a Playbook with it or write a PyTest script.  A Playbook is likely easier, but
 PyTest's allow you to mock and act as unit tests.
@@ -147,7 +165,14 @@ and attach them to the `main.yml` playbook.  There is also a secondary [README.m
 setup, such as configuring defaults with `group_vars`.
 
 To run those, you will need to perform the directions mentioned in the [Installation](#Installation) section, but
-instead of installing with ansible-galaxy, just point the environment variables to the local paths.
+instead of installing with ansible-galaxy, just point all environment variables to the local paths.
+
+```bash
+PUREPORT_ANSIBLE_MODULES_DIR="THE PROJECT DIRECTORY HERE"
+export ANSIBLE_LIBRARY=${PUREPORT_ANSIBLE_MODULES_DIR}/modules
+export ANSIBLE_MODULE_UTILS=${PUREPORT_ANSIBLE_MODULES_DIR}/module_utils
+export ANSIBLE_DOC_FRAGMENT_PLUGINS=${PUREPORT_ANSIBLE_MODULES_DIR}/plugins/doc_fragments
+```
 
 #### Writing a PyTest
 Coming soon!

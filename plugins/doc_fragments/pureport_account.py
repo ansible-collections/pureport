@@ -3,8 +3,8 @@ class ModuleDocFragment(object):
 options:
     account:
         description:
-            - A Pureport Account object.  The dict must include an 'href'
-            property that is the location of the object on the server.
+            - A Pureport Account object.  The dict must include an 'href' property that 
+            - is the location of the object on the server.
         required: false
         type: dict
     account_id:

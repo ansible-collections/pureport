@@ -1,0 +1,178 @@
+---
+- hosts: localhost
+  tasks:
+    - name: Test create Public AWS connection
+      pureport_aws_direct_connect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+        network_id: "{{ network_id }}"
+        wait_for_server: true
+        name: "Test AWS Direct Connect"
+        speed: 50
+        high_availability: true
+        peering_type: PUBLIC
+        location:
+          id: us-sea
+          href: /locations/us-sea
+          title: Seattle
+        billing_term: HOURLY
+        aws_account_id: "{{ aws_account_id }}"
+        aws_region: us-west-2
+        cloud_services:
+          - href: /cloudServices/aws-s3-us-west-2
+            id: aws-s3-us-west-2
+            title: AWS S3 us-west-2
+      register: result
+    - debug: var=result
+
+    - name: Test update Public AWS connection (no changes)
+      pureport_aws_direct_connect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+        network_id: "{{ network_id }}"
+        wait_for_server: true
+        id: "{{ result.connection.id }}"
+        name: "{{ result.connection.name }}"
+        speed: "{{ result.connection.speed }}"
+        high_availability: "{{ result.connection.highAvailability }}"
+        peering_type: "{{ result.connection.peering.type }}"
+        location: "{{ result.connection.location }}"
+        billing_term: "{{ result.connection.billingTerm }}"
+        aws_account_id: "{{ result.connection.awsAccountId }}"
+        aws_region: "{{ result.connection.awsRegion }}"
+        cloud_services: "{{ result.connection.cloudServices }}"
+      register: result
+    - debug: var=result
+
+    - name: Test update Public AWS connection (changes)
+      pureport_aws_direct_connect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+        network_id: "{{ network_id }}"
+        wait_for_server: true
+        id: "{{ result.connection.id }}"
+        name: "{{ result.connection.name }}"
+        speed: 100
+        high_availability: "{{ result.connection.highAvailability }}"
+        peering_type: "{{ result.connection.peering.type }}"
+        location: "{{ result.connection.location }}"
+        billing_term: "{{ result.connection.billingTerm }}"
+        aws_account_id: "{{ result.connection.awsAccountId }}"
+        aws_region: "{{ result.connection.awsRegion }}"
+        cloud_services: "{{ result.connection.cloudServices }}"
+      register: result
+    - debug: var=result
+
+    - name: Test delete Public AWS connection
+      pureport_aws_direct_connect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+        network_id: "{{ network_id }}"
+        wait_for_server: true
+        id: "{{ result.connection.id }}"
+        name: "{{ result.connection.name }}"
+        speed: "{{ result.connection.speed }}"
+        high_availability: "{{ result.connection.highAvailability }}"
+        peering_type: "{{ result.connection.peering.type }}"
+        location: "{{ result.connection.location }}"
+        billing_term: "{{ result.connection.billingTerm }}"
+        aws_account_id: "{{ result.connection.awsAccountId }}"
+        aws_region: "{{ result.connection.awsRegion }}"
+        cloud_services: "{{ result.connection.cloudServices }}"
+      register: result
+    - debug: var=result
+
+    - name: Test create Private AWS connection
+      pureport_aws_direct_connect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+        network_id: "{{ network_id }}"
+        wait_for_server: true
+        name: "Test AWS Direct Connect"
+        speed: 50
+        high_availability: true
+        peering_type: PRIVATE
+        location:
+          id: us-sea
+          href: /locations/us-sea
+          title: Seattle
+        billing_term: HOURLY
+        customer_networks:
+          - address: 192.167.1.1/32
+            name: My Custom Address
+        nat:
+          enabled: true
+          mappings:
+            - native_cidr: 192.167.1.1/32
+        aws_account_id: "{{ aws_account_id }}"
+        aws_region: us-west-2
+      register: result
+    - debug: var=result
+
+    - name: Test update Private AWS connection (no changes)
+      pureport_aws_direct_connect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+        network_id: "{{ network_id }}"
+        wait_for_server: true
+        id: "{{ result.connection.id }}"
+        name: "{{ result.connection.name }}"
+        speed: "{{ result.connection.speed }}"
+        high_availability: "{{ result.connection.highAvailability }}"
+        peering_type: "{{ result.connection.peering.type }}"
+        location: "{{ result.connection.location }}"
+        billing_term: "{{ result.connection.billingTerm }}"
+        customer_networks: "{{ result.connection.customerNetworks }}"
+        nat: "{{ result.connection.nat }}"
+        aws_account_id: "{{ result.connection.awsAccountId }}"
+        aws_region: "{{ result.connection.awsRegion }}"
+      register: result
+    - debug: var=result
+
+    - name: Test update Public AWS connection (changes)
+      pureport_aws_direct_connect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+        network_id: "{{ network_id }}"
+        wait_for_server: true
+        id: "{{ result.connection.id }}"
+        name: "{{ result.connection.name }}"
+        speed: 100
+        high_availability: "{{ result.connection.highAvailability }}"
+        peering_type: "{{ result.connection.peering.type }}"
+        location: "{{ result.connection.location }}"
+        billing_term: "{{ result.connection.billingTerm }}"
+        customer_networks: "{{ result.connection.customerNetworks }}"
+        nat: "{{ result.connection.nat }}"
+        aws_account_id: "{{ result.connection.awsAccountId }}"
+        aws_region: "{{ result.connection.awsRegion }}"
+      register: result
+    - debug: var=result
+
+    - name: Test delete Public AWS connection
+      pureport_aws_direct_connect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+        network_id: "{{ network_id }}"
+        wait_for_server: true
+        id: "{{ result.connection.id }}"
+        name: "{{ result.connection.name }}"
+        speed: "{{ result.connection.speed }}"
+        high_availability: "{{ result.connection.highAvailability }}"
+        peering_type: "{{ result.connection.peering.type }}"
+        location: "{{ result.connection.location }}"
+        billing_term: "{{ result.connection.billingTerm }}"
+        customer_networks: "{{ result.connection.customerNetworks }}"
+        nat: "{{ result.connection.nat }}"
+        aws_account_id: "{{ result.connection.awsAccountId }}"
+        aws_region: "{{ result.connection.awsRegion }}"
+      register: result
+    - debug: var=result
