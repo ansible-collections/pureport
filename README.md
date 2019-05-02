@@ -7,6 +7,7 @@ It provides the following modules you can use in your own roles:
 - `pureport_network` - used to create/update/delete a network
 - `pureport_connection_facts` - used to list a set of connections
 - `pureport_aws_direct_connect_connection` - used to create/update/delete a Pureport AWS connection
+- `pureport_google_cloud_interconnect_connection` - used to create/update/delete a Pureport Google Cloud Interconnect connection
 
 ## Installation
 This "role" is distributed via [ansible-galaxy](https://galaxy.ansible.com/) (bundled with Ansible).
@@ -24,7 +25,7 @@ This can be done via Environment variables ([1](https://docs.ansible.com/ansible
 
 ```bash
 PROJECT_DIRECTORY="YOUR PROJECT DIRECTORY HERE"
-PUREPORT_ANSIBLE_MODULES_DIR=${PROJECT_DIRECTORY}/roles.galaxy/pureport-ansible-modules
+PUREPORT_ANSIBLE_MODULES_DIR=${PROJECT_DIRECTORY}/roles.galaxy/pureport-ansible-modules/ansible
 export ANSIBLE_LIBRARY=${PUREPORT_ANSIBLE_MODULES_DIR}/modules
 export ANSIBLE_MODULE_UTILS=${PUREPORT_ANSIBLE_MODULES_DIR}/module_utils
 ```
@@ -32,8 +33,8 @@ export ANSIBLE_MODULE_UTILS=${PUREPORT_ANSIBLE_MODULES_DIR}/module_utils
 It can also be done via `ansible.cfg` file ([1](https://docs.ansible.com/ansible/2.8/reference_appendices/config.html#default-module-path),
 [2](https://docs.ansible.com/ansible/2.8/reference_appendices/config.html#default-module-utils-path)):
 ```ini
-library = roles.galaxy/pureport-ansible-modules/modules
-module_utils = roles.galaxy/pureport-ansible-modules/module_utils
+library = roles.galaxy/pureport-ansible-modules/ansible/modules
+module_utils = roles.galaxy/pureport-ansible-modules/ansible/module_utils
 ```
 
 ## Module Documentation
@@ -45,13 +46,13 @@ Because the modules for this are external to Ansible and some of the documentati
 documentation to work with the `ansible-doc`, simply do the following:
 ```bash
 PROJECT_DIRECTORY="YOUR PROJECT DIRECTORY HERE"
-PUREPORT_ANSIBLE_MODULES_DIR=${PROJECT_DIRECTORY}/roles.galaxy/pureport-ansible-modules
+PUREPORT_ANSIBLE_MODULES_DIR=${PROJECT_DIRECTORY}/roles.galaxy/pureport-ansible-modules/ansible
 export ANSIBLE_DOC_FRAGMENT_PLUGINS=${PUREPORT_ANSIBLE_MODULES_DIR}/plugins/doc_fragments
 ```
 
 It can also be done via `ansible.cfg` file ([1](https://docs.ansible.com/ansible/2.8/reference_appendices/config.html#doc-fragment-plugin-path))
 ```yaml
-doc_fragment_plugins = roles.galaxy/pureport-ansible-modules/plugins/doc_fragments
+doc_fragment_plugins = roles.galaxy/pureport-ansible-modules/ansible/plugins/doc_fragments
 ```
 
 You can then 
@@ -60,6 +61,7 @@ ansible-docs pureport_network_facts
 ansible-docs pureport_network
 ansible-docs pureport_connection_facts
 ansible-docs pureport_aws_direct_connect_connection
+ansible-docs pureport_google_cloud_interconnect_connection
 ```
 
 ## Development
@@ -87,11 +89,13 @@ We should follow these guidelines for writing/maintaining Modules:
 - Follow the documentation on the [module checklist](https://docs.ansible.com/ansible/latest/dev_guide/developing_modules_checklist.html).
 - Write good documentation for the module [using this as a guide](https://docs.ansible.com/ansible/2.8/dev_guide/developing_modules_documenting.html).
 
+All modules should live in the `ansible/modules/pureport` package.  All modules should be prefixed with `pureport_`.
+
 #### Writing a shared Module Utility
 [Module utilities](https://docs.ansible.com/ansible/2.8/dev_guide/developing_module_utilities.html) are a great way to share 
-code between modules.  They should be located in the `module_utils/pureport` package.
+code between modules.  They should be located in the `ansible/module_utils/pureport` package.
 
-When importing a `module_util` into a module, use an `ansible` prefixed path to import it.
+When importing a `module_util` use the full path to Python module instead of relative paths.
 
 ```python
 # like this
@@ -106,7 +110,7 @@ Ansible supports a documentation feature called
 [`extends_documentation_fragment`](https://docs.ansible.com/ansible/2.8/dev_guide/developing_modules_documenting.html#documentation-fragments), 
 which basically merges the documentation of a module and a fragment or list of fragments.
 
-A documentation fragment should live in the `plugins/doc_fragments` directory.  The documentation fragment module should be a file 
+A documentation fragment should live in the `ansible/plugins/doc_fragments` directory.  The documentation fragment module should be a file 
 with a single class called `ModuleDocFragment` and it should contain a variable called `DOCUMENTATION`.
 
 For example:
@@ -169,9 +173,9 @@ instead of installing with ansible-galaxy, just point all environment variables 
 
 ```bash
 PUREPORT_ANSIBLE_MODULES_DIR="THE PROJECT DIRECTORY HERE"
-export ANSIBLE_LIBRARY=${PUREPORT_ANSIBLE_MODULES_DIR}/modules
-export ANSIBLE_MODULE_UTILS=${PUREPORT_ANSIBLE_MODULES_DIR}/module_utils
-export ANSIBLE_DOC_FRAGMENT_PLUGINS=${PUREPORT_ANSIBLE_MODULES_DIR}/plugins/doc_fragments
+export ANSIBLE_LIBRARY=${PUREPORT_ANSIBLE_MODULES_DIR}/ansible/modules
+export ANSIBLE_MODULE_UTILS=${PUREPORT_ANSIBLE_MODULES_DIR}/ansible/module_utils
+export ANSIBLE_DOC_FRAGMENT_PLUGINS=${PUREPORT_ANSIBLE_MODULES_DIR}/ansible/plugins/doc_fragments
 ```
 
 #### Writing a PyTest
