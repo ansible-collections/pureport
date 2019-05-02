@@ -25,10 +25,9 @@
         customer_networks:
           - address: 192.167.1.1/32
             name: My Custom Address
-        nat:
-          enabled: true
-          mappings:
-            - native_cidr: 192.167.1.1/32
+        nat_enabled: true
+        nat_mappings:
+          - 192.167.1.1/32
         enable_bgp_password: true
       register: result
     - debug: var=result
@@ -58,7 +57,8 @@
         esp_encryption: "{{ result.connection.ikeV1.esp.encryption }}"
         esp_dh_group: "{{ result.connection.ikeV1.esp.dhGroup }}"
         customer_networks: "{{ result.connection.customerNetworks }}"
-        nat: "{{ result.connection.nat }}"
+        nat_enabled: "{{ result.connection.nat.enabled }}"
+        nat_mappings: "{{ result.connection.nat.mappings | json_query('[*].nativeCidr') }}"
         enable_bgp_password: "{{ result.connection.enableBGPPassword }}"
       register: result
     - debug: var=result
@@ -88,7 +88,8 @@
         esp_encryption: "{{ result.connection.ikeV1.esp.encryption }}"
         esp_dh_group: "{{ result.connection.ikeV1.esp.dhGroup }}"
         customer_networks: "{{ result.connection.customerNetworks }}"
-        nat: "{{ result.connection.nat }}"
+        nat_enabled: "{{ result.connection.nat.enabled }}"
+        nat_mappings: "{{ result.connection.nat.mappings | json_query('[*].nativeCidr') }}"
         enable_bgp_password: "{{ result.connection.enableBGPPassword }}"
       register: result
     - debug: var=result
@@ -119,7 +120,8 @@
         esp_encryption: "{{ result.connection.ikeV1.esp.encryption }}"
         esp_dh_group: "{{ result.connection.ikeV1.esp.dhGroup }}"
         customer_networks: "{{ result.connection.customerNetworks }}"
-        nat: "{{ result.connection.nat }}"
+        nat_enabled: "{{ result.connection.nat.enabled }}"
+        nat_mappings: "{{ result.connection.nat.mappings | json_query('[*].nativeCidr') }}"
         enable_bgp_password: "{{ result.connection.enableBGPPassword }}"
       register: result
     - debug: var=result
@@ -150,10 +152,9 @@
         customer_networks:
           - address: 192.167.1.1/32
             name: My Custom Address
-        nat:
-          enabled: true
-          mappings:
-            - native_cidr: 192.167.1.1/32
+        nat_enabled: true
+        nat_mappings:
+          - 192.167.1.1/32
         enable_bgp_password: true
       register: result
     - debug: var=result
@@ -183,7 +184,8 @@
         esp_encryption: "{{ result.connection.ikeV2.esp.encryption }}"
         esp_dh_group: "{{ result.connection.ikeV2.esp.dhGroup }}"
         customer_networks: "{{ result.connection.customerNetworks }}"
-        nat: "{{ result.connection.nat }}"
+        nat_enabled: "{{ result.connection.nat.enabled }}"
+        nat_mappings: "{{ result.connection.nat.mappings | json_query('[*].nativeCidr') }}"
         enable_bgp_password: "{{ result.connection.enableBGPPassword }}"
       register: result
     - debug: var=result
@@ -213,7 +215,8 @@
         esp_encryption: "{{ result.connection.ikeV2.esp.encryption }}"
         esp_dh_group: "{{ result.connection.ikeV2.esp.dhGroup }}"
         customer_networks: "{{ result.connection.customerNetworks }}"
-        nat: "{{ result.connection.nat }}"
+        nat_enabled: "{{ result.connection.nat.enabled }}"
+        nat_mappings: "{{ result.connection.nat.mappings | json_query('[*].nativeCidr') }}"
         enable_bgp_password: "{{ result.connection.enableBGPPassword }}"
       register: result
     - debug: var=result
@@ -244,7 +247,8 @@
         esp_encryption: "{{ result.connection.ikeV2.esp.encryption }}"
         esp_dh_group: "{{ result.connection.ikeV2.esp.dhGroup }}"
         customer_networks: "{{ result.connection.customerNetworks }}"
-        nat: "{{ result.connection.nat }}"
+        nat_enabled: "{{ result.connection.nat.enabled }}"
+        nat_mappings: "{{ result.connection.nat.mappings | json_query('[*].nativeCidr') }}"
         enable_bgp_password: "{{ result.connection.enableBGPPassword }}"
       register: result
     - debug: var=result

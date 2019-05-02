@@ -105,10 +105,9 @@
         customer_networks:
           - address: 192.167.1.1/32
             name: My Custom Address
-        nat:
-          enabled: true
-          mappings:
-            - native_cidr: 192.167.1.1/32
+        nat_enabled: true
+        nat_mappings:
+          - 192.167.1.1/32
         aws_account_id: "{{ aws_account_id }}"
         aws_region: us-west-2
       register: result
@@ -131,7 +130,8 @@
         location: "{{ location }}"
         billing_term: "{{ result.connection.billingTerm }}"
         customer_networks: "{{ result.connection.customerNetworks }}"
-        nat: "{{ result.connection.nat }}"
+        nat_enabled: "{{ result.connection.nat.enabled }}"
+        nat_mappings: "{{ result.connection.nat.mappings | json_query('[*].nativeCidr') }}"
         aws_account_id: "{{ aws_account_id }}"
         aws_region: "{{ result.connection.awsRegion }}"
       register: result
@@ -154,7 +154,8 @@
         location: "{{ location }}"
         billing_term: "{{ result.connection.billingTerm }}"
         customer_networks: "{{ result.connection.customerNetworks }}"
-        nat: "{{ result.connection.nat }}"
+        nat_enabled: "{{ result.connection.nat.enabled }}"
+        nat_mappings: "{{ result.connection.nat.mappings | json_query('[*].nativeCidr') }}"
         aws_account_id: "{{ aws_account_id }}"
         aws_region: "{{ result.connection.awsRegion }}"
       register: result
@@ -178,7 +179,8 @@
         location: "{{ location }}"
         billing_term: "{{ result.connection.billingTerm }}"
         customer_networks: "{{ result.connection.customerNetworks }}"
-        nat: "{{ result.connection.nat }}"
+        nat_enabled: "{{ result.connection.nat.enabled }}"
+        nat_mappings: "{{ result.connection.nat.mappings | json_query('[*].nativeCidr') }}"
         aws_account_id: "{{ aws_account_id }}"
         aws_region: "{{ result.connection.awsRegion }}"
       register: result
