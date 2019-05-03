@@ -35,83 +35,41 @@ def get_client(module):
     return client
 
 
-def get_account_argument_spec():
+def get_account_argument_spec(required=False):
     """
     Return the basic account params
+    :param bool required: are these params required
     :rtype: dict[str, dict]
     """
     return dict(
-        account=dict(type='dict'),
-        account_id=dict(type='str')
+        account_href=dict(type='str', required=required)
     )
 
 
-def get_account_mutually_exclusive():
-    """
-    Return the basic account mutually exclusive params
-    :rtype: list[list[str]]
-    """
-    return [
-        ['account', 'account_id']
-    ]
-
-
-def get_account(module, client):
+def get_account(module):
     """
     Get the account from the passed in module
     :param ansible.module_utils.basic.AnsibleModule module: the Ansible module
-    :param Client client: the Pureport client
     :rtype: Account
     """
-    account = module.params.get('account')
-    if not account:
-        account_id = module.params.get('account_id')
-        if account_id is not None:
-            try:
-                account = client.accounts.get_by_id(account_id)
-            except ClientHttpException as e:
-                module.fail_json(msg=e.response.text, exception=format_exc())
-        else:
-            module.fail_json(msg='missing account or account_id parameter')
-    return account
+    return dict(href=module.params.get('account_href'))
 
 
-def get_network_argument_spec():
+def get_network_argument_spec(required=False):
     """
     Return the basic account params
+    :param bool required: are these params required
     :rtype: dict[str, dict]
     """
     return dict(
-        network=dict(type='dict'),
-        network_id=dict(type='str')
+        network_href=dict(type='str', required=required)
     )
 
 
-def get_network_mutually_exclusive():
-    """
-    Return the basic account mutually exclusive params
-    :rtype: list[list[str]]
-    """
-    return [
-        ['network', 'network_id']
-    ]
-
-
-def get_network(module, client):
+def get_network(module):
     """
     Get the account from the passed in module
     :param ansible.module_utils.basic.AnsibleModule module: the Ansible module
-    :param Client client: the Pureport client
     :rtype: Network
     """
-    network = module.params.get('network')
-    if not network:
-        network_id = module.params.get('network_id')
-        if network_id is not None:
-            try:
-                network = client.networks.get_by_id(network_id)
-            except ClientHttpException as e:
-                module.fail_json(msg=e.response.text, exception=format_exc())
-        else:
-            module.fail_json(msg='missing network or network_id parameter')
-    return network
+    return dict(href=module.params.get('network_href'))

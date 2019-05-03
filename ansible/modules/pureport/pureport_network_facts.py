@@ -64,7 +64,6 @@ from ansible.module_utils.pureport.pureport import \
     get_client_argument_spec, \
     get_client, \
     get_account_argument_spec, \
-    get_account_mutually_exclusive, \
     get_account
 
 
@@ -74,7 +73,7 @@ def find_networks(module):
     :param AnsibleModule module: the ansible module
     """
     client = get_client(module)
-    account = get_account(module, client)
+    account = get_account(module)
     try:
         networks = client.accounts.networks(account).list()
         module.exit_json(networks=networks)
@@ -85,9 +84,8 @@ def find_networks(module):
 def main():
     argument_spec = dict()
     argument_spec.update(get_client_argument_spec())
-    argument_spec.update(get_account_argument_spec())
+    argument_spec.update(get_account_argument_spec(True))
     mutually_exclusive = []
-    mutually_exclusive += get_account_mutually_exclusive()
     module = AnsibleModule(
         argument_spec=argument_spec,
         mutually_exclusive=mutually_exclusive

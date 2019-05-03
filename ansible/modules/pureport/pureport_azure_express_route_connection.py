@@ -50,8 +50,7 @@ from ansible.module_utils.common.dict_transformations import snake_dict_to_camel
 
 from ansible.module_utils.pureport.pureport import \
     get_client_argument_spec, \
-    get_network_argument_spec, \
-    get_network_mutually_exclusive
+    get_network_argument_spec
 from ansible.module_utils.pureport.pureport_crud import get_state_argument_spec
 from ansible.module_utils.pureport.pureport_connection_crud import \
     get_wait_for_server_argument_spec, \
@@ -73,7 +72,6 @@ def construct_connection(module):
         'description',
         'speed',
         'high_availability',
-        'location',
         'billing_term',
         'customer_networks',
         'service_key'
@@ -81,6 +79,9 @@ def construct_connection(module):
     connection.update(dict(
         type="AZURE_EXPRESS_ROUTE",
         peering=dict(type=module.params.get('peering_type')),
+        # TODO(mtraynham): Remove id parsing once we only need to pass href
+        location=dict(href=module.params.get('location_href'),
+                      id=module.params.get('location_href').split('/')[-1]),
         nat=dict(
             enabled=module.params.get('nat_enabled'),
             mappings=[dict(native_cidr=nat_mapping)
@@ -94,7 +95,7 @@ def construct_connection(module):
 def main():
     argument_spec = dict()
     argument_spec.update(get_client_argument_spec())
-    argument_spec.update(get_network_argument_spec())
+    argument_spec.update(get_network_argument_spec(True))
     argument_spec.update(get_state_argument_spec())
     argument_spec.update(get_wait_for_server_argument_spec())
     argument_spec.update(get_connection_argument_spec())
@@ -106,7 +107,6 @@ def main():
         )
     )
     mutually_exclusive = []
-    mutually_exclusive += get_network_mutually_exclusive()
     module = AnsibleModule(
         argument_spec=argument_spec,
         mutually_exclusive=mutually_exclusive

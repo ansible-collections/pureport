@@ -1,15 +1,10 @@
 class ModuleDocFragment(object):
     DOCUMENTATION = r'''
 options:
-    network:
+    network_href:
         description:
-            - A Pureport Network object.  The dict must include an 'href' property that is the
-            - location of the object on the server.
+            - The Pureport Network object.
+            - This should be the full 'href' path to the Network ReST object (e.g /networks/abc).
         required: false
         type: dict
-    network_id:
-        description:
-            - A Pureport Network id.
-        required: false
-        type: str
     '''

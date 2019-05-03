@@ -27,9 +27,10 @@ options:
             - If the connection should be high available (2 gateways).
         required: false
         type: bool
-    location:
+    location_href:
         description:
             - The Pureport location to connect to.
+            - This should be the full 'href' path to the Location ReST object (e.g /locations/abc).
         required: true
         type: dict
     billing_term:

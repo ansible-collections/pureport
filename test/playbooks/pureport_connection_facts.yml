@@ -1,80 +1,31 @@
 ---
 - hosts: localhost
   tasks:
-    - name: Test works with an account
+    - name: Test works with an account href
       pureport_connection_facts:
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
-        account: "{{ account }}"
+        account_href: "{{ account_href }}"
       register: result
     - debug: var=result
 
-    - name: Test works with an account id
+    - name: Test works with an network href
       pureport_connection_facts:
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
-        account_id: "{{ account_id }}"
+        network_href: "{{ network_href }}"
       register: result
     - debug: var=result
 
-    - name: Test that my module fails when passing both account & account_id
+    - name: Test that my module fails when passing both account_href & network_href
       pureport_connection_facts:
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
-        account: "{{ account }}"
-        account_id: "{{ account_id }}"
-      register: result
-      ignore_errors: yes
-    - debug: var=result
-
-    - name: Test works with an network
-      pureport_connection_facts:
-        api_base_url: "{{ api_base_url }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret }}"
-        network: "{{ network }}"
-      register: result
-    - debug: var=result
-
-    - name: Test works with an network id
-      pureport_connection_facts:
-        api_base_url: "{{ api_base_url }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret }}"
-        network_id: "{{ network_id }}"
-      register: result
-    - debug: var=result
-
-    - name: Test that my module fails when passing both network & network_id
-      pureport_connection_facts:
-        api_base_url: "{{ api_base_url }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret }}"
-        network: "{{ network }}"
-        network_id: "{{ network_id }}"
-      register: result
-      ignore_errors: yes
-    - debug: var=result
-
-    - name: Test that my module fails when passing both account & network_id
-      pureport_connection_facts:
-        api_base_url: "{{ api_base_url }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret }}"
-        account: "{{ account }}"
-        network_id: "{{ network_id }}"
-      register: result
-      ignore_errors: yes
-    - debug: var=result
-
-    - name: Test that my module fails when passing none of account, account_id, network, network_id
-      pureport_connection_facts:
-        api_base_url: "{{ api_base_url }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret }}"
+        account_href: "{{ account_href }}"
+        network_href: "{{ network_href }}"
       register: result
       ignore_errors: yes
     - debug: var=result
@@ -84,7 +35,7 @@
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
-        account: "{{ account }}"
+        account_href: "{{ account_href }}"
       register: result
     - name: Display all connection ids
       debug:

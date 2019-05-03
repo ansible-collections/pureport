@@ -29,7 +29,7 @@ def get_connection_argument_spec():
         description=dict(type="str"),
         speed=dict(type="int", required=True, choices=[50, 100, 200, 300, 400, 500, 1000, 1000]),
         high_availability=dict(type="bool"),
-        location=dict(type="dict", required=True),
+        location_href=dict(type="str", required=True),
         billing_term=dict(type="str", required=True, choices=['HOURLY']),
         cloud_services=dict(type="list"),
         customer_asn=dict(type="int"),
@@ -101,7 +101,7 @@ def __create_connection(module, client, wait_for_server, connection):
     :param Connection connection: the Ansible inferred Connection
     :rtype: Connection
     """
-    network = get_network(module, client)
+    network = get_network(module)
     try:
         return client.networks.connections(network).create(connection, wait_until_active=wait_for_server)
     except ClientHttpException as e:

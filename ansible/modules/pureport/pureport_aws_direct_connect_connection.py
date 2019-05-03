@@ -28,9 +28,10 @@ options:
             - The AWS region associated with the connection
         required: true
         type: str
-    cloud_services:
+    cloud_service_hrefs:
         description:
-            - A list of cloud services for the connection (Link object)
+            - A list of cloud services for the connection
+            - This should be the full 'href' path to the CloudService ReST object (e.g /cloudServices/abc).
         required: false
         type: list
         default: []
@@ -61,8 +62,7 @@ from ansible.module_utils.common.dict_transformations import snake_dict_to_camel
 
 from ansible.module_utils.pureport.pureport import \
     get_client_argument_spec, \
-    get_network_argument_spec, \
-    get_network_mutually_exclusive
+    get_network_argument_spec
 from ansible.module_utils.pureport.pureport_crud import get_state_argument_spec
 from ansible.module_utils.pureport.pureport_connection_crud import \
     get_wait_for_server_argument_spec, \
@@ -84,17 +84,21 @@ def construct_connection(module):
         'description',
         'speed',
         'high_availability',
-        'location',
         'billing_term',
         'customer_asn',
         'customer_networks',
         'aws_account_id',
-        'aws_region',
-        'cloud_services'
+        'aws_region'
     ))
     connection.update(dict(
         type="AWS_DIRECT_CONNECT",
         peering=dict(type=module.params.get('peering_type')),
+        # TODO(mtraynham): Remove id parsing once we only need to pass href
+        location=dict(href=module.params.get('location_href'),
+                      id=module.params.get('location_href').split('/')[-1]),
+        # TODO(mtraynham): Remove id parsing once we only need to pass href
+        cloud_services=[dict(href=cloud_service_href, id=cloud_service_href.split('/')[-1])
+                        for cloud_service_href in module.params.get('cloud_service_hrefs')],
         nat=dict(
             enabled=module.params.get('nat_enabled'),
             mappings=[dict(native_cidr=nat_mapping)
@@ -112,7 +116,7 @@ def construct_connection(module):
 def main():
     argument_spec = dict()
     argument_spec.update(get_client_argument_spec())
-    argument_spec.update(get_network_argument_spec())
+    argument_spec.update(get_network_argument_spec(True))
     argument_spec.update(get_state_argument_spec())
     argument_spec.update(get_wait_for_server_argument_spec())
     argument_spec.update(get_connection_argument_spec())
@@ -122,11 +126,10 @@ def main():
         dict(
             aws_account_id=dict(type="str", required=True),
             aws_region=dict(type="str", required=True),
-            cloud_services=dict(type="list", default=[])
+            cloud_service_hrefs=dict(type="list", default=[])
         )
     )
     mutually_exclusive = []
-    mutually_exclusive += get_network_mutually_exclusive()
     module = AnsibleModule(
         argument_spec=argument_spec,
         mutually_exclusive=mutually_exclusive

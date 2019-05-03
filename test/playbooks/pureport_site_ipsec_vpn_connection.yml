@@ -6,12 +6,12 @@
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
-        network_id: "{{ network_id }}"
+        network_href: "{{ network_href }}"
         wait_for_server: true
         name: "Test Site IPSec VPN Connection"
         speed: 50
         high_availability: true
-        location: "{{ location }}"
+        location_href: "{{ location_href }}"
         billing_term: HOURLY
         primary_customer_router_ip: 192.167.1.1
         secondary_customer_router_ip: 192.167.1.2
@@ -39,13 +39,13 @@
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
-        network_id: "{{ network_id }}"
+        network_href: "{{ network_href }}"
         wait_for_server: true
         id: "{{ result.connection.id }}"
         name: "{{ result.connection.name }}"
         speed: "{{ result.connection.speed }}"
         high_availability: "{{ result.connection.highAvailability }}"
-        location: "{{ location }}"
+        location_href: "{{ location_href }}"
         billing_term: "{{ result.connection.billingTerm }}"
         primary_customer_router_ip: "{{ result.connection.primaryCustomerRouterIP }}"
         secondary_customer_router_ip: "{{ result.connection.secondaryCustomerRouterIP }}"
@@ -70,13 +70,13 @@
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
-        network_id: "{{ network_id }}"
+        network_href: "{{ network_href }}"
         wait_for_server: true
         id: "{{ result.connection.id }}"
         name: "{{ result.connection.name }}"
         speed: 100
         high_availability: "{{ result.connection.highAvailability }}"
-        location: "{{ location }}"
+        location_href: "{{ location_href }}"
         billing_term: "{{ result.connection.billingTerm }}"
         primary_customer_router_ip: "{{ result.connection.primaryCustomerRouterIP }}"
         secondary_customer_router_ip: "{{ result.connection.secondaryCustomerRouterIP }}"
@@ -101,14 +101,14 @@
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
-        network_id: "{{ network_id }}"
+        network_href: "{{ network_href }}"
         wait_for_server: true
         state: 'absent'
         id: "{{ result.connection.id }}"
         name: "{{ result.connection.name }}"
         speed: "{{ result.connection.speed }}"
         high_availability: "{{ result.connection.highAvailability }}"
-        location: "{{ location }}"
+        location_href: "{{ location_href }}"
         billing_term: "{{ result.connection.billingTerm }}"
         primary_customer_router_ip: "{{ result.connection.primaryCustomerRouterIP }}"
         secondary_customer_router_ip: "{{ result.connection.secondaryCustomerRouterIP }}"
@@ -133,12 +133,12 @@
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
-        network_id: "{{ network_id }}"
+        network_href: "{{ network_href }}"
         wait_for_server: true
         name: "Test Site IPSec VPN Connection"
         speed: 50
         high_availability: true
-        location: "{{ location }}"
+        location_href: "{{ location_href }}"
         billing_term: HOURLY
         primary_customer_router_ip: 192.167.1.1
         secondary_customer_router_ip: 192.167.1.2
@@ -166,13 +166,13 @@
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
-        network_id: "{{ network_id }}"
+        network_href: "{{ network_href }}"
         wait_for_server: true
         id: "{{ result.connection.id }}"
         name: "{{ result.connection.name }}"
         speed: "{{ result.connection.speed }}"
         high_availability: "{{ result.connection.highAvailability }}"
-        location: "{{ location }}"
+        location_href: "{{ location_href }}"
         billing_term: "{{ result.connection.billingTerm }}"
         primary_customer_router_ip: "{{ result.connection.primaryCustomerRouterIP }}"
         secondary_customer_router_ip: "{{ result.connection.secondaryCustomerRouterIP }}"
@@ -197,13 +197,13 @@
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
-        network_id: "{{ network_id }}"
+        network_href: "{{ network_href }}"
         wait_for_server: true
         id: "{{ result.connection.id }}"
         name: "{{ result.connection.name }}"
         speed: 100
         high_availability: "{{ result.connection.highAvailability }}"
-        location: "{{ location }}"
+        location_href: "{{ location_href }}"
         billing_term: "{{ result.connection.billingTerm }}"
         primary_customer_router_ip: "{{ result.connection.primaryCustomerRouterIP }}"
         secondary_customer_router_ip: "{{ result.connection.secondaryCustomerRouterIP }}"
@@ -228,14 +228,14 @@
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
-        network_id: "{{ network_id }}"
+        network_href: "{{ network_href }}"
         wait_for_server: true
         state: 'absent'
         id: "{{ result.connection.id }}"
         name: "{{ result.connection.name }}"
         speed: "{{ result.connection.speed }}"
         high_availability: "{{ result.connection.highAvailability }}"
-        location: "{{ location }}"
+        location_href: "{{ location_href }}"
         billing_term: "{{ result.connection.billingTerm }}"
         primary_customer_router_ip: "{{ result.connection.primaryCustomerRouterIP }}"
         secondary_customer_router_ip: "{{ result.connection.secondaryCustomerRouterIP }}"
