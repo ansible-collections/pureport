@@ -15,7 +15,7 @@ It provides the following modules you can use in your own roles:
 This "role" is distributed via [ansible-galaxy](https://galaxy.ansible.com/) (bundled with Ansible).
 
 ```bash
-ansible-galaxy install pureport-ansible-modules
+ansible-galaxy install pureport.pureport-ansible-modules
 ```
 
 Because this is not a collection of "roles" and is instead intended to be used within your own roles, you'll need to tell
@@ -26,8 +26,8 @@ This can be done via Environment variables ([1](https://docs.ansible.com/ansible
 [2](https://docs.ansible.com/ansible/2.8/reference_appendices/config.html?highlight=module_utils#envvar-ANSIBLE_MODULE_UTILS)):
 
 ```bash
-PROJECT_DIRECTORY="YOUR PROJECT DIRECTORY HERE"
-PUREPORT_ANSIBLE_MODULES_DIR=${PROJECT_DIRECTORY}/roles.galaxy/pureport-ansible-modules/ansible
+ANSIBLE_GALAXY_ROLES_DIRECTORY="YOUR ANSIBLE GALAXY ROLES DIRECTORY"
+PUREPORT_ANSIBLE_MODULES_DIR=${ANSIBLE_GALAXY_ROLES_DIRECTORY}/pureport.pureport-ansible-modules/ansible
 export ANSIBLE_LIBRARY=${PUREPORT_ANSIBLE_MODULES_DIR}/modules
 export ANSIBLE_MODULE_UTILS=${PUREPORT_ANSIBLE_MODULES_DIR}/module_utils
 ```
@@ -35,9 +35,11 @@ export ANSIBLE_MODULE_UTILS=${PUREPORT_ANSIBLE_MODULES_DIR}/module_utils
 It can also be done via `ansible.cfg` file ([1](https://docs.ansible.com/ansible/2.8/reference_appendices/config.html#default-module-path),
 [2](https://docs.ansible.com/ansible/2.8/reference_appendices/config.html#default-module-utils-path)):
 ```ini
-library = roles.galaxy/pureport-ansible-modules/ansible/modules
-module_utils = roles.galaxy/pureport-ansible-modules/ansible/module_utils
+library = ./roles/pureport.pureport-ansible-modules/ansible/modules
+module_utils = ./roles/pureport.pureport-ansible-modules/ansible/module_utils
 ```
+
+**NOTE:** The above assumes your Ansible Galaxy roles are installed to the `./roles` directory.
 
 ## Module Documentation
 **NOTE**: This will only work with Ansible 2.8 (via this [PR](https://github.com/ansible/ansible/pull/50172)) which opens up
@@ -47,15 +49,17 @@ Because the modules for this are external to Ansible and some of the documentati
 [doc_fragments](https://docs.ansible.com/ansible/2.8/dev_guide/developing_modules_documenting.html#documentation-fragments), for 
 documentation to work with the `ansible-doc`, simply do the following:
 ```bash
-PROJECT_DIRECTORY="YOUR PROJECT DIRECTORY HERE"
-PUREPORT_ANSIBLE_MODULES_DIR=${PROJECT_DIRECTORY}/roles.galaxy/pureport-ansible-modules/ansible
+ANSIBLE_GALAXY_ROLES_DIRECTORY="YOUR ANSIBLE GALAXY ROLES DIRECTORY"
+PUREPORT_ANSIBLE_MODULES_DIR=${ANSIBLE_GALAXY_ROLES_DIRECTORY}/pureport.pureport-ansible-modules/ansible
 export ANSIBLE_DOC_FRAGMENT_PLUGINS=${PUREPORT_ANSIBLE_MODULES_DIR}/plugins/doc_fragments
 ```
 
 It can also be done via `ansible.cfg` file ([1](https://docs.ansible.com/ansible/2.8/reference_appendices/config.html#doc-fragment-plugin-path))
 ```yaml
-doc_fragment_plugins = roles.galaxy/pureport-ansible-modules/ansible/plugins/doc_fragments
+doc_fragment_plugins = ./roles/pureport.pureport-ansible-modules/ansible/plugins/doc_fragments
 ```
+
+**NOTE:** The above assumes your Ansible Galaxy roles are installed to the `./roles` directory.
 
 You can then 
 ```bash
@@ -119,7 +123,7 @@ with a single class called `ModuleDocFragment` and it should contain a variable 
 
 For example:
 
-*plugins/doc_fragments/pureport_my_parameter.py*
+*ansible/plugins/doc_fragments/pureport_my_parameter.py*
 ```python
 class ModuleDocFragment(object):
     DOCUMENTATION = r'''
@@ -176,10 +180,10 @@ To run those, you will need to perform the directions mentioned in the [Installa
 instead of installing with ansible-galaxy, just point all environment variables to the local paths.
 
 ```bash
-PUREPORT_ANSIBLE_MODULES_DIR="THE PROJECT DIRECTORY HERE"
-export ANSIBLE_LIBRARY=${PUREPORT_ANSIBLE_MODULES_DIR}/ansible/modules
-export ANSIBLE_MODULE_UTILS=${PUREPORT_ANSIBLE_MODULES_DIR}/ansible/module_utils
-export ANSIBLE_DOC_FRAGMENT_PLUGINS=${PUREPORT_ANSIBLE_MODULES_DIR}/ansible/plugins/doc_fragments
+PUREPORT_ANSIBLE_MODULES_SRC_DIR="THE PROJECT DIRECTORY HERE"
+export ANSIBLE_LIBRARY=${PUREPORT_ANSIBLE_MODULES_SRC_DIR}/ansible/modules
+export ANSIBLE_MODULE_UTILS=${PUREPORT_ANSIBLE_MODULES_SRC_DIR}/ansible/module_utils
+export ANSIBLE_DOC_FRAGMENT_PLUGINS=${PUREPORT_ANSIBLE_MODULES_SRC_DIR}/ansible/plugins/doc_fragments
 ```
 
 #### Writing a PyTest
