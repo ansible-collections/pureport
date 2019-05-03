@@ -35,6 +35,7 @@ export ANSIBLE_MODULE_UTILS=${PUREPORT_ANSIBLE_MODULES_DIR}/module_utils
 It can also be done via `ansible.cfg` file ([1](https://docs.ansible.com/ansible/2.8/reference_appendices/config.html#default-module-path),
 [2](https://docs.ansible.com/ansible/2.8/reference_appendices/config.html#default-module-utils-path)):
 ```ini
+[defaults]
 library = ./roles/pureport.pureport-ansible-modules/ansible/modules
 module_utils = ./roles/pureport.pureport-ansible-modules/ansible/module_utils
 ```
@@ -56,6 +57,7 @@ export ANSIBLE_DOC_FRAGMENT_PLUGINS=${PUREPORT_ANSIBLE_MODULES_DIR}/plugins/doc_
 
 It can also be done via `ansible.cfg` file ([1](https://docs.ansible.com/ansible/2.8/reference_appendices/config.html#doc-fragment-plugin-path))
 ```yaml
+[defaults]
 doc_fragment_plugins = ./roles/pureport.pureport-ansible-modules/ansible/plugins/doc_fragments
 ```
 
@@ -171,20 +173,10 @@ options:
 There are two ways to test a module, either run a Playbook with it or write a PyTest script.  A Playbook is likely easier, but
 PyTest's allow you to mock and act as unit tests.
 
-#### Writing a Playbook
+#### Writing a Test Playbook
 The `test/playbooks` directory contains a set of playbook tests which interact with our modules.  Feel free to write your own
 and attach them to the `main.yml` playbook.  There is also a secondary [README.md](test/playbooks/README.md) which discusses
 setup, such as configuring defaults with `group_vars`.
-
-To run those, you will need to perform the directions mentioned in the [Installation](#Installation) section, but
-instead of installing with ansible-galaxy, just point all environment variables to the local paths.
-
-```bash
-PUREPORT_ANSIBLE_MODULES_SRC_DIR="THE PROJECT DIRECTORY HERE"
-export ANSIBLE_LIBRARY=${PUREPORT_ANSIBLE_MODULES_SRC_DIR}/ansible/modules
-export ANSIBLE_MODULE_UTILS=${PUREPORT_ANSIBLE_MODULES_SRC_DIR}/ansible/module_utils
-export ANSIBLE_DOC_FRAGMENT_PLUGINS=${PUREPORT_ANSIBLE_MODULES_SRC_DIR}/ansible/plugins/doc_fragments
-```
 
 #### Writing a PyTest
 Coming soon!

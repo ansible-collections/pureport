@@ -24,7 +24,7 @@ pipeline {
                         version = sh(returnStdout: true, script: "python setup.py --version").trim()
                         sh """
                             git tag $version
-                            git push https://$username:$password@github.com/pureport/pureport-ansible $version
+                            git push https://$username:$password@github.com/pureport/pureport-ansible-modules $version
                         """
                     }
                 }
