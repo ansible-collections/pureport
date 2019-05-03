@@ -10,13 +10,13 @@ DOCUMENTATION = '''
 ---
 module: pureport_network_facts
 
-short_description: Retrieve a list of Networks
+short_description: Retrieve a list of networks for an account
 
 version_added: "2.8"
 
 description:
-    - "Retrieve a list of Networks"
-    
+    - "Retrieve a list of networks for an account"
+
 options:
     account_href:
         required: true
@@ -32,23 +32,15 @@ author:
 EXAMPLES = '''
 - name: List networks for an account
   pureport_networks_facts:
-    api_key: abc
-    api_secret: xyz
-    account_id: 123
+    api_key: XXXXXXXXXXXXX
+    api_secret: XXXXXXXXXXXXXXXXX
+    account_href: /accounts/ac-XXXXXXXXXXXXXXXXXXXXXX
+  register: result   # Registers result.networks
 
-### List networks for an account and display their names using json query filter
-### https://docs.ansible.com/ansible/latest/user_guide/playbooks_filters.html#json-query-filter
-- name: List networks for an account
-  pureport_connection_facts:
-    api_key: abc
-    api_secret: xyz
-    account_id: 123
-  register: result
-
-- name: Display all network ids
+- name: Display all network hrefs using a json_query filter
   debug:
     var: item
-  loop: "{{ result.networks | json_query('[*].id') }}"
+  loop: "{{ result.networks | json_query('[*].href') }}"
 '''
 
 RETURN = '''

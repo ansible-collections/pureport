@@ -123,6 +123,172 @@ author:
 '''
 
 EXAMPLES = '''
+- name: Create a simple ROUTE_BASED_BGP Site IPSec VPN connection for a network
+  pureport_aws_direct_connect_connection:
+    api_key: XXXXXXXXXXXXX
+    api_secret: XXXXXXXXXXXXXXXXX
+    network_href: /networks/network-XXXXXXXXXXXXXXXXXXXXXX
+    name: My Ansible Site IPSec VPN Connection
+    speed: 50
+    high_availability: true
+    location_href: /locations/XX-XXX
+    billing_term: HOURLY
+    primary_customer_router_ip: a.b.c.d  # A valid Public IP Address
+    secondary_customer_router_ip: a.b.c.d  # A valid Public IP Address
+    routing_type: ROUTE_BASED_BGP
+    customer_asn: ######
+    ike_version: V2
+    ike_encryption: AES_128
+    ike_integrity: SHA256_HMAC
+    ike_dh_group: MODP_2048
+    esp_encryption: AES_128
+    esp_integrity: SHA256_HMAC
+    esp_dh_group: MODP_2048
+    wait_for_server: true  # Wait for the server to finish provisioning the connection
+  register: result  # Registers result.connection
+
+- name: Update the newly created connection with changed properties
+  pureport_aws_direct_connect_connection:
+    api_key: XXXXXXXXXXXXX
+    api_secret: XXXXXXXXXXXXXXXXX
+    network_href: /networks/network-XXXXXXXXXXXXXXXXXXXXXX
+    name: {{ result.connection.name }}
+    speed: 100
+    high_availability: {{ result.connection.highAvailability }}
+    location_href: {{ result.connection.location.href }}
+    billing_term: {{ result.connection.billingTerm }}
+    primary_customer_router_ip: {{ result.connection.primaryCustomerRouterIP }}
+    secondary_customer_router_ip: {{ result.connection.secondaryCustomerRouterIP }}
+    routing_type: {{ result.connection.routingType }}
+    customer_asn: {{ result.connection.customerASN }}
+    ike_version: {{ result.connection.ikeVersion }}
+    ike_encryption: {{ result.connection.ikeV2.ike.encryption }}
+    ike_integrity: {{ result.connection.ikeV2.ike.integrity }}
+    ike_dh_group: {{ result.connection.ikeV2.ike.dhGroup }}
+    esp_encryption: {{ result.connection.ikeV2.esp.encryption }}
+    esp_integrity: {{ result.connection.ikeV2.esp.integrity }}
+    esp_dh_group: {{ result.connection.ikeV2.esp.dhGroup }}
+    wait_for_server: true  # Wait for the server to finish updating the connection
+  register: result  # Registers result.connection
+
+- name: Delete the newly created connection using the 'absent' state
+  pureport_aws_direct_connect_connection:
+    api_key: XXXXXXXXXXXXX
+    api_secret: XXXXXXXXXXXXXXXXX
+    network_href: /networks/network-XXXXXXXXXXXXXXXXXXXXXX
+    state: absent
+    name: {{ result.connection.name }}
+    speed: {{ result.connection.speed }}
+    high_availability: {{ result.connection.highAvailability }}
+    location_href: {{ result.connection.location.href }}
+    billing_term: {{ result.connection.billingTerm }}
+    primary_customer_router_ip: {{ result.connection.primaryCustomerRouterIP }}
+    secondary_customer_router_ip: {{ result.connection.secondaryCustomerRouterIP }}
+    routing_type: {{ result.connection.routingType }}
+    customer_asn: {{ result.connection.customerASN }}
+    ike_version: {{ result.connection.ikeVersion }}
+    ike_encryption: {{ result.connection.ikeV2.ike.encryption }}
+    ike_integrity: {{ result.connection.ikeV2.ike.integrity }}
+    ike_dh_group: {{ result.connection.ikeV2.ike.dhGroup }}
+    esp_encryption: {{ result.connection.ikeV2.esp.encryption }}
+    esp_integrity: {{ result.connection.ikeV2.esp.integrity }}
+    esp_dh_group: {{ result.connection.ikeV2.esp.dhGroup }}
+    wait_for_server: true  # Wait for the server to finish deleting the connection
+
+- name: Create a ROUTE_BASED_BGP Site IPSec VPN connection with all properties configured
+  pureport_aws_direct_connect_connection:
+    api_key: XXXXXXXXXXXXX
+    api_secret: XXXXXXXXXXXXXXXXX
+    network_href: /networks/network-XXXXXXXXXXXXXXXXXXXXXX
+    name: My Ansible Site IPSec VPN Connection
+    speed: 50
+    high_availability: true
+    location_href: /locations/XX-XXX
+    billing_term: HOURLY
+    primary_customer_router_ip: a.b.c.d  # A valid Public IP Address
+    secondary_customer_router_ip: a.b.c.d  # A valid Public IP Address
+    routing_type: ROUTE_BASED_BGP
+    customer_asn: ######
+    ike_version: V2
+    ike_encryption: AES_128
+    ike_integrity: SHA256_HMAC
+    ike_dh_group: MODP_2048
+    esp_encryption: AES_128
+    esp_integrity: SHA256_HMAC
+    esp_dh_group: MODP_2048
+    # Optional properties start here
+    description: My Ansible managed Site IPSec VPN connection
+    routing_type: ROUTE_BASED_BGP
+    enable_bgp_password: true # Enable a BGP password for each gateway
+    customer_networks:
+      - address: a.b.c.d/x  # A valid CIDR address
+        name: My AWS accessible CIDR address
+    nat_enabled: true
+    nat_mappings:
+      - a.b.c.d/x  # A valid CIDR address, likely referencing a Customer Network
+
+- name: Create a ROUTE_BASED_STATIC Site IPSec VPN connection with all properties configured
+  pureport_aws_direct_connect_connection:
+    api_key: XXXXXXXXXXXXX
+    api_secret: XXXXXXXXXXXXXXXXX
+    network_href: /networks/network-XXXXXXXXXXXXXXXXXXXXXX
+    name: My Ansible Site IPSec VPN Connection
+    speed: 50
+    high_availability: true
+    location_href: /locations/XX-XXX
+    billing_term: HOURLY
+    primary_customer_router_ip: a.b.c.d  # A valid Public IP Address
+    secondary_customer_router_ip: a.b.c.d  # A valid Public IP Address
+    routing_type: ROUTE_BASED_STATIC
+    ike_version: V2
+    ike_encryption: AES_128
+    ike_integrity: SHA256_HMAC
+    ike_dh_group: MODP_2048
+    esp_encryption: AES_128
+    esp_integrity: SHA256_HMAC
+    esp_dh_group: MODP_2048
+    customer_networks:  # At least 1 is required
+      - address: a.b.c.d/x  # A valid CIDR address
+        name: My AWS accessible CIDR address
+    # Optional properties start here
+    description: My Ansible managed Site IPSec VPN connection
+    enable_bgp_password: true
+    nat_enabled: true
+    nat_mappings:
+      - a.b.c.d/x  # A valid CIDR address, likely referencing a Customer Network
+
+- name: Create a POLICY_BASED Site IPSec VPN connection with all properties configured
+  pureport_aws_direct_connect_connection:
+    api_key: XXXXXXXXXXXXX
+    api_secret: XXXXXXXXXXXXXXXXX
+    network_href: /networks/network-XXXXXXXXXXXXXXXXXXXXXX
+    name: My Ansible Site IPSec VPN Connection
+    speed: 50
+    high_availability: true
+    location_href: /locations/XX-XXX
+    billing_term: HOURLY
+    primary_customer_router_ip: a.b.c.d  # A valid Public IP Address
+    secondary_customer_router_ip: a.b.c.d  # A valid Public IP Address
+    routing_type: POLICY_BASED
+    ike_version: V2
+    ike_encryption: AES_128
+    ike_integrity: SHA256_HMAC
+    ike_dh_group: MODP_2048
+    esp_encryption: AES_128
+    esp_integrity: SHA256_HMAC
+    esp_dh_group: MODP_2048
+    traffic_selectors:
+      - customer_side: a.b.c.d/x  # A valid CIDR address, likely referencing a Customer Network
+        pureport_side: a.b.c.d/x  # A valid CIDR address that points to a different connection's Customer
+                                  #    Network or NAT mapped natCidr
+    # Optional properties start here
+    description: My Ansible managed Site IPSec VPN connection
+    customer_networks:
+      - address: a.b.c.d/x  # A valid CIDR address
+        name: My AWS accessible CIDR address
+    nat_enabled: true
+    nat_mappings:
+      - a.b.c.d/x  # A valid CIDR address, likely referencing a Customer Network
 '''
 
 RETURN = '''

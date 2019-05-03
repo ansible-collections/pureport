@@ -10,12 +10,12 @@ DOCUMENTATION = '''
 ---
 module: pureport_connection_facts
 
-short_description: Retrieve a list of Connections
+short_description: Retrieve a list of connections for a account or network
 
 version_added: "2.8"
 
 description:
-    - "Retrieve a list of Connections"
+    - "Retrieve a list of connections for a account or network"
 
 options:
     account_href:
@@ -40,30 +40,23 @@ author:
 
 EXAMPLES = '''
 - name: List connections for an account
-  pureport_connection_facts:
-    api_key: abc
-    api_secret: xyz
-    account_id: 123
+  pureport_networks_facts:
+    api_key: XXXXXXXXXXXXX
+    api_secret: XXXXXXXXXXXXXXXXX
+    account_href: /accounts/ac-XXXXXXXXXXXXXXXXXXXXXX
+  register: result   # Registers result.connections
 
-- name: List connection for a network
-  pureport_connection_facts:
-    api_key: abc
-    api_secret: xyz
-    network_id: 123
-
-### List connections for a network and display their names using json query filter
-### https://docs.ansible.com/ansible/latest/user_guide/playbooks_filters.html#json-query-filter
 - name: List connections for a network
-  pureport_connection_facts:
-    api_key: abc
-    api_secret: xyz
-    network_id: 123
-  register: result
+  pureport_networks_facts:
+    api_key: XXXXXXXXXXXXX
+    api_secret: XXXXXXXXXXXXXXXXX
+    network_href: /networks/network-XXXXXXXXXXXXXXXXXXXXXX
+  register: result   # Registers result.connections
 
-- name: Display all connection ids
+- name: Display all connection hrefs using a json_query filter
   debug:
     var: item
-  loop: "{{ result.connections | json_query('[*].id') }}"
+  loop: "{{ result.connections | json_query('[*].href') }}"
 '''
 
 RETURN = '''
