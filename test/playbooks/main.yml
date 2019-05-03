@@ -1,7 +1,12 @@
 ---
-- import_playbook: pureport_connection_facts.yml
+- import_playbook: pureport_location_facts.yml
+- import_playbook: pureport_option_facts.yml
+- import_playbook: pureport_cloud_service_facts.yml
+- import_playbook: pureport_account_facts.yml
+- import_playbook: pureport_supported_connection_facts.yml
 - import_playbook: pureport_network_facts.yml
 - import_playbook: pureport_network.yml
+- import_playbook: pureport_connection_facts.yml
 - import_playbook: pureport_aws_direct_connect_connection.yml
 - import_playbook: pureport_azure_express_route_connection.yml
 - import_playbook: pureport_google_cloud_interconnect_connection.yml

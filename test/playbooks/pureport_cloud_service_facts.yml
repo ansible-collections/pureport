@@ -1,0 +1,10 @@
+---
+- hosts: localhost
+  tasks:
+    - name: List cloud services
+      pureport_cloud_service_facts:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+      register: result
+    - debug: var=result
