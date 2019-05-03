@@ -16,6 +16,10 @@ version_added: "2.8"
 
 description:
     - "Retrieve a list of Networks"
+    
+options:
+    account_href:
+        required: true
 
 extends_documentation_fragment:
     - pureport_client

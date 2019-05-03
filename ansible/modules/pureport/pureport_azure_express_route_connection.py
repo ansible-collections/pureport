@@ -18,6 +18,8 @@ description:
     - "Create, update or delete a Azure Express Route connection"
 
 options:
+    network_href:
+        required: true
     service_key:
         description:
             - The Azure Express Route service key.

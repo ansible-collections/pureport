@@ -18,6 +18,8 @@ description:
     - "Create, update or delete a Network"
 
 options:
+    account_href:
+        required: true
     id:
         description:
             - The id of the network (required if updating/deleting)

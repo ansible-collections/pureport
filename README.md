@@ -63,7 +63,7 @@ doc_fragment_plugins = ./roles/pureport.pureport-ansible-modules/ansible/plugins
 
 **NOTE:** The above assumes your Ansible Galaxy roles are installed to the `./roles` directory.
 
-You can then 
+You can then get information about each module:
 ```bash
 ansible-doc pureport_network_facts
 ansible-doc pureport_network
@@ -74,110 +74,13 @@ ansible-doc pureport_google_cloud_interconnect_connection
 ansible-doc pureport_site_ipsec_vpn_connection
 ```
 
-## Development
-This project uses:
-- [tox](https://tox.readthedocs.io/en/latest/) - A generic virtualenv management and test command line tool
-- [pytest](https://docs.pytest.org/en/latest/) - A Python testing framework
-- [flake8](http://flake8.pycqa.org/en/latest/) - A Python lint tool
-- [yamllint](https://yamllint.readthedocs.io/en/stable/) - A YAML lint tool
-
-To build from scratch, first install `tox`.
-
+Also dump a snippet of what invoking a module requires:
 ```bash
-pip install tox
+ansible-doc pureport_network_facts -s
+ansible-doc pureport_network -s
+ansible-doc pureport_connection_facts -s
+ansible-doc pureport_aws_direct_connect_connection -s
+ansible-doc pureport_azure_express_route_connection -s
+ansible-doc pureport_google_cloud_interconnect_connection -s
+ansible-doc pureport_site_ipsec_vpn_connection -s
 ```
-
-Then run tox from the root directory.
-
-```bash
-tox
-```
-
-### Writing a Module
-We should follow these guidelines for writing/maintaining Modules:
-- Follow the documentation on [writing your own module](https://docs.ansible.com/ansible/2.8/dev_guide/developing_locally.html).
-- Follow the documentation on the [module checklist](https://docs.ansible.com/ansible/latest/dev_guide/developing_modules_checklist.html).
-- Write good documentation for the module [using this as a guide](https://docs.ansible.com/ansible/2.8/dev_guide/developing_modules_documenting.html).
-
-All modules should live in the `ansible/modules/pureport` package.  All modules should be prefixed with `pureport_`.
-
-#### Writing a shared Module Utility
-[Module utilities](https://docs.ansible.com/ansible/2.8/dev_guide/developing_module_utilities.html) are a great way to share 
-code between modules.  They should be located in the `ansible/module_utils/pureport` package.
-
-When importing a `module_util` use the full path to Python module instead of relative paths.
-
-```python
-# like this
-import ansible.module_utils.pureport.pureport
-
-# or like this
-from ansible.module_utils.pureport.pureport import get_client
-```
-
-#### Writing shared Documentation
-Ansible supports a documentation feature called 
-[`extends_documentation_fragment`](https://docs.ansible.com/ansible/2.8/dev_guide/developing_modules_documenting.html#documentation-fragments), 
-which basically merges the documentation of a module and a fragment or list of fragments.
-
-A documentation fragment should live in the `ansible/plugins/doc_fragments` directory.  The documentation fragment module should be a file 
-with a single class called `ModuleDocFragment` and it should contain a variable called `DOCUMENTATION`.
-
-For example:
-
-*ansible/plugins/doc_fragments/pureport_my_parameter.py*
-```python
-class ModuleDocFragment(object):
-    DOCUMENTATION = r'''
-options:
-    my_parameter:
-        description:
-            - A simple shared parameter
-        required: false
-        type: bool
-    '''
-```
-
-You can then use the documentation fragment in a module, referencing it via module name:
-```python
-DOCUMENTATION = '''
----
-...
-
-extends_documentation_fragment:
-    - pureport_my_parameter
-'''
-```
-
-##### Documentation Errors
-I encountered one or two errors while writing documentation.  If you see the following, it's likely because of a formatting error
-with an `options` description field.
-```bash
-ansible-doc pureport_network_facts
-ERROR! module pureport_network_facts has a documentation error formatting or is missing documentation.
-```
-
-Description fields should use a line continuation with prefixed with `- `, like so:
-```yaml
-options:
-    my_parameter:
-        description:
-            - A simple shared parameter that does X, Y, Z.  This is
-            - required if you need A, B, C.  # The continuation here starts with `- `
-        required: false
-        type: bool
-```
-
-
-### Testing a Module
-There are two ways to test a module, either run a Playbook with it or write a PyTest script.  A Playbook is likely easier, but
-PyTest's allow you to mock and act as unit tests.
-
-#### Writing a Test Playbook
-The `test/playbooks` directory contains a set of playbook tests which interact with our modules.  Feel free to write your own
-and attach them to the `main.yml` playbook.  There is also a secondary [README.md](test/playbooks/README.md) which discusses
-setup, such as configuring defaults with `group_vars`.
-
-#### Writing a PyTest
-Coming soon!
-

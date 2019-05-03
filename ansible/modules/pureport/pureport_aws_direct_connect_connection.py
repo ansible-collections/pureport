@@ -18,6 +18,8 @@ description:
     - "Create, update or delete an AWS Direct Connect connection"
 
 options:
+    network_href:
+        required: true
     aws_account_id:
         description:
             - The AWS account Id associated with the connection

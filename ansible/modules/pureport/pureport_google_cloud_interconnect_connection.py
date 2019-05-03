@@ -18,6 +18,8 @@ description:
     - "Create, update or delete a Google Cloud Interconnect connection"
 
 options:
+    network_href:
+        required: true
     primary_pairing_key:
         description:
             - The Google Cloud Interconnect Attachment's primary pairing key.

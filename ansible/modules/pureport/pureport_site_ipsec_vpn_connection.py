@@ -18,6 +18,8 @@ description:
     - "Create, update or delete a Site IPSec VPN connection"
 
 options:
+    network_href:
+        required: true
     primary_customer_router_ip:
         description:
             - The VPN's primary router IP address.

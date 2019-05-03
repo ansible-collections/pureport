@@ -17,6 +17,18 @@ version_added: "2.8"
 description:
     - "Retrieve a list of Connections"
 
+options:
+    account_href:
+        description:
+            - The Pureport Account object.
+            - This should be the full 'href' path to the Account ReST object (e.g /accounts/abc).
+            - One of 'account_href' or 'network_href' should be supplied for this command, but not both.
+    network_href:
+        description:
+            - The Pureport Network object.
+            - This should be the full 'href' path to the Network ReST object (e.g /networks/abc).
+            - One of 'account_href' or 'network_href' should be supplied for this command, but not both.
+
 extends_documentation_fragment:
     - pureport_client
     - pureport_account
