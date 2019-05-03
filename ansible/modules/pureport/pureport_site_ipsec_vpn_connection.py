@@ -188,8 +188,8 @@ def construct_connection(module):
         )
     ])
     connection.update(dict(
-        type="SITE_IPSEC_VPN",
-        authType="PSK",
+        type='SITE_IPSEC_VPN',
+        authType='PSK',
         # TODO(mtraynham): Remove id parsing once we only need to pass href
         location=dict(href=module.params.get('location_href'),
                       id=module.params.get('location_href').split('/')[-1]),
@@ -219,10 +219,10 @@ def main():
     argument_spec.update(get_connection_argument_spec())
     argument_spec.update(
         dict(
-            primary_customer_router_ip=dict(type="str", required=True),
-            secondary_customer_router_ip=dict(type="str"),
+            primary_customer_router_ip=dict(type='str', required=True),
+            secondary_customer_router_ip=dict(type='str'),
             routing_type=dict(
-                type="str",
+                type='str',
                 choices=[
                     'ROUTE_BASED_BGP',
                     'ROUTE_BASED_STATIC',
@@ -230,7 +230,7 @@ def main():
                 ],
                 default='ROUTE_BASED_BGP'
             ),
-            physical_address=dict(type="dict"),
+            physical_address=dict(type='dict'),
             ike_version=dict(type='str', choices=['V1', 'V2'], default='V2'),
             ike_encryption=dict(type='str', required=True),
             ike_integrity=dict(type='str'),

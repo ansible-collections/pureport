@@ -91,7 +91,7 @@ def construct_connection(module):
         'aws_region'
     ))
     connection.update(dict(
-        type="AWS_DIRECT_CONNECT",
+        type='AWS_DIRECT_CONNECT',
         peering=dict(type=module.params.get('peering_type')),
         # TODO(mtraynham): Remove id parsing once we only need to pass href
         location=dict(href=module.params.get('location_href'),
@@ -124,9 +124,9 @@ def main():
     argument_spec.update(get_peering_connection_argument_spec())
     argument_spec.update(
         dict(
-            aws_account_id=dict(type="str", required=True),
-            aws_region=dict(type="str", required=True),
-            cloud_service_hrefs=dict(type="list", default=[])
+            aws_account_id=dict(type='str', required=True),
+            aws_region=dict(type='str', required=True),
+            cloud_service_hrefs=dict(type='list', default=[])
         )
     )
     mutually_exclusive = []

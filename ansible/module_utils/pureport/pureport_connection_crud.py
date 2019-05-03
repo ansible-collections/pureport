@@ -24,18 +24,18 @@ def get_connection_argument_spec():
     :rtype: dict[str, dict]
     """
     return dict(
-        id=dict(type="str"),
-        name=dict(type="str", required=True),
-        description=dict(type="str"),
-        speed=dict(type="int", required=True, choices=[50, 100, 200, 300, 400, 500, 1000, 1000]),
-        high_availability=dict(type="bool"),
-        location_href=dict(type="str", required=True),
-        billing_term=dict(type="str", required=True, choices=['HOURLY']),
-        cloud_services=dict(type="list"),
-        customer_asn=dict(type="int"),
-        customer_networks=dict(type="list", default=[]),
-        nat_enabled=dict(type="bool", default=False),
-        nat_mappings=dict(type="list", default=[])
+        id=dict(type='str'),
+        name=dict(type='str', required=True),
+        description=dict(type='str'),
+        speed=dict(type='int', required=True, choices=[50, 100, 200, 300, 400, 500, 1000, 1000]),
+        high_availability=dict(type='bool'),
+        location_href=dict(type='str', required=True),
+        billing_term=dict(type='str', required=True, choices=['HOURLY']),
+        cloud_services=dict(type='list'),
+        customer_asn=dict(type='int'),
+        customer_networks=dict(type='list', default=[]),
+        nat_enabled=dict(type='bool', default=False),
+        nat_mappings=dict(type='list', default=[])
     )
 
 
@@ -53,7 +53,7 @@ def get_peering_connection_argument_spec():
     :rtype: dict[str, dict]
     """
     return dict(
-        peering_type=dict(type="str", choices=['PRIVATE', 'PUBLIC'], default='PRIVATE'),
+        peering_type=dict(type='str', choices=['PRIVATE', 'PUBLIC'], default='PRIVATE'),
     )
 
 

@@ -166,9 +166,9 @@ def main():
     argument_spec.update(get_state_argument_spec())
     argument_spec.update(
         dict(
-            id=dict(type="str"),
-            name=dict(type="str", required=True),
-            description=dict(type="str")
+            id=dict(type='str'),
+            name=dict(type='str', required=True),
+            description=dict(type='str')
         )
     )
     mutually_exclusive = []

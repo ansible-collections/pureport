@@ -77,7 +77,7 @@ def construct_connection(module):
         'service_key'
     ))
     connection.update(dict(
-        type="AZURE_EXPRESS_ROUTE",
+        type='AZURE_EXPRESS_ROUTE',
         peering=dict(type=module.params.get('peering_type')),
         # TODO(mtraynham): Remove id parsing once we only need to pass href
         location=dict(href=module.params.get('location_href'),
@@ -103,7 +103,7 @@ def main():
     argument_spec.update(get_peering_connection_argument_spec())
     argument_spec.update(
         dict(
-            service_key=dict(type="str", required=True)
+            service_key=dict(type='str', required=True)
         )
     )
     mutually_exclusive = []
