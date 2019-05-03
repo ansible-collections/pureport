@@ -81,7 +81,7 @@ def construct_connection(module):
         'secondary_pairing_key'
     ))
     connection.update(dict(
-        type="GOOGLE_CLOUD_INTERCONNECT",
+        type='GOOGLE_CLOUD_INTERCONNECT',
         # TODO(mtraynham): Remove id parsing once we only need to pass href
         location=dict(href=module.params.get('location_href'),
                       id=module.params.get('location_href').split('/')[-1]),
@@ -105,8 +105,8 @@ def main():
     argument_spec.update(get_cloud_connection_argument_spec())
     argument_spec.update(
         dict(
-            primary_pairing_key=dict(type="str", required=True),
-            secondary_pairing_key=dict(type="str")
+            primary_pairing_key=dict(type='str', required=True),
+            secondary_pairing_key=dict(type='str')
         )
     )
     mutually_exclusive = []
