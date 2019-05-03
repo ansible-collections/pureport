@@ -71,10 +71,8 @@ from ansible.module_utils.pureport.pureport import \
     get_client_argument_spec, \
     get_client, \
     get_account_argument_spec, \
-    get_account_mutually_exclusive, \
     get_account, \
     get_network_argument_spec, \
-    get_network_mutually_exclusive, \
     get_network
 
 
@@ -87,24 +85,22 @@ def find_connections(module):
 
     connections = None
     # Retrieve connections from the account
-    if module.params.get('account') is not None or \
-            module.params.get('account_id') is not None:
-        account = get_account(module, client)
+    if module.params.get('account_href') is not None:
+        account = get_account(module)
         try:
             connections = client.accounts.connections(account).list()
         except ClientHttpException as e:
             module.fail_json(msg=e.response.text, exception=format_exc())
     # Retrieve connections from the network
-    elif module.params.get('network') is not None or \
-            module.params.get('network_id') is not None:
-        network = get_network(module, client)
+    elif module.params.get('network_href') is not None:
+        network = get_network(module)
         try:
             connections = client.networks.connections(network).list()
         except ClientHttpException as e:
             module.fail_json(msg=e.response.text, exception=format_exc())
     else:
-        module.fail_json(msg='One of account, account_id, network, '
-                             'or network_id arguments should be provided.')
+        module.fail_json(msg='One of account_href or network_href '
+                             'arguments should be provided.')
 
     module.exit_json(connections=connections)
 
@@ -116,7 +112,7 @@ def main():
     argument_spec.update(get_network_argument_spec())
     mutually_exclusive = []
     mutually_exclusive += [
-        get_account_mutually_exclusive()[0] + get_network_mutually_exclusive()[0]
+        ['account_href', 'network_href']
     ]
     module = AnsibleModule(
         argument_spec=argument_spec,

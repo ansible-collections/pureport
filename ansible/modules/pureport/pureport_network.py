@@ -64,7 +64,6 @@ from ansible.module_utils.pureport.pureport import \
     get_client_argument_spec, \
     get_client, \
     get_account_argument_spec, \
-    get_account_mutually_exclusive, \
     get_account
 from ansible.module_utils.pureport.pureport_crud import \
     get_state_argument_spec, \
@@ -123,7 +122,7 @@ def create_network(module, client, network):
     :param Network network: the Ansible inferred Network
     :rtype: Network
     """
-    account = get_account(module, client)
+    account = get_account(module)
     try:
         return client.accounts.networks(account).create(network)
     except ClientHttpException as e:
@@ -163,7 +162,7 @@ def delete_network(module, client, network):
 def main():
     argument_spec = dict()
     argument_spec.update(get_client_argument_spec())
-    argument_spec.update(get_account_argument_spec())
+    argument_spec.update(get_account_argument_spec(True))
     argument_spec.update(get_state_argument_spec())
     argument_spec.update(
         dict(
@@ -173,7 +172,6 @@ def main():
         )
     )
     mutually_exclusive = []
-    mutually_exclusive += get_account_mutually_exclusive()
     module = AnsibleModule(
         argument_spec=argument_spec,
         mutually_exclusive=mutually_exclusive,

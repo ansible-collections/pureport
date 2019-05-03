@@ -6,12 +6,12 @@
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
-        network_id: "{{ network_id }}"
+        network_href: "{{ network_href }}"
         wait_for_server: true
         name: "Test Azure Express Route"
         speed: 50
         high_availability: true
-        location: "{{ location }}"
+        location_href: "{{ location_href }}"
         peering_type: PRIVATE
         billing_term: HOURLY
         service_key: "{{ azure_service_key }}"
@@ -28,14 +28,14 @@
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
-        network_id: "{{ network_id }}"
+        network_href: "{{ network_href }}"
         wait_for_server: true
         id: "{{ result.connection.id }}"
         name: "{{ result.connection.name }}"
         speed: "{{ result.connection.speed }}"
         high_availability: "{{ result.connection.highAvailability }}"
         peering_type: "{{ result.connection.peering.type }}"
-        location: "{{ location }}"
+        location_href: "{{ location_href }}"
         billing_term: "{{ result.connection.billingTerm }}"
         service_key: "{{ azure_service_key }}"
         customer_networks: "{{ result.connection.customerNetworks }}"
@@ -49,14 +49,14 @@
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
-        network_id: "{{ network_id }}"
+        network_href: "{{ network_href }}"
         wait_for_server: true
         id: "{{ result.connection.id }}"
         name: "{{ result.connection.name }}"
         speed: "{{ result.connection.speed }}"
         high_availability: "{{ result.connection.highAvailability }}"
         peering_type: "{{ result.connection.peering.type }}"
-        location: "{{ location }}"
+        location_href: "{{ location_href }}"
         billing_term: "{{ result.connection.billingTerm }}"
         service_key: "{{ azure_service_key }}"
         customer_networks:
@@ -72,7 +72,7 @@
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
-        network_id: "{{ network_id }}"
+        network_href: "{{ network_href }}"
         state: 'absent'
         wait_for_server: true
         id: "{{ result.connection.id }}"
@@ -80,7 +80,7 @@
         speed: "{{ result.connection.speed }}"
         high_availability: "{{ result.connection.highAvailability }}"
         peering_type: "{{ result.connection.peering.type }}"
-        location: "{{ location }}"
+        location_href: "{{ location_href }}"
         billing_term: "{{ result.connection.billingTerm }}"
         service_key: "{{ azure_service_key }}"
         customer_networks: "{{ result.connection.customerNetworks }}"
@@ -94,12 +94,12 @@
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
-        network_id: "{{ network_id }}"
+        network_href: "{{ network_href }}"
         wait_for_server: true
         name: "Test Google Cloud Interconnect"
         speed: 50
         high_availability: true
-        location: "{{ location }}"
+        location_href: "{{ location_href }}"
         peering_type: PRIVATE
         billing_term: HOURLY
         service_key: "{{ azure_service_key }}"
@@ -113,14 +113,14 @@
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
-        network_id: "{{ network_id }}"
+        network_href: "{{ network_href }}"
         wait_for_server: true
         id: "{{ result.connection.id }}"
         name: "{{ result.connection.name }}"
         speed: "{{ result.connection.speed }}"
         high_availability: "{{ result.connection.highAvailability }}"
         peering_type: "{{ result.connection.peering.type }}"
-        location: "{{ location }}"
+        location_href: "{{ location_href }}"
         billing_term: "{{ result.connection.billingTerm }}"
         service_key: "{{ azure_service_key }}"
         customer_networks: "{{ result.connection.customerNetworks }}"
@@ -134,14 +134,14 @@
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
-        network_id: "{{ network_id }}"
+        network_href: "{{ network_href }}"
         wait_for_server: true
         id: "{{ result.connection.id }}"
         name: "{{ result.connection.name }}"
         speed: 100
         high_availability: "{{ result.connection.highAvailability }}"
         peering_type: "{{ result.connection.peering.type }}"
-        location: "{{ location }}"
+        location_href: "{{ location_href }}"
         billing_term: "{{ result.connection.billingTerm }}"
         service_key: "{{ azure_service_key }}"
         customer_networks: "{{ result.connection.customerNetworks }}"
@@ -155,7 +155,7 @@
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
-        network_id: "{{ network_id }}"
+        network_href: "{{ network_href }}"
         state: 'absent'
         wait_for_server: true
         id: "{{ result.connection.id }}"
@@ -163,7 +163,7 @@
         speed: "{{ result.connection.speed }}"
         high_availability: "{{ result.connection.highAvailability }}"
         peering_type: "{{ result.connection.peering.type }}"
-        location: "{{ location }}"
+        location_href: "{{ location_href }}"
         billing_term: "{{ result.connection.billingTerm }}"
         service_key: "{{ azure_service_key }}"
         customer_networks: "{{ result.connection.customerNetworks }}"

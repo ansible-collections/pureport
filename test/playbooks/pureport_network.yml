@@ -6,7 +6,7 @@
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
-        account_id: "{{ account_id }}"
+        account_href: "{{ account_href }}"
         name: Create
       register: result
     - debug: var=result
@@ -18,7 +18,7 @@
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
-        account_id: "{{ account_id }}"
+        account_href: "{{ account_href }}"
         id: "{{ result.network.id }}"
         name: "{{ result.network.name }}"
       register: result
@@ -31,7 +31,7 @@
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
-        account_id: "{{ account_id }}"
+        account_href: "{{ account_href }}"
         id: "{{ result.network.id }}"
         name: "{{ result.network.name }}"
         description: Update
@@ -45,7 +45,7 @@
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
-        account_id: "{{ account_id }}"
+        account_href: "{{ account_href }}"
         id: "{{ result.network.id }}"
         name: "{{ result.network.name }}"
       register: result
@@ -58,7 +58,7 @@
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
-        account_id: "{{ account_id }}"
+        account_href: "{{ account_href }}"
         id: "{{ result.network.id }}"
         name: "12341234123412341234123412341234123412341234123412341234123412341234123412341234123412341234123412341234123412341234123412341234"
       register: bad_result
@@ -71,7 +71,7 @@
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
-        account_id: "{{ account_id }}"
+        account_href: "{{ account_href }}"
         id: "{{ result.network.id }}"
         name: "{{ result.network.name }}"
       register: result
