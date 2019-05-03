@@ -3,7 +3,6 @@
 *.iml
 *.egg-info/
 .tox/
-ansible.cfg
 inventory.ini
 build/
 dist/
