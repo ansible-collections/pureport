@@ -79,11 +79,17 @@ def construct_connection(module):
         'location',
         'billing_term',
         'customer_networks',
-        'nat',
         'primary_pairing_key',
         'secondary_pairing_key'
     ))
-    connection.update(dict(type="GOOGLE_CLOUD_INTERCONNECT"))
+    connection.update(dict(
+        type="GOOGLE_CLOUD_INTERCONNECT",
+        nat=dict(
+            enabled=module.params.get('nat_enabled'),
+            mappings=[dict(native_cidr=nat_mapping)
+                      for nat_mapping in module.params.get('nat_mappings')]
+        )
+    ))
     connection = snake_dict_to_camel_dict(connection)
     return connection
 

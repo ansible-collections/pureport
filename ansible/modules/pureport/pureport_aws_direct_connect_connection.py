@@ -88,14 +88,18 @@ def construct_connection(module):
         'billing_term',
         'customer_asn',
         'customer_networks',
-        'nat',
         'aws_account_id',
         'aws_region',
         'cloud_services'
     ))
     connection.update(dict(
         type="AWS_DIRECT_CONNECT",
-        peering=dict(type=module.params.get('peering_type'))
+        peering=dict(type=module.params.get('peering_type')),
+        nat=dict(
+            enabled=module.params.get('nat_enabled'),
+            mappings=[dict(native_cidr=nat_mapping)
+                      for nat_mapping in module.params.get('nat_mappings')]
+        )
     ))
     connection = snake_dict_to_camel_dict(connection)
     # Correct naming

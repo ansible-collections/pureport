@@ -34,7 +34,8 @@ def get_connection_argument_spec():
         cloud_services=dict(type="list"),
         customer_asn=dict(type="int"),
         customer_networks=dict(type="list", default=[]),
-        nat=dict(type="dict", default=dict(enabled=False))
+        nat_enabled=dict(type="bool", default=False),
+        nat_mappings=dict(type="list", default=[])
     )
 
 

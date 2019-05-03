@@ -49,9 +49,14 @@ options:
         required: false
         type: list
         default: []
-    nat:
+    nat_enabled:
         description:
-            - A NAT configuration
+            - If NAT should be enabled
+        type: bool
+        default: false
+    nat_mappings:
+        description:
+            - A list of CIDR's that should be mapped with NAT
         required: false
-        type: dict
+        type: list
     '''

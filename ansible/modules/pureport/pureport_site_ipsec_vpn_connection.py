@@ -160,7 +160,6 @@ def construct_connection(module):
         'billing_term',
         'customer_asn',
         'customer_networks',
-        'nat',
         'primary_customer_router_ip',
         'secondary_customer_router_ip',
         'routing_type',
@@ -192,7 +191,12 @@ def construct_connection(module):
     ])
     connection.update(dict(
         type="SITE_IPSEC_VPN",
-        authType="PSK"
+        authType="PSK",
+        nat=dict(
+            enabled=module.params.get('nat_enabled'),
+            mappings=[dict(native_cidr=nat_mapping)
+                      for nat_mapping in module.params.get('nat_mappings')]
+        )
     ))
     connection = snake_dict_to_camel_dict(connection)
     # Correct naming

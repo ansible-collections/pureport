@@ -76,12 +76,16 @@ def construct_connection(module):
         'location',
         'billing_term',
         'customer_networks',
-        'nat',
         'service_key'
     ))
     connection.update(dict(
         type="AZURE_EXPRESS_ROUTE",
-        peering=dict(type=module.params.get('peering_type'))
+        peering=dict(type=module.params.get('peering_type')),
+        nat=dict(
+            enabled=module.params.get('nat_enabled'),
+            mappings=[dict(native_cidr=nat_mapping)
+                      for nat_mapping in module.params.get('nat_mappings')]
+        )
     ))
     connection = snake_dict_to_camel_dict(connection)
     return connection
