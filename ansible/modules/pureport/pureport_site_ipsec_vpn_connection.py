@@ -63,7 +63,7 @@ options:
         description:
             - The IKE Pseudo-random Function
             - When the IKE version is 'V2', some of the IKE Encryption algorithms require the PRF to be set.
-            - Those algorithms also require you to not set the IKE Integrity and therefore 'ike_integrity' 
+            - Those algorithms also require you to not set the IKE Integrity and therefore 'ike_integrity'
             - and 'ike_prf' are mutually exclusive.
         required: false
         type: str
