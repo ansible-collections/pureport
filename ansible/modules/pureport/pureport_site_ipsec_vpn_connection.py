@@ -47,6 +47,47 @@ options:
         type: str
         choices: ['V1', 'V2']
         default: 'V2'
+    ike_encryption:
+        description:
+            - The IKE Encryption algorithm
+        required: true
+        type: str
+    ike_integrity:
+        description:
+            - The IKE Integrity algorithm
+            - This is required for IKE version 'V1'.  For IKE 'V2', depending on the IKE Encryption algorithm,
+            - this may or may not be required.
+        required: false
+        type: str
+    ike_prf:
+        description:
+            - The IKE Pseudo-random Function
+            - When the IKE version is 'V2', some of the IKE Encryption algorithms require the PRF to be set.
+            - Those algorithms also require you to not set the IKE Integrity and therefore 'ike_integrity' 
+            - and 'ike_prf' are mutually exclusive.
+        required: false
+        type: str
+    ike_dh_group:
+        description:
+            - The IKE Diffie-Hellman group
+        required: true
+        type: str
+    esp_encryption:
+        description:
+            - The ESP Encryption algorithm
+        required: true
+        type: str
+    esp_integrity:
+        description:
+            - The ESP Integrity algorithm
+            - Depending on the ESP Encryption algorithm, this may or may not be required.
+        required: false
+        type: str
+    esp_dh_group:
+        description:
+            - The ESP Diffie-Hellman algorithm
+        required: true
+        type: str
     primary_key:
         description:
             - The IPSec pre-shared key for the secondary gateway.
@@ -57,16 +98,6 @@ options:
             - The IPSec pre-shared key for the secondary gateway.
         required: false
         type: str
-    ike_v1:
-        description:
-            - The IKEV1 configuration.
-        required: false
-        type: dict
-    ike_v2:
-        description:
-            - The IKEV2 configuration.
-        required: false
-        type: dict
     traffic_selectors:
         description:
             - A list of traffic selectors (e.g dict(customer_side=str, pureport_side=str))
@@ -137,11 +168,28 @@ def construct_connection(module):
         'ike_version',
         'primary_key',
         'secondary_key',
-        'ike_v1',
-        'ike_v2',
         'traffic_selectors',
         'enable_bgp_password'
     ))
+    is_ike_v1 = connection.get('ike_version') == 'V1'
+    connection.update([
+        (
+            'ikeV1' if is_ike_v1 else 'ikeV2',
+            dict(
+                ike=dict((k[4:], module.params.get(k)) for k in (
+                    'ike_encryption',
+                    'ike_integrity',
+                    'ike_prf' if not is_ike_v1 else None,
+                    'ike_dh_group',
+                ) if k is not None),
+                esp=dict((k[4:], module.params.get(k)) for k in (
+                    'esp_encryption',
+                    'esp_integrity',
+                    'esp_dh_group'
+                ))
+            )
+        )
+    ])
     connection.update(dict(
         type="SITE_IPSEC_VPN",
         authType="PSK"
@@ -179,10 +227,15 @@ def main():
             ),
             physical_address=dict(type="dict"),
             ike_version=dict(type='str', choices=['V1', 'V2'], default='V2'),
+            ike_encryption=dict(type='str', required=True),
+            ike_integrity=dict(type='str'),
+            ike_prf=dict(type='str'),
+            ike_dh_group=dict(type='str', required=True),
+            esp_encryption=dict(type='str', required=True),
+            esp_integrity=dict(type='str'),
+            esp_dh_group=dict(type='str', required=True),
             primary_key=dict(type='str'),
             secondary_key=dict(type='str'),
-            ike_v1=dict(type='dict'),
-            ike_v2=dict(type='dict'),
             traffic_selectors=dict(type='list', default=[]),
             enable_bgp_password=dict(type='bool')
         )
@@ -190,7 +243,7 @@ def main():
     mutually_exclusive = []
     mutually_exclusive += get_network_mutually_exclusive()
     mutually_exclusive += [
-        ['ike_v1', 'ike_v2']
+        ['ike_integrity', 'ike_prf']
     ]
     module = AnsibleModule(
         argument_spec=argument_spec,
