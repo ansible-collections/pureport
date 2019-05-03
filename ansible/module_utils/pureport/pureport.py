@@ -5,6 +5,8 @@ try:
     HAS_PUREPORT_CLIENT = True
 except ImportError:
     HAS_PUREPORT_CLIENT = False
+    Client = None
+    ClientHttpException = None
 
 
 def get_client_argument_spec():

@@ -61,7 +61,8 @@ from traceback import format_exc
 try:
     from pureport.exception.api import ClientHttpException, NotFoundException
 except ImportError:
-    pass
+    ClientHttpException = None
+    NotFoundException = None
 from ansible.module_utils.pureport.pureport import \
     get_client_argument_spec, \
     get_client, \

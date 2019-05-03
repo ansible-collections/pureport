@@ -3,7 +3,8 @@ from traceback import format_exc
 try:
     from pureport.exception.api import ClientHttpException, NotFoundException
 except ImportError:
-    pass
+    ClientHttpException = None
+    NotFoundException = None
 from ansible.module_utils.pureport.pureport import get_client, get_network
 from ansible.module_utils.pureport.pureport_crud import item_crud, deep_compare
 
