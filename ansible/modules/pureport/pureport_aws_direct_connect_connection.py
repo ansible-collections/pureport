@@ -52,8 +52,7 @@ author:
 EXAMPLES = '''
 - name: Create a simple PRIVATE AWS Direct Connect connection for a network
   pureport_aws_direct_connect_connection:
-    api_key: XXXXXXXXXXXXX
-    api_secret: XXXXXXXXXXXXXXXXX
+    api_access_token: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     network_href: /networks/network-XXXXXXXXXXXXXXXXXXXXXX
     name: My Ansible AWS Direct Connect Connection
     speed: 50
@@ -67,8 +66,7 @@ EXAMPLES = '''
 
 - name: Update the newly created connection with changed properties
   pureport_aws_direct_connect_connection:
-    api_key: XXXXXXXXXXXXX
-    api_secret: XXXXXXXXXXXXXXXXX
+    api_access_token: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     network_href: /networks/network-XXXXXXXXXXXXXXXXXXXXXX
     name: {{ result.connection.name }}
     speed: 100
@@ -82,8 +80,7 @@ EXAMPLES = '''
 
 - name: Delete the newly created connection using the 'absent' state
   pureport_aws_direct_connect_connection:
-    api_key: XXXXXXXXXXXXX
-    api_secret: XXXXXXXXXXXXXXXXX
+    api_access_token: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     network_href: /networks/network-XXXXXXXXXXXXXXXXXXXXXX
     state: absent
     name: {{ result.connection.name }}
@@ -97,8 +94,7 @@ EXAMPLES = '''
 
 - name: Create a PRIVATE AWS Direct Connect connection with all properties configured
   pureport_aws_direct_connect_connection:
-    api_key: XXXXXXXXXXXXX
-    api_secret: XXXXXXXXXXXXXXXXX
+    api_access_token: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     network_href: /networks/network-XXXXXXXXXXXXXXXXXXXXXX
     name: My Ansible AWS Direct Connect
     speed: 50
@@ -120,8 +116,7 @@ EXAMPLES = '''
 
 - name: Create a PUBLIC AWS Direct Connect connection with all properties configured
   pureport_aws_direct_connect_connection:
-    api_key: XXXXXXXXXXXXX
-    api_secret: XXXXXXXXXXXXXXXXX
+    api_access_token: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     network_href: /networks/network-XXXXXXXXXXXXXXXXXXXXXX
     name: My Ansible AWS Direct Connect
     speed: 50

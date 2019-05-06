@@ -1,11 +1,20 @@
 ---
 - hosts: localhost
   tasks:
-    - name: Test create Private Azure Express Route connection
-      pureport_azure_express_route_connection:
+    - name: Retrieve the access token for an api key and secret
+      pureport_access_token_fact:
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
+      register: result
+    - name: Set the access token as a fact
+      set_fact:
+        access_token: "{{ result.access_token }}"
+
+    - name: Test create Private Azure Express Route connection
+      pureport_azure_express_route_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         wait_for_server: true
         name: "Test Azure Express Route"
@@ -26,8 +35,7 @@
     - name: Test update Private Azure Express Route connection (no changes)
       pureport_azure_express_route_connection:
         api_base_url: "{{ api_base_url }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret }}"
+        api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         wait_for_server: true
         id: "{{ result.connection.id }}"
@@ -47,8 +55,7 @@
     - name: Test update Private Azure Express Route connection (changes)
       pureport_azure_express_route_connection:
         api_base_url: "{{ api_base_url }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret }}"
+        api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         wait_for_server: true
         id: "{{ result.connection.id }}"
@@ -70,8 +77,7 @@
     - name: Test delete Private Azure Express Route connection
       pureport_azure_express_route_connection:
         api_base_url: "{{ api_base_url }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret }}"
+        api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         state: 'absent'
         wait_for_server: true
@@ -92,8 +98,7 @@
     - name: Test create Public Azure Express Route connection
       pureport_azure_express_route_connection:
         api_base_url: "{{ api_base_url }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret }}"
+        api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         wait_for_server: true
         name: "Test Google Cloud Interconnect"
@@ -111,8 +116,7 @@
     - name: Test update Public Azure Express Route connection (no changes)
       pureport_azure_express_route_connection:
         api_base_url: "{{ api_base_url }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret }}"
+        api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         wait_for_server: true
         id: "{{ result.connection.id }}"
@@ -132,8 +136,7 @@
     - name: Test update Public Azure Express Route connection (changes)
       pureport_azure_express_route_connection:
         api_base_url: "{{ api_base_url }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret }}"
+        api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         wait_for_server: true
         id: "{{ result.connection.id }}"
@@ -153,8 +156,7 @@
     - name: Test delete Public Azure Express Route connection
       pureport_azure_express_route_connection:
         api_base_url: "{{ api_base_url }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret }}"
+        api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         state: 'absent'
         wait_for_server: true

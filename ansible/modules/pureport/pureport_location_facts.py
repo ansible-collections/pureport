@@ -27,8 +27,7 @@ author:
 EXAMPLES = '''
 - name: List locations
   pureport_location_facts:
-    api_key: XXXXXXXXXXXXX
-    api_secret: XXXXXXXXXXXXXXXXX
+    api_access_token: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
   register: result   # Registers result.locations
 
 - name: Display all locations hrefs using a json_query filter

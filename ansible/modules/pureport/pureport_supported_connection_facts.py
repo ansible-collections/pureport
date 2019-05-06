@@ -32,8 +32,7 @@ author:
 EXAMPLES = '''
 - name: List supported connections for an account
   pureport_supported_connection_facts:
-    api_key: XXXXXXXXXXXXX
-    api_secret: XXXXXXXXXXXXXXXXX
+    api_access_token: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     account_href: /accounts/ac-XXXXXXXXXXXXXXXXXXXXXX
   register: result   # Registers result.supported_connections
 

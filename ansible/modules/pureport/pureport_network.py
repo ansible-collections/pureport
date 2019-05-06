@@ -48,16 +48,14 @@ author:
 EXAMPLES = '''
 - name: Create a network for an account
   pureport_network:
-    api_key: XXXXXXXXXXXXX
-    api_secret: XXXXXXXXXXXXXXXXX
+    api_access_token: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     account_href: /accounts/ac-XXXXXXXXXXXXXXXXXXXXXX
     name: My Ansible Account
   register: result  # Registers result.network
 
 - name: Update the newly created network with changed properties
   pureport_network:
-    api_key: XXXXXXXXXXXXX
-    api_secret: XXXXXXXXXXXXXXXXX
+    api_access_token: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     account_href: /accounts/ac-XXXXXXXXXXXXXXXXXXXXXX
     id: {{ result.network.id }}
     name: My Updated Ansible Account
@@ -66,8 +64,7 @@ EXAMPLES = '''
 
 - name: Delete the newly created network using the 'absent' state
   pureport_network:
-    api_key: XXXXXXXXXXXXX
-    api_secret: XXXXXXXXXXXXXXXXX
+    api_access_token: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     account_href: /accounts/ac-XXXXXXXXXXXXXXXXXXXXXX
     state: absent
     id: {{ result.network.id }}

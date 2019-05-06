@@ -6,14 +6,10 @@ options:
             - The host url for the Pureport API.
         required: false
         type: str
-    api_key:
+    api_access_token:
         description:
-            - The pre-configured API Key for a Pureport Account.
-        required: true
-        type: str
-    api_secret:
-        description:
-            - The pre-configured API Secret for a Pureport Account.
+            - The access token to use with Pureport API.  This can be obtained from
+            - the `pureport_access_token_fact` module.
         required: true
         type: str
     '''

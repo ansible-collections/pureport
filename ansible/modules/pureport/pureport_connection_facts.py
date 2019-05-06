@@ -41,15 +41,13 @@ author:
 EXAMPLES = '''
 - name: List connections for an account
   pureport_networks_facts:
-    api_key: XXXXXXXXXXXXX
-    api_secret: XXXXXXXXXXXXXXXXX
+    api_access_token: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     account_href: /accounts/ac-XXXXXXXXXXXXXXXXXXXXXX
   register: result   # Registers result.connections
 
 - name: List connections for a network
   pureport_networks_facts:
-    api_key: XXXXXXXXXXXXX
-    api_secret: XXXXXXXXXXXXXXXXX
+    api_access_token: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     network_href: /networks/network-XXXXXXXXXXXXXXXXXXXXXX
   register: result   # Registers result.connections
 

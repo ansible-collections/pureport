@@ -38,14 +38,12 @@ author:
 EXAMPLES = '''
 - name: List options
   pureport_location_facts:
-    api_key: XXXXXXXXXXXXX
-    api_secret: XXXXXXXXXXXXXXXXX
+    api_access_token: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
   register: result   # Registers result.options
 
 - name: List a subset of options
   pureport_location_facts:
-    api_key: XXXXXXXXXXXXX
-    api_secret: XXXXXXXXXXXXXXXXX
+    api_access_token: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     types:
       - IKEV2IKEPRF
   register: result   # Registers result.options

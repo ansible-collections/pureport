@@ -32,8 +32,7 @@ author:
 EXAMPLES = '''
 - name: List networks for an account
   pureport_networks_facts:
-    api_key: XXXXXXXXXXXXX
-    api_secret: XXXXXXXXXXXXXXXXX
+    api_access_token: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     account_href: /accounts/ac-XXXXXXXXXXXXXXXXXXXXXX
   register: result   # Registers result.networks
 

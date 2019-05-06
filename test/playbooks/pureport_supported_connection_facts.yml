@@ -1,11 +1,20 @@
 ---
 - hosts: localhost
   tasks:
-    - name: List supported connections for an account
-      pureport_supported_connection_facts:
+    - name: Retrieve the access token for an api key and secret
+      pureport_access_token_fact:
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
+      register: result
+    - name: Set the access token as a fact
+      set_fact:
+        access_token: "{{ result.access_token }}"
+
+    - name: List supported connections for an account
+      pureport_supported_connection_facts:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
         account_href: "{{ account_href }}"
       register: result
     - debug: var=result

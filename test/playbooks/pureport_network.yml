@@ -1,11 +1,20 @@
 ---
 - hosts: localhost
   tasks:
-    - name: Test create network (without id)
-      pureport_network:
+    - name: Retrieve the access token for an api key and secret
+      pureport_access_token_fact:
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
+      register: result
+    - name: Set the access token as a fact
+      set_fact:
+        access_token: "{{ result.access_token }}"
+
+    - name: Test create network (without id)
+      pureport_network:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
         account_href: "{{ account_href }}"
         name: Create
       register: result
@@ -16,8 +25,7 @@
     - name: Test update network (no changes)
       pureport_network:
         api_base_url: "{{ api_base_url }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret }}"
+        api_access_token: "{{ access_token }}"
         account_href: "{{ account_href }}"
         id: "{{ result.network.id }}"
         name: "{{ result.network.name }}"
@@ -29,8 +37,7 @@
     - name: Test update network
       pureport_network:
         api_base_url: "{{ api_base_url }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret }}"
+        api_access_token: "{{ access_token }}"
         account_href: "{{ account_href }}"
         id: "{{ result.network.id }}"
         name: "{{ result.network.name }}"
@@ -43,8 +50,7 @@
     - name: Test update network (remove property)
       pureport_network:
         api_base_url: "{{ api_base_url }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret }}"
+        api_access_token: "{{ access_token }}"
         account_href: "{{ account_href }}"
         id: "{{ result.network.id }}"
         name: "{{ result.network.name }}"
@@ -56,8 +62,7 @@
     - name: Test update network (bad name)
       pureport_network:
         api_base_url: "{{ api_base_url }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret }}"
+        api_access_token: "{{ access_token }}"
         account_href: "{{ account_href }}"
         id: "{{ result.network.id }}"
         name: "12341234123412341234123412341234123412341234123412341234123412341234123412341234123412341234123412341234123412341234123412341234"
@@ -69,8 +74,7 @@
       pureport_network:
         state: absent
         api_base_url: "{{ api_base_url }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret }}"
+        api_access_token: "{{ access_token }}"
         account_href: "{{ account_href }}"
         id: "{{ result.network.id }}"
         name: "{{ result.network.name }}"

@@ -27,8 +27,7 @@ author:
 EXAMPLES = '''
 - name: List accounts for an API key pair
   pureport_account_facts:
-    api_key: XXXXXXXXXXXXX
-    api_secret: XXXXXXXXXXXXXXXXX
+    api_access_token: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
   register: result   # Registers result.accounts
 
 - name: Display all account hrefs using a json_query filter

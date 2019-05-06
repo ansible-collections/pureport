@@ -1,10 +1,19 @@
 ---
 - hosts: localhost
   tasks:
-    - name: List locations
-      pureport_location_facts:
+    - name: Retrieve the access token for an api key and secret
+      pureport_access_token_fact:
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
+      register: result
+    - name: Set the access token as a fact
+      set_fact:
+        access_token: "{{ result.access_token }}"
+
+    - name: List locations
+      pureport_location_facts:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
       register: result
     - debug: var=result

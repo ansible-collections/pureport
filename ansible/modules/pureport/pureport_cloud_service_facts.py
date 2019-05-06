@@ -27,8 +27,7 @@ author:
 EXAMPLES = '''
 - name: List cloud services
   pureport_cloud_service_facts:
-    api_key: XXXXXXXXXXXXX
-    api_secret: XXXXXXXXXXXXXXXXX
+    api_access_token: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
   register: result   # Registers result.cloudServices
 
 - name: Display all cloud service hrefs using a json_query filter
