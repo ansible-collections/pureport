@@ -1,0 +1,11 @@
+---
+- hosts: localhost
+  tasks:
+    - name: List supported connections for an account
+      pureport_supported_connection_facts:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+        account_href: "{{ account_href }}"
+      register: result
+    - debug: var=result

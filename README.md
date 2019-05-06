@@ -3,6 +3,11 @@ This is a collection of Ansible [library modules](https://docs.ansible.com/ansib
 interact with the [Pureport](https://www.pureport.com/) ReST API.
 
 It provides the following modules you can use in your own roles:
+- `pureport_location_facts` - used to list a set of locations
+- `pureport_option_facts` - used to list a set of enum options used for creating connections
+- `pureport_cloud_service_facts` - used to list a set of cloud service objects for public connections
+- `pureport_account_facts` - used to list available accounts for an API key
+- `pureport_supported_connection_facts` - used to list available supported connections for an account
 - `pureport_network_facts` - used to list a set of networks
 - `pureport_network` - used to create/update/delete a network
 - `pureport_connection_facts` - used to list a set of connections
@@ -65,6 +70,11 @@ doc_fragment_plugins = ./roles/pureport.pureport-ansible-modules/ansible/plugins
 
 You can then get information about each module:
 ```bash
+ansible-doc pureport_location_facts
+ansible-doc pureport_option_facts
+ansible-doc pureport_cloud_service_facts
+ansible-doc pureport_account_facts
+ansible-doc pureport_supported_connection_facts
 ansible-doc pureport_network_facts
 ansible-doc pureport_network
 ansible-doc pureport_connection_facts
@@ -76,6 +86,11 @@ ansible-doc pureport_site_ipsec_vpn_connection
 
 Also dump a snippet of what invoking a module requires:
 ```bash
+ansible-doc pureport_location_facts -s
+ansible-doc pureport_option_facts -s
+ansible-doc pureport_cloud_service_facts -s
+ansible-doc pureport_account_facts -s
+ansible-doc pureport_supported_connection_facts -s
 ansible-doc pureport_network_facts -s
 ansible-doc pureport_network -s
 ansible-doc pureport_connection_facts -s
