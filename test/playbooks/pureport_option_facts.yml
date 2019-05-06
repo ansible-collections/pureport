@@ -15,6 +15,7 @@
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
         types:
+          - IKEV1IKEEncryption
           - IKEV2IKEPRF
       register: result
     - debug: var=result

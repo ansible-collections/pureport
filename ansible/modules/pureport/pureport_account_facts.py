@@ -26,7 +26,7 @@ author:
 
 EXAMPLES = '''
 - name: List accounts for an API key pair
-  pureport_networks_facts:
+  pureport_account_facts:
     api_key: XXXXXXXXXXXXX
     api_secret: XXXXXXXXXXXXXXXXX
   register: result   # Registers result.accounts

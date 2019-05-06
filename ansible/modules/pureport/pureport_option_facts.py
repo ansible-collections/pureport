@@ -22,6 +22,10 @@ options:
         description:
             - a list of types to filter the results
         type: list
+        choices: ['IKEV1IKEEncryption', 'IKEV1IKEIntegrity', 'IKEV1IKEDHGroup', 'IKEV1ESPEncryption',
+                  'IKEV1ESPIntegrity', 'IKEV1ESPDHGroup', 'IKEV2IKEEncryption', 'IKEV2IKEPRF',
+                  'IKEV2IKEIntegrity', 'IKEV2IKEDHGroup', 'IKEV2ESPEncryption', 'IKEV2ESPIntegrity',
+                  'IKEV2ESPDHGroup']
         default: []
 
 extends_documentation_fragment:
@@ -82,7 +86,25 @@ def main():
     argument_spec = dict()
     argument_spec.update(get_client_argument_spec())
     argument_spec.update(dict(
-        types=dict(type="list", default=[])
+        types=dict(
+            type="list",
+            default=[],
+            choices=[
+                'IKEV1IKEEncryption',
+                'IKEV1IKEIntegrity',
+                'IKEV1IKEDHGroup',
+                'IKEV1ESPEncryption',
+                'IKEV1ESPIntegrity',
+                'IKEV1ESPDHGroup',
+                'IKEV2IKEEncryption',
+                'IKEV2IKEPRF',
+                'IKEV2IKEIntegrity',
+                'IKEV2IKEDHGroup',
+                'IKEV2ESPEncryption',
+                'IKEV2ESPIntegrity',
+                'IKEV2ESPDHGroup'
+            ]
+        )
     ))
     mutually_exclusive = []
     module = AnsibleModule(
