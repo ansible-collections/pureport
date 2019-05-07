@@ -8,7 +8,7 @@ It provides the following modules you can use in your own roles:
   of the `access_token`, further reducing the number of API calls and execution time. 
 - `pureport_location_facts` - used to list a set of locations
 - `pureport_option_facts` - used to list a set of enum options used for creating connections
-- `pureport_cloud_service_facts` - used to list a set of cloud region objects for various connection types
+- `pureport_cloud_region_facts` - used to list a set of cloud region objects for various connection types
 - `pureport_cloud_service_facts` - used to list a set of cloud service objects for public connections
 - `pureport_account_facts` - used to list available accounts for an API key
 - `pureport_supported_connection_facts` - used to list available supported connections for an account
