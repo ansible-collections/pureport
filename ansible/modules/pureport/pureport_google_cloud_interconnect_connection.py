@@ -121,6 +121,7 @@ from ansible.module_utils.common.dict_transformations import snake_dict_to_camel
 
 from ansible.module_utils.pureport.pureport import \
     get_client_argument_spec, \
+    get_client_mutually_exclusive, \
     get_network_argument_spec
 from ansible.module_utils.pureport.pureport_crud import get_state_argument_spec
 from ansible.module_utils.pureport.pureport_connection_crud import \
@@ -177,6 +178,7 @@ def main():
         )
     )
     mutually_exclusive = []
+    mutually_exclusive += get_client_mutually_exclusive()
     module = AnsibleModule(
         argument_spec=argument_spec,
         mutually_exclusive=mutually_exclusive

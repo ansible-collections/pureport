@@ -1,11 +1,20 @@
 ---
 - hosts: localhost
   tasks:
-    - name: Test create Site IPSec VPN connection (ikeV1)
-      pureport_site_ipsec_vpn_connection:
+    - name: Retrieve the access token for an api key and secret
+      pureport_access_token_fact:
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
+      register: result
+    - name: Set the access token as a fact
+      set_fact:
+        access_token: "{{ result.access_token }}"
+
+    - name: Test create Site IPSec VPN connection (ikeV1)
+      pureport_site_ipsec_vpn_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         wait_for_server: true
         name: "Test Site IPSec VPN Connection"
@@ -37,8 +46,7 @@
     - name: Test update Site IPSec VPN connection (ikeV1) (no changes)
       pureport_site_ipsec_vpn_connection:
         api_base_url: "{{ api_base_url }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret }}"
+        api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         wait_for_server: true
         id: "{{ result.connection.id }}"
@@ -68,8 +76,7 @@
     - name: Test update Site IPSec VPN connection (ikeV1) (changes)
       pureport_site_ipsec_vpn_connection:
         api_base_url: "{{ api_base_url }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret }}"
+        api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         wait_for_server: true
         id: "{{ result.connection.id }}"
@@ -99,8 +106,7 @@
     - name: Test delete Site IPSec VPN connection (ikeV1)
       pureport_site_ipsec_vpn_connection:
         api_base_url: "{{ api_base_url }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret }}"
+        api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         wait_for_server: true
         state: 'absent'
@@ -131,8 +137,7 @@
     - name: Test create Site IPSec VPN connection (ikeV2)
       pureport_site_ipsec_vpn_connection:
         api_base_url: "{{ api_base_url }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret }}"
+        api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         wait_for_server: true
         name: "Test Site IPSec VPN Connection"
@@ -164,8 +169,7 @@
     - name: Test update Site IPSec VPN connection (ikeV2) (no changes)
       pureport_site_ipsec_vpn_connection:
         api_base_url: "{{ api_base_url }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret }}"
+        api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         wait_for_server: true
         id: "{{ result.connection.id }}"
@@ -195,8 +199,7 @@
     - name: Test update Site IPSec VPN connection (ikeV2) (changes)
       pureport_site_ipsec_vpn_connection:
         api_base_url: "{{ api_base_url }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret }}"
+        api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         wait_for_server: true
         id: "{{ result.connection.id }}"
@@ -226,8 +229,7 @@
     - name: Test delete Site IPSec VPN connection (ikeV2)
       pureport_site_ipsec_vpn_connection:
         api_base_url: "{{ api_base_url }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret }}"
+        api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         wait_for_server: true
         state: 'absent'

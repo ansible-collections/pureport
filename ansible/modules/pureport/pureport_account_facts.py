@@ -52,6 +52,7 @@ except ImportError:
     ClientHttpException = None
 from ansible.module_utils.pureport.pureport import \
     get_client_argument_spec, \
+    get_client_mutually_exclusive, \
     get_client
 
 
@@ -72,6 +73,7 @@ def main():
     argument_spec = dict()
     argument_spec.update(get_client_argument_spec())
     mutually_exclusive = []
+    mutually_exclusive += get_client_mutually_exclusive()
     module = AnsibleModule(
         argument_spec=argument_spec,
         mutually_exclusive=mutually_exclusive

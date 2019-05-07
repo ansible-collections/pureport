@@ -1,11 +1,20 @@
 ---
 - hosts: localhost
   tasks:
-    - name: Test works with an account href
-      pureport_connection_facts:
+    - name: Retrieve the access token for an api key and secret
+      pureport_access_token_fact:
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
+      register: result
+    - name: Set the access token as a fact
+      set_fact:
+        access_token: "{{ result.access_token }}"
+
+    - name: Test works with an account href
+      pureport_connection_facts:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
         account_href: "{{ account_href }}"
       register: result
     - debug: var=result
@@ -13,8 +22,7 @@
     - name: Test works with an network href
       pureport_connection_facts:
         api_base_url: "{{ api_base_url }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret }}"
+        api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
       register: result
     - debug: var=result
@@ -22,8 +30,7 @@
     - name: Test that my module fails when passing both account_href & network_href
       pureport_connection_facts:
         api_base_url: "{{ api_base_url }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret }}"
+        api_access_token: "{{ access_token }}"
         account_href: "{{ account_href }}"
         network_href: "{{ network_href }}"
       register: result
@@ -33,8 +40,7 @@
     - name: Test that a filter works for the connections
       pureport_connection_facts:
         api_base_url: "{{ api_base_url }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret }}"
+        api_access_token: "{{ access_token }}"
         account_href: "{{ account_href }}"
       register: result
     - name: Display all connection ids

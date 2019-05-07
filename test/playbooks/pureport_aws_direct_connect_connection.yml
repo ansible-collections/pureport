@@ -1,11 +1,20 @@
 ---
 - hosts: localhost
   tasks:
-    - name: Test create Public AWS connection
-      pureport_aws_direct_connect_connection:
+    - name: Retrieve the access token for an api key and secret
+      pureport_access_token_fact:
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
+      register: result
+    - name: Set the access token as a fact
+      set_fact:
+        access_token: "{{ result.access_token }}"
+
+    - name: Test create Public AWS connection
+      pureport_aws_direct_connect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         wait_for_server: true
         name: "Test AWS Direct Connect"
@@ -25,8 +34,7 @@
     - name: Test update Public AWS connection (no changes)
       pureport_aws_direct_connect_connection:
         api_base_url: "{{ api_base_url }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret }}"
+        api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         wait_for_server: true
         id: "{{ result.connection.id }}"
@@ -47,8 +55,7 @@
     - name: Test update Public AWS connection (changes)
       pureport_aws_direct_connect_connection:
         api_base_url: "{{ api_base_url }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret }}"
+        api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         wait_for_server: true
         id: "{{ result.connection.id }}"
@@ -69,8 +76,7 @@
     - name: Test delete Public AWS connection
       pureport_aws_direct_connect_connection:
         api_base_url: "{{ api_base_url }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret }}"
+        api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         state: 'absent'
         wait_for_server: true
@@ -92,8 +98,7 @@
     - name: Test create Private AWS connection
       pureport_aws_direct_connect_connection:
         api_base_url: "{{ api_base_url }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret }}"
+        api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         wait_for_server: true
         name: "Test AWS Direct Connect"
@@ -118,8 +123,7 @@
     - name: Test update Private AWS connection (no changes)
       pureport_aws_direct_connect_connection:
         api_base_url: "{{ api_base_url }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret }}"
+        api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         wait_for_server: true
         id: "{{ result.connection.id }}"
@@ -142,8 +146,7 @@
     - name: Test update Private AWS connection (changes)
       pureport_aws_direct_connect_connection:
         api_base_url: "{{ api_base_url }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret }}"
+        api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         wait_for_server: true
         id: "{{ result.connection.id }}"
@@ -166,8 +169,7 @@
     - name: Test delete Private AWS connection
       pureport_aws_direct_connect_connection:
         api_base_url: "{{ api_base_url }}"
-        api_key: "{{ api_key }}"
-        api_secret: "{{ api_secret }}"
+        api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         state: 'absent'
         wait_for_server: true

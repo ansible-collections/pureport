@@ -91,6 +91,7 @@ except ImportError:
     NotFoundException = None
 from ansible.module_utils.pureport.pureport import \
     get_client_argument_spec, \
+    get_client_mutually_exclusive, \
     get_client, \
     get_account_argument_spec, \
     get_account
@@ -201,6 +202,7 @@ def main():
         )
     )
     mutually_exclusive = []
+    mutually_exclusive += get_client_mutually_exclusive()
     module = AnsibleModule(
         argument_spec=argument_spec,
         mutually_exclusive=mutually_exclusive,
