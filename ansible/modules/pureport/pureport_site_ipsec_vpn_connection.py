@@ -488,9 +488,7 @@ def main():
     )
     module.exit_json(
         changed=changed,
-        connection=changed_connection,
-        argument_connection=argument_connection,
-        existing_connection=existing_connection
+        **changed_connection
     )
 
 

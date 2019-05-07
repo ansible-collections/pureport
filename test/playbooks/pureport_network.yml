@@ -27,8 +27,8 @@
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         account_href: "{{ account_href }}"
-        id: "{{ result.network.id }}"
-        name: "{{ result.network.name }}"
+        id: "{{ result.id }}"
+        name: "{{ result.name }}"
       register: result
     - debug: var=result
     - fail:
@@ -39,7 +39,7 @@
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         account_href: "{{ account_href }}"
-        name: "{{ result.network.name }}"
+        name: "{{ result.name }}"
       register: result
     - debug: var=result
     - fail:
@@ -50,8 +50,8 @@
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         account_href: "{{ account_href }}"
-        id: "{{ result.network.id }}"
-        name: "{{ result.network.name }}"
+        id: "{{ result.id }}"
+        name: "{{ result.name }}"
         description: Update
       register: result
     - debug: var=result
@@ -63,7 +63,7 @@
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         account_href: "{{ account_href }}"
-        name: "{{ result.network.name }}"
+        name: "{{ result.name }}"
         description: Update 2
       register: result
     - debug: var=result
@@ -75,8 +75,8 @@
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         account_href: "{{ account_href }}"
-        id: "{{ result.network.id }}"
-        name: "{{ result.network.name }}"
+        id: "{{ result.id }}"
+        name: "{{ result.name }}"
       register: result
     - debug: var=result
     - fail:
@@ -87,7 +87,7 @@
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         account_href: "{{ account_href }}"
-        id: "{{ result.network.id }}"
+        id: "{{ result.id }}"
         name: "12341234123412341234123412341234123412341234123412341234123412341234123412341234123412341234123412341234123412341234123412341234"
       register: bad_result
       ignore_errors: yes
@@ -99,7 +99,7 @@
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         account_href: "{{ account_href }}"
-        name: "{{ result.network.name }}"
+        name: "{{ result.name }}"
       register: result
     - debug: var=result
     - fail:

@@ -70,35 +70,30 @@ EXAMPLES = '''
 '''
 
 RETURN = '''
-network:
-    description: the created, updated, or deleted network returned from the server
+id:
+    description:
+        - The network id.
     returned: success
-    type: complex
-    contains:
-        id:
-            description:
-                - The network id.
-            returned: success
-            type: str
-            sample: "network-rfqj4qc9fO8hDOczEB7Z_Q"
-        href:
-            description:
-                - The network href, a path to resource on the server.
-            returned: success
-            type: str
-            sample: "/networks/network-rfqj4qc9fO8hDOczEB7Z_Q"
-        name:
-            description:
-                - The name of the network.
-            returned: success
-            type: str
-            sample: "My Network Name"
-        description:
-            description:
-                - The description of the network.
-            returned: success
-            type: str
-            sample: "My network description"
+    type: str
+    sample: "network-rfqj4qc9fO8hDOczEB7Z_Q"
+href:
+    description:
+        - The network href, a path to resource on the server.
+    returned: success
+    type: str
+    sample: "/networks/network-rfqj4qc9fO8hDOczEB7Z_Q"
+name:
+    description:
+        - The name of the network.
+    returned: success
+    type: str
+    sample: "My Network Name"
+description:
+    description:
+        - The description of the network.
+    returned: success
+    type: str
+    sample: "My network description"
 '''
 
 from ansible.module_utils.basic import AnsibleModule
@@ -280,9 +275,7 @@ def main():
     )
     module.exit_json(
         changed=changed,
-        network=changed_network,
-        argument_network=argument_network,
-        existing_network=existing_network
+        **changed_network
     )
 
 

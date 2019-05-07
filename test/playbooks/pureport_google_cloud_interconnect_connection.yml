@@ -36,14 +36,14 @@
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         wait_for_server: true
-        id: "{{ result.connection.id }}"
-        name: "{{ result.connection.name }}"
-        speed: "{{ result.connection.speed }}"
-        high_availability: "{{ result.connection.highAvailability }}"
+        id: "{{ result.id }}"
+        name: "{{ result.name }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.highAvailability }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.connection.billingTerm }}"
+        billing_term: "{{ result.billingTerm }}"
         primary_pairing_key: "{{ gci_primary_pairing_key }}"
-        customer_networks: "{{ result.connection.customerNetworks }}"
+        customer_networks: "{{ result.customerNetworks }}"
       register: result
     - debug: var=result
     - fail:
@@ -55,13 +55,13 @@
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         wait_for_server: true
-        name: "{{ result.connection.name }}"
-        speed: "{{ result.connection.speed }}"
-        high_availability: "{{ result.connection.highAvailability }}"
+        name: "{{ result.name }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.highAvailability }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.connection.billingTerm }}"
+        billing_term: "{{ result.billingTerm }}"
         primary_pairing_key: "{{ gci_primary_pairing_key }}"
-        customer_networks: "{{ result.connection.customerNetworks }}"
+        customer_networks: "{{ result.customerNetworks }}"
       register: result
     - debug: var=result
     - fail:
@@ -73,12 +73,12 @@
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         wait_for_server: true
-        id: "{{ result.connection.id }}"
-        name: "{{ result.connection.name }}"
-        speed: "{{ result.connection.speed }}"
-        high_availability: "{{ result.connection.highAvailability }}"
+        id: "{{ result.id }}"
+        name: "{{ result.name }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.highAvailability }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.connection.billingTerm }}"
+        billing_term: "{{ result.billingTerm }}"
         primary_pairing_key: "{{ gci_primary_pairing_key }}"
         customer_networks:
           - address: 192.167.1.2/32
@@ -94,14 +94,14 @@
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         wait_for_server: true
-        name: "{{ result.connection.name }}"
+        name: "{{ result.name }}"
         description: Test123
-        speed: "{{ result.connection.speed }}"
-        high_availability: "{{ result.connection.highAvailability }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.highAvailability }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.connection.billingTerm }}"
+        billing_term: "{{ result.billingTerm }}"
         primary_pairing_key: "{{ gci_primary_pairing_key }}"
-        customer_networks: "{{ result.connection.customerNetworks }}"
+        customer_networks: "{{ result.customerNetworks }}"
       register: result
     - debug: var=result
     - fail:
@@ -114,13 +114,13 @@
         network_href: "{{ network_href }}"
         state: 'absent'
         wait_for_server: true
-        name: "{{ result.connection.name }}"
-        speed: "{{ result.connection.speed }}"
-        high_availability: "{{ result.connection.highAvailability }}"
+        name: "{{ result.name }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.highAvailability }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.connection.billingTerm }}"
+        billing_term: "{{ result.billingTerm }}"
         primary_pairing_key: "{{ gci_primary_pairing_key }}"
-        customer_networks: "{{ result.connection.customerNetworks }}"
+        customer_networks: "{{ result.customerNetworks }}"
       register: result
     - debug: var=result
     - fail:
@@ -153,15 +153,15 @@
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         wait_for_server: true
-        id: "{{ result.connection.id }}"
-        name: "{{ result.connection.name }}"
-        speed: "{{ result.connection.speed }}"
-        high_availability: "{{ result.connection.highAvailability }}"
+        id: "{{ result.id }}"
+        name: "{{ result.name }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.highAvailability }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.connection.billingTerm }}"
+        billing_term: "{{ result.billingTerm }}"
         primary_pairing_key: "{{ gci_primary_pairing_key }}"
         secondary_pairing_key: "{{ gci_secondary_pairing_key }}"
-        customer_networks: "{{ result.connection.customerNetworks }}"
+        customer_networks: "{{ result.customerNetworks }}"
       register: result
     - debug: var=result
     - fail:
@@ -173,14 +173,14 @@
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         wait_for_server: true
-        name: "{{ result.connection.name }}"
-        speed: "{{ result.connection.speed }}"
-        high_availability: "{{ result.connection.highAvailability }}"
+        name: "{{ result.name }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.highAvailability }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.connection.billingTerm }}"
+        billing_term: "{{ result.billingTerm }}"
         primary_pairing_key: "{{ gci_primary_pairing_key }}"
         secondary_pairing_key: "{{ gci_secondary_pairing_key }}"
-        customer_networks: "{{ result.connection.customerNetworks }}"
+        customer_networks: "{{ result.customerNetworks }}"
       register: result
     - debug: var=result
     - fail:
@@ -192,12 +192,12 @@
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         wait_for_server: true
-        id: "{{ result.connection.id }}"
-        name: "{{ result.connection.name }}"
-        speed: "{{ result.connection.speed }}"
-        high_availability: "{{ result.connection.highAvailability }}"
+        id: "{{ result.id }}"
+        name: "{{ result.name }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.highAvailability }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.connection.billingTerm }}"
+        billing_term: "{{ result.billingTerm }}"
         primary_pairing_key: "{{ gci_primary_pairing_key }}"
         secondary_pairing_key: "{{ gci_secondary_pairing_key }}"
         customer_networks:
@@ -214,15 +214,15 @@
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         wait_for_server: true
-        name: "{{ result.connection.name }}"
+        name: "{{ result.name }}"
         description: Test123
-        speed: "{{ result.connection.speed }}"
-        high_availability: "{{ result.connection.highAvailability }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.highAvailability }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.connection.billingTerm }}"
+        billing_term: "{{ result.billingTerm }}"
         primary_pairing_key: "{{ gci_primary_pairing_key }}"
         secondary_pairing_key: "{{ gci_secondary_pairing_key }}"
-        customer_networks: "{{ result.connection.customerNetworks }}"
+        customer_networks: "{{ result.customerNetworks }}"
       register: result
     - debug: var=result
     - fail:
@@ -235,15 +235,15 @@
         network_href: "{{ network_href }}"
         state: 'absent'
         wait_for_server: true
-        id: "{{ result.connection.id }}"
-        name: "{{ result.connection.name }}"
-        speed: "{{ result.connection.speed }}"
-        high_availability: "{{ result.connection.highAvailability }}"
+        id: "{{ result.id }}"
+        name: "{{ result.name }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.highAvailability }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.connection.billingTerm }}"
+        billing_term: "{{ result.billingTerm }}"
         primary_pairing_key: "{{ gci_primary_pairing_key }}"
         secondary_pairing_key: "{{ gci_secondary_pairing_key }}"
-        customer_networks: "{{ result.connection.customerNetworks }}"
+        customer_networks: "{{ result.customerNetworks }}"
       register: result
     - debug: var=result
     - fail:

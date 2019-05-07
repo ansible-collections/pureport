@@ -82,7 +82,7 @@
         api_base_url: "{{ pureport_api_base_url | default(omit) }}"
         api_key: "{{ pureport_api_key }}"
         api_secret: "{{ pureport_api_secret }}"
-        network_href: "{{ pureport_network.network.href }}"
+        network_href: "{{ pureport_network.href }}"
         name: "{{ pureport_connection_name }}"
         speed: "{{ pureport_connection_speed }}"
         high_availability: "{{ pureport_connection_high_availability | default(omit) }}"
@@ -97,7 +97,7 @@
 
     - name: Set fact 'pureport_gateways'
       set_fact:
-        pureport_gateways: "{{ [pureport_connection.connection.primaryGateway, pureport_connection.connection.secondaryGateway] | select('defined') | list }}"
+        pureport_gateways: "{{ [pureport_connection.primaryGateway, pureport_connection.secondaryGateway] | select('defined') | list }}"
 
     # https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/directconnect.html#DirectConnect.Client.confirm_connection
     - name: Confirm Direct Connect Connection(s)

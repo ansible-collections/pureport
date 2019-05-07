@@ -57,7 +57,7 @@
         api_base_url: "{{ pureport_api_base_url | default(omit) }}"
         api_key: "{{ pureport_api_key }}"
         api_secret: "{{ pureport_api_secret }}"
-        network_href: "{{ pureport_network.network.href }}"
+        network_href: "{{ pureport_network.href }}"
         id: "{{ pureport_connection_id | default(omit) }}"
         name: "{{ pureport_connection_name }}"
         speed: "{{ pureport_connection_speed }}"

@@ -37,15 +37,15 @@
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         wait_for_server: true
-        id: "{{ result.connection.id }}"
-        name: "{{ result.connection.name }}"
-        speed: "{{ result.connection.speed }}"
-        high_availability: "{{ result.connection.highAvailability }}"
-        peering_type: "{{ result.connection.peering.type }}"
+        id: "{{ result.id }}"
+        name: "{{ result.name }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.highAvailability }}"
+        peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.connection.billingTerm }}"
+        billing_term: "{{ result.billingTerm }}"
         aws_account_id: "{{ aws_account_id }}"
-        aws_region: "{{ result.connection.awsRegion }}"
+        aws_region: "{{ result.awsRegion }}"
         cloud_service_hrefs: "{{ cloud_service_hrefs }}"
       register: result
     - debug: var=result
@@ -58,14 +58,14 @@
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         wait_for_server: true
-        name: "{{ result.connection.name }}"
-        speed: "{{ result.connection.speed }}"
-        high_availability: "{{ result.connection.highAvailability }}"
-        peering_type: "{{ result.connection.peering.type }}"
+        name: "{{ result.name }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.highAvailability }}"
+        peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.connection.billingTerm }}"
+        billing_term: "{{ result.billingTerm }}"
         aws_account_id: "{{ aws_account_id }}"
-        aws_region: "{{ result.connection.awsRegion }}"
+        aws_region: "{{ result.awsRegion }}"
         cloud_service_hrefs: "{{ cloud_service_hrefs }}"
       register: result
     - debug: var=result
@@ -78,15 +78,15 @@
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         wait_for_server: true
-        id: "{{ result.connection.id }}"
-        name: "{{ result.connection.name }}"
+        id: "{{ result.id }}"
+        name: "{{ result.name }}"
         speed: 100
-        high_availability: "{{ result.connection.highAvailability }}"
-        peering_type: "{{ result.connection.peering.type }}"
+        high_availability: "{{ result.highAvailability }}"
+        peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.connection.billingTerm }}"
+        billing_term: "{{ result.billingTerm }}"
         aws_account_id: "{{ aws_account_id }}"
-        aws_region: "{{ result.connection.awsRegion }}"
+        aws_region: "{{ result.awsRegion }}"
         cloud_service_hrefs: "{{ cloud_service_hrefs }}"
       register: result
     - debug: var=result
@@ -99,14 +99,14 @@
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         wait_for_server: true
-        name: "{{ result.connection.name }}"
+        name: "{{ result.name }}"
         speed: 50
-        high_availability: "{{ result.connection.highAvailability }}"
-        peering_type: "{{ result.connection.peering.type }}"
+        high_availability: "{{ result.highAvailability }}"
+        peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.connection.billingTerm }}"
+        billing_term: "{{ result.billingTerm }}"
         aws_account_id: "{{ aws_account_id }}"
-        aws_region: "{{ result.connection.awsRegion }}"
+        aws_region: "{{ result.awsRegion }}"
         cloud_service_hrefs: "{{ cloud_service_hrefs }}"
       register: result
     - debug: var=result
@@ -120,14 +120,14 @@
         network_href: "{{ network_href }}"
         state: 'absent'
         wait_for_server: true
-        name: "{{ result.connection.name }}"
-        speed: "{{ result.connection.speed }}"
-        high_availability: "{{ result.connection.highAvailability }}"
-        peering_type: "{{ result.connection.peering.type }}"
+        name: "{{ result.name }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.highAvailability }}"
+        peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.connection.billingTerm }}"
+        billing_term: "{{ result.billingTerm }}"
         aws_account_id: "{{ aws_account_id }}"
-        aws_region: "{{ result.connection.awsRegion }}"
+        aws_region: "{{ result.awsRegion }}"
         cloud_service_hrefs: "{{ cloud_service_hrefs }}"
       register: result
     - debug: var=result
@@ -165,18 +165,18 @@
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         wait_for_server: true
-        id: "{{ result.connection.id }}"
-        name: "{{ result.connection.name }}"
-        speed: "{{ result.connection.speed }}"
-        high_availability: "{{ result.connection.highAvailability }}"
-        peering_type: "{{ result.connection.peering.type }}"
+        id: "{{ result.id }}"
+        name: "{{ result.name }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.highAvailability }}"
+        peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.connection.billingTerm }}"
-        customer_networks: "{{ result.connection.customerNetworks }}"
-        nat_enabled: "{{ result.connection.nat.enabled }}"
-        nat_mappings: "{{ result.connection.nat.mappings | json_query('[*].nativeCidr') }}"
+        billing_term: "{{ result.billingTerm }}"
+        customer_networks: "{{ result.customerNetworks }}"
+        nat_enabled: "{{ result.nat.enabled }}"
+        nat_mappings: "{{ result.nat.mappings | json_query('[*].nativeCidr') }}"
         aws_account_id: "{{ aws_account_id }}"
-        aws_region: "{{ result.connection.awsRegion }}"
+        aws_region: "{{ result.awsRegion }}"
       register: result
     - debug: var=result
     - fail:
@@ -188,17 +188,17 @@
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         wait_for_server: true
-        name: "{{ result.connection.name }}"
-        speed: "{{ result.connection.speed }}"
-        high_availability: "{{ result.connection.highAvailability }}"
-        peering_type: "{{ result.connection.peering.type }}"
+        name: "{{ result.name }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.highAvailability }}"
+        peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.connection.billingTerm }}"
-        customer_networks: "{{ result.connection.customerNetworks }}"
-        nat_enabled: "{{ result.connection.nat.enabled }}"
-        nat_mappings: "{{ result.connection.nat.mappings | json_query('[*].nativeCidr') }}"
+        billing_term: "{{ result.billingTerm }}"
+        customer_networks: "{{ result.customerNetworks }}"
+        nat_enabled: "{{ result.nat.enabled }}"
+        nat_mappings: "{{ result.nat.mappings | json_query('[*].nativeCidr') }}"
         aws_account_id: "{{ aws_account_id }}"
-        aws_region: "{{ result.connection.awsRegion }}"
+        aws_region: "{{ result.awsRegion }}"
       register: result
     - debug: var=result
     - fail:
@@ -210,18 +210,18 @@
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         wait_for_server: true
-        id: "{{ result.connection.id }}"
-        name: "{{ result.connection.name }}"
+        id: "{{ result.id }}"
+        name: "{{ result.name }}"
         speed: 100
-        high_availability: "{{ result.connection.highAvailability }}"
-        peering_type: "{{ result.connection.peering.type }}"
+        high_availability: "{{ result.highAvailability }}"
+        peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.connection.billingTerm }}"
-        customer_networks: "{{ result.connection.customerNetworks }}"
-        nat_enabled: "{{ result.connection.nat.enabled }}"
-        nat_mappings: "{{ result.connection.nat.mappings | json_query('[*].nativeCidr') }}"
+        billing_term: "{{ result.billingTerm }}"
+        customer_networks: "{{ result.customerNetworks }}"
+        nat_enabled: "{{ result.nat.enabled }}"
+        nat_mappings: "{{ result.nat.mappings | json_query('[*].nativeCidr') }}"
         aws_account_id: "{{ aws_account_id }}"
-        aws_region: "{{ result.connection.awsRegion }}"
+        aws_region: "{{ result.awsRegion }}"
       register: result
     - debug: var=result
     - fail:
@@ -233,17 +233,17 @@
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         wait_for_server: true
-        name: "{{ result.connection.name }}"
+        name: "{{ result.name }}"
         speed: 50
-        high_availability: "{{ result.connection.highAvailability }}"
-        peering_type: "{{ result.connection.peering.type }}"
+        high_availability: "{{ result.highAvailability }}"
+        peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.connection.billingTerm }}"
-        customer_networks: "{{ result.connection.customerNetworks }}"
-        nat_enabled: "{{ result.connection.nat.enabled }}"
-        nat_mappings: "{{ result.connection.nat.mappings | json_query('[*].nativeCidr') }}"
+        billing_term: "{{ result.billingTerm }}"
+        customer_networks: "{{ result.customerNetworks }}"
+        nat_enabled: "{{ result.nat.enabled }}"
+        nat_mappings: "{{ result.nat.mappings | json_query('[*].nativeCidr') }}"
         aws_account_id: "{{ aws_account_id }}"
-        aws_region: "{{ result.connection.awsRegion }}"
+        aws_region: "{{ result.awsRegion }}"
       register: result
     - debug: var=result
     - fail:
@@ -256,18 +256,18 @@
         network_href: "{{ network_href }}"
         state: 'absent'
         wait_for_server: true
-        id: "{{ result.connection.id }}"
-        name: "{{ result.connection.name }}"
-        speed: "{{ result.connection.speed }}"
-        high_availability: "{{ result.connection.highAvailability }}"
-        peering_type: "{{ result.connection.peering.type }}"
+        id: "{{ result.id }}"
+        name: "{{ result.name }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.highAvailability }}"
+        peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.connection.billingTerm }}"
-        customer_networks: "{{ result.connection.customerNetworks }}"
-        nat_enabled: "{{ result.connection.nat.enabled }}"
-        nat_mappings: "{{ result.connection.nat.mappings | json_query('[*].nativeCidr') }}"
+        billing_term: "{{ result.billingTerm }}"
+        customer_networks: "{{ result.customerNetworks }}"
+        nat_enabled: "{{ result.nat.enabled }}"
+        nat_mappings: "{{ result.nat.mappings | json_query('[*].nativeCidr') }}"
         aws_account_id: "{{ aws_account_id }}"
-        aws_region: "{{ result.connection.awsRegion }}"
+        aws_region: "{{ result.awsRegion }}"
       register: result
     - debug: var=result
     - fail:
