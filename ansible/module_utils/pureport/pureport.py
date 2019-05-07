@@ -18,7 +18,7 @@ def get_client_argument_spec():
         api_base_url=dict(type='str'),
         api_key=dict(type='str'),
         api_secret=dict(type='str', no_log=True),
-        api_access_token=dict(type='str')
+        api_access_token=dict(type='str', no_log=True)
     )
 
 
