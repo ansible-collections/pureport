@@ -40,11 +40,12 @@ def deep_compare(item, existing_item):
                 # Lists were of different size
                 return False
         # Compare the item to the existing item.  There's also a special case here
-        # where the item may have been None, but the server returns a empty list or empty dict.
+        # where the item may have been None, but the server returns a false boolean, empty list or empty dict.
         if sub_item == sub_existing_item:
             return True
         elif sub_item is None:
-            return (isinstance(sub_existing_item, dict) and len(sub_existing_item.items()) == 0) or \
+            return (isinstance(sub_existing_item, bool) and sub_existing_item is False) or \
+                   (isinstance(sub_existing_item, dict) and len(sub_existing_item.items()) == 0) or \
                    (isinstance(sub_existing_item, list) and len(sub_existing_item) == 0)
         return False
 
@@ -99,7 +100,7 @@ def item_crud(module,
     if module.check_mode:
         module.exit_json(changed=changed)
 
-    changed_item = item
+    changed_item = existing_item if existing_item is not None else item
     if create_item:
         changed_item = create_item_fn(item)
     elif update_item:
