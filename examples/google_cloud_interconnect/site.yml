@@ -1,10 +1,12 @@
 ---
 - hosts: localhost
+  vars:
+    ansible_python_interpreter: "./venv/bin/python"  # Required for virtualenv...
   tasks:
     # https://docs.ansible.com/ansible/latest/modules/gcp_compute_network_module.html
     - name: Create a Google Cloud Network
       gcp_compute_network:
-        auth_kind: "{{ gcp_auth_kind }}"
+        auth_kind: serviceaccount
         service_account_file: "{{ gcp_service_account_file }}"
         project: "{{ gcp_project }}"
         name: "{{ gcp_network_prefix }}-network"
@@ -13,7 +15,7 @@
     # https://docs.ansible.com/ansible/latest/modules/gcp_compute_router_module.html
     - name: Create a Google Cloud Router (1)
       gcp_compute_router:
-        auth_kind: "{{ gcp_auth_kind }}"
+        auth_kind: serviceaccount
         service_account_file: "{{ gcp_service_account_file }}"
         project: "{{ gcp_project }}"
         name: "{{ gcp_network_prefix }}-router-1"
@@ -25,7 +27,7 @@
 
     - name: Create a Google Cloud Router (2)
       gcp_compute_router:
-        auth_kind: "{{ gcp_auth_kind }}"
+        auth_kind: serviceaccount
         service_account_file: "{{ gcp_service_account_file }}"
         project: "{{ gcp_project }}"
         name: "{{ gcp_network_prefix }}-router-2"
@@ -39,7 +41,7 @@
     # https://docs.ansible.com/ansible/devel/modules/gcp_compute_interconnect_attachment_module.html
     - name: Create Google Cloud Interconnect Attachment (1)
       gcp_compute_interconnect_attachment:
-        auth_kind: "{{ gcp_auth_kind }}"
+        auth_kind: serviceaccount
         service_account_file: "{{ gcp_service_account_file }}"
         project: "{{ gcp_project }}"
         name: "{{ gcp_network_prefix }}-interconnect-attachment-1"
@@ -51,7 +53,7 @@
 
     - name: Create Google Cloud Interconnect Attachment (2)
       gcp_compute_interconnect_attachment:
-        auth_kind: "{{ gcp_auth_kind }}"
+        auth_kind: serviceaccount
         service_account_file: "{{ gcp_service_account_file }}"
         project: "{{ gcp_project }}"
         name: "{{ gcp_network_prefix }}-interconnect-attachment-2"

@@ -1,0 +1,158 @@
+---
+- hosts: localhost
+  vars:
+    ansible_python_interpreter: "./venv/bin/python"  # Required for virtualenv...
+  tasks:
+    # https://docs.ansible.com/ansible/latest/modules/azure_rm_resource_module.html#azure-rm-resource-module
+    # https://github.com/ansible/ansible/blob/devel/lib/ansible/modules/cloud/azure/azure_rm_resource.py
+    # https://docs.microsoft.com/en-us/rest/api/expressroute/expressroutecircuits/createorupdate
+    - name: Create an Azure Express Route Circuit
+      azure_rm_resource:
+        api_version: "2018-11-01"
+        ad_user: "{{ azure_user }}"
+        password: "{{ azure_password }}"
+        subscription_id: "{{ azure_subscription_id }}"
+        resource_group: "{{ azure_resource_group }}"
+        provider: network
+        resource_type: expressRouteCircuits
+        resource_name: "{{ azure_resource_name }}"
+        idempotency: true
+        body:
+          location: "{{ azure_location }}"
+          sku:
+            name: Standard_MeteredData
+            tier: Standard
+            family: MeteredData
+          properties:
+            serviceProviderProperties:
+              serviceProviderName: Equinix
+              peeringLocation: "{{ azure_peering_location }}"
+              bandwidthInMbps: "{{ pureport_connection_speed }}"
+
+    - name: Wait until the Azure Express Route Circuit has a Service Key
+      azure_rm_resource:
+        api_version: "2018-11-01"
+        ad_user: "{{ azure_user }}"
+        password: "{{ azure_password }}"
+        subscription_id: "{{ azure_subscription_id }}"
+        resource_group: "{{ azure_resource_group }}"
+        provider: network
+        resource_type: expressRouteCircuits
+        resource_name: "{{ azure_resource_name }}"
+        method: GET
+      register: azure_express_route
+      until: azure_express_route.response.properties.serviceKey != '00000000-0000-0000-0000-000000000000'
+      retries: 5
+      delay: 10
+
+    - name: Create Pureport Network
+      pureport_network:
+        api_base_url: "{{ pureport_api_base_url | default(omit) }}"
+        api_key: "{{ pureport_api_key }}"
+        api_secret: "{{ pureport_api_secret }}"
+        account_href: "{{ pureport_account_href }}"
+        id: "{{ pureport_network_id | default(omit) }}"
+        name: "{{ pureport_network_name }}"
+      register: pureport_network
+
+    - name: Create Pureport Azure Express Route Connection
+      pureport_azure_express_route_connection:
+        api_base_url: "{{ pureport_api_base_url | default(omit) }}"
+        api_key: "{{ pureport_api_key }}"
+        api_secret: "{{ pureport_api_secret }}"
+        network_href: "{{ pureport_network.network.href }}"
+        id: "{{ pureport_connection_id | default(omit) }}"
+        name: "{{ pureport_connection_name }}"
+        speed: "{{ pureport_connection_speed }}"
+        high_availability: "{{ pureport_connection_high_availability | default(omit) }}"
+        location_href: "{{ pureport_connection_location_href }}"
+        peering_type: "{{ pureport_connection_peering_type | default(omit) }}"
+        billing_term: "{{ pureport_connection_billing_term }}"
+        service_key: "{{ azure_express_route.response.properties.serviceKey }}"
+        wait_for_server: true
+      register: pureport_connection
+
+    # https://docs.microsoft.com/en-us/rest/api/expressroute/expressroutecircuitpeerings/createorupdate
+    - name: Update the Azure Express Route Circuit peering configuration (PRIVATE)
+      azure_rm_resource:
+        api_version: "2018-11-01"
+        ad_user: "{{ azure_user }}"
+        password: "{{ azure_password }}"
+        subscription_id: "{{ azure_subscription_id }}"
+        resource_group: "{{ azure_resource_group }}"
+        provider: network
+        resource_type: expressRouteCircuits
+        resource_name: "{{ azure_resource_name }}"
+        subresource:
+          - type: peerings
+            name: AzurePrivatePeering
+        idempotency: true
+        body:
+          properties:
+            peeringType: AzurePrivatePeering
+            peerASN: "{{ pureport_connection.connection.primaryGateway.bgpConfig.pureportASN }}"
+            primaryPeerAddressPrefix: "{{ pureport_connection.connection.primaryGateway.bgpConfig.peeringSubnet }}"
+            secondaryPeerAddressPrefix: "{{ pureport_connection.connection.secondaryGateway.bgpConfig.peeringSubnet | default(omit) }}"
+            vlanId: 100
+            sharedKey: "{{ pureport_connection.connection.primaryGateway.bgpConfig.password }}"
+      register: azure_express_route_peering
+      when: pureport_connection.connection.peering.type == 'PRIVATE'
+
+    # https://docs.microsoft.com/en-us/rest/api/expressroute/routefilters/createorupdate
+    - name: Create a Azure Route Filter for Microsoft peering (PUBLIC)
+      azure_rm_resource:
+        api_version: "2018-11-01"
+        ad_user: "{{ azure_user }}"
+        password: "{{ azure_password }}"
+        subscription_id: "{{ azure_subscription_id }}"
+        resource_group: "{{ azure_resource_group }}"
+        provider: network
+        resource_type: routeFilters
+        resource_name: "{{ azure_resource_name }}-routeFilter"
+        idempotency: true
+        body:
+          location: "{{ azure_location }}"
+          properties:
+            rules:
+              - name: "{{ azure_resource_name }}-routeFilter-rule"
+                properties:
+                  access: Allow
+                  routeFilterRuleType: Community
+                  communities: "{{ azure_route_filter_service_communities | default([]) }}"
+            peerings: []
+      register: azure_express_route_filter
+      when: pureport_connection.connection.peering.type == 'PUBLIC'
+
+    # https://docs.microsoft.com/en-us/rest/api/expressroute/expressroutecircuitpeerings/createorupdate
+    - name: Update the Azure Express Route Circuit peering configuration (PUBLIC)
+      azure_rm_resource:
+        api_version: "2018-11-01"
+        ad_user: "{{ azure_user }}"
+        password: "{{ azure_password }}"
+        subscription_id: "{{ azure_subscription_id }}"
+        resource_group: "{{ azure_resource_group }}"
+        provider: network
+        resource_type: expressRouteCircuits
+        resource_name: "{{ azure_resource_name }}"
+        subresource:
+          - type: peerings
+            name: MicrosoftPeering
+        idempotency: true
+        body:
+          properties:
+            peeringType: MicrosoftPeering
+            peerASN: "{{ pureport_connection.connection.primaryGateway.bgpConfig.pureportASN }}"
+            primaryPeerAddressPrefix: "{{ pureport_connection.connection.primaryGateway.bgpConfig.peeringSubnet }}"
+            secondaryPeerAddressPrefix: "{{ pureport_connection.connection.secondaryGateway.bgpConfig.peeringSubnet | default(omit) }}"
+            vlanId: 100
+            sharedKey: "{{ pureport_connection.connection.primaryGateway.bgpConfig.password }}"
+            microsoftPeeringConfig:
+              customerASN: "{{ pureport_connection.connection.primaryGateway.bgpConfig.pureportASN }}"
+              advertisedPublicPrefixes:
+                - "{{ pureport_connection.connection.primaryGateway.bgpConfig.publicNatIp }}"
+                - "{{ pureport_connection.connection.secondaryGateway.bgpConfig.publicNatIp | default(omit) }}"
+              routingRegistryName: ARIN
+            routeFilter:
+              id: "{{ azure_express_route_filter.response.id }}"
+      register: azure_express_route_peering
+      when: pureport_connection.connection.peering.type == 'PUBLIC'
