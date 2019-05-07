@@ -107,3 +107,6 @@ ansible-doc pureport_azure_express_route_connection -s
 ansible-doc pureport_google_cloud_interconnect_connection -s
 ansible-doc pureport_site_ipsec_vpn_connection -s
 ```
+
+## Examples
+There are various examples on how to use these modules in the [examples directory](examples/README.md).
