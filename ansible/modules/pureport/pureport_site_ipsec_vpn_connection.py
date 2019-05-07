@@ -42,6 +42,48 @@ options:
             - Information about the physical address of the VPN appliance.
         required: false
         type: dict
+        suboptions:
+            street:
+                description:
+                    - The street address
+                required: false
+                type: str
+            city:
+                description:
+                    - The city
+                required: false
+                type: str
+            state:
+                description:
+                    - The state
+                required: false
+                type: str
+            postalCode:
+                description:
+                    - The postal code
+                required: false
+                type: str
+            country:
+                description:
+                    - The country
+                required: false
+                type: str
+            geoCoordinates:
+                description:
+                    - A dict representing the geocoordinates of a location
+                required: false
+                type: dict
+                suboptions:
+                    latitude:
+                        description:
+                            - The latitude
+                        required: false
+                        type: double
+                    longitude:
+                        description:
+                            - The logitude
+                        required: false
+                        type: double
     ike_version:
         description:
             - The IKE version of the VPN connection.
@@ -102,10 +144,22 @@ options:
         type: str
     traffic_selectors:
         description:
-            - A list of traffic selectors (e.g dict(customer_side=str, pureport_side=str))
+            - A list of traffic selectors
         required: false
         type: list
         default: []
+        suboptions:
+            customer_side:
+                description:
+                    - A CIDR (a.b.c.d/n) address representing a subnet on the customer side.
+                    - This should reference a Customer Network, but it doesn't have to.
+                required: true
+                type: str
+            pureport_side:
+                description:
+                    - A CIDR (a.b.c.d/n) address representing a subnet on the pureport side.
+                    - This should reference the customer_networks of another connection in the contained Network,
+                    - or it should reference the connections NAT mapped natCidr field if the connection had NAT enabled.
     enable_bgp_password:
         description:
             - Enable a BGP password for the 'ROUTE_BASED_BGP' VPN connection gateways.

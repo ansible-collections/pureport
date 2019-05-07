@@ -50,6 +50,15 @@ options:
         required: false
         type: list
         default: []
+        suboptions:
+            address:
+                description:
+                    - A CIDR (a.b.c.d/n) address representing a subnet behind this connection.
+                required: true
+                type: str
+            name:
+                description:
+                    - A name to give this subnet CIDR.
     nat_enabled:
         description:
             - If NAT should be enabled
@@ -57,7 +66,8 @@ options:
         default: false
     nat_mappings:
         description:
-            - A list of CIDR's that should be mapped with NAT
+            - A list of CIDR's (a.b.c.d/n) addresses that should be mapped with NAT.
+            - This should likely reference the customer_networks supplied on the connection.
         required: false
         type: list
     '''
