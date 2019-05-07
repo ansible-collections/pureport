@@ -11,13 +11,26 @@ except ImportError:
 
 def get_client_argument_spec():
     """
-    Return the basic account params
+    Return the basic client params
     :rtype: dict[str, dict]
     """
     return dict(
         api_base_url=dict(type='str'),
-        api_access_token=dict(type='str', required=True)
+        api_key=dict(type='str'),
+        api_secret=dict(type='str', no_log=True),
+        api_access_token=dict(type='str')
     )
+
+
+def get_client_mutually_exclusive():
+    """
+    Return the basic client mutually exclusive array
+    :rtype: list[list[str]]
+    """
+    return [
+        ['api_key', 'api_access_token'],
+        ['api_secret', 'api_access_token']
+    ]
 
 
 def get_client(module):
@@ -30,7 +43,11 @@ def get_client(module):
         module.fail_json(msg='pureport-client required for this module')
     client = Client(module.params.get('api_base_url'))
     try:
-        client.login(access_token=module.params.get('api_access_token'))
+        client.login(
+            key=module.params.get('api_key'),
+            secret=module.params.get('api_secret'),
+            access_token=module.params.get('api_access_token')
+        )
     except ClientHttpException as e:
         module.fail_json(msg=e.response.text, exception=format_exc())
     return client

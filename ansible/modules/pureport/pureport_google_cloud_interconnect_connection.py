@@ -44,7 +44,8 @@ author:
 EXAMPLES = '''
 - name: Create a simple Google Cloud Interconnect connection for a network
   pureport_aws_direct_connect_connection:
-    api_access_token: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    api_key: XXXXXXXXXXXXX
+    api_secret: XXXXXXXXXXXXXXXXX
     network_href: /networks/network-XXXXXXXXXXXXXXXXXXXXXX
     name: My Ansible Google Cloud Interconnect Connection
     speed: 50
@@ -58,7 +59,8 @@ EXAMPLES = '''
 
 - name: Update the newly created connection with changed properties
   pureport_aws_direct_connect_connection:
-    api_access_token: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    api_key: XXXXXXXXXXXXX
+    api_secret: XXXXXXXXXXXXXXXXX
     network_href: /networks/network-XXXXXXXXXXXXXXXXXXXXXX
     name: {{ result.connection.name }}
     speed: 100
@@ -72,7 +74,8 @@ EXAMPLES = '''
 
 - name: Delete the newly created connection using the 'absent' state
   pureport_aws_direct_connect_connection:
-    api_access_token: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    api_key: XXXXXXXXXXXXX
+    api_secret: XXXXXXXXXXXXXXXXX
     network_href: /networks/network-XXXXXXXXXXXXXXXXXXXXXX
     state: absent
     name: {{ result.connection.name }}
@@ -86,7 +89,8 @@ EXAMPLES = '''
 
 - name: Create a Google Cloud Interconnect connection with all properties configured
   pureport_aws_direct_connect_connection:
-    api_access_token: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    api_key: XXXXXXXXXXXXX
+    api_secret: XXXXXXXXXXXXXXXXX
     network_href: /networks/network-XXXXXXXXXXXXXXXXXXXXXX
     name: My Ansible Google Cloud Interconnect
     speed: 50
@@ -117,6 +121,7 @@ from ansible.module_utils.common.dict_transformations import snake_dict_to_camel
 
 from ansible.module_utils.pureport.pureport import \
     get_client_argument_spec, \
+    get_client_mutually_exclusive, \
     get_network_argument_spec
 from ansible.module_utils.pureport.pureport_crud import get_state_argument_spec
 from ansible.module_utils.pureport.pureport_connection_crud import \
@@ -173,6 +178,7 @@ def main():
         )
     )
     mutually_exclusive = []
+    mutually_exclusive += get_client_mutually_exclusive()
     module = AnsibleModule(
         argument_spec=argument_spec,
         mutually_exclusive=mutually_exclusive

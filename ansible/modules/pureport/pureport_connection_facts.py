@@ -41,13 +41,15 @@ author:
 EXAMPLES = '''
 - name: List connections for an account
   pureport_networks_facts:
-    api_access_token: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    api_key: XXXXXXXXXXXXX
+    api_secret: XXXXXXXXXXXXXXXXX
     account_href: /accounts/ac-XXXXXXXXXXXXXXXXXXXXXX
   register: result   # Registers result.connections
 
 - name: List connections for a network
   pureport_networks_facts:
-    api_access_token: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    api_key: XXXXXXXXXXXXX
+    api_secret: XXXXXXXXXXXXXXXXX
     network_href: /networks/network-XXXXXXXXXXXXXXXXXXXXXX
   register: result   # Registers result.connections
 
@@ -72,6 +74,7 @@ except ImportError:
     ClientHttpException = None
 from ansible.module_utils.pureport.pureport import \
     get_client_argument_spec, \
+    get_client_mutually_exclusive, \
     get_client, \
     get_account_argument_spec, \
     get_account, \
@@ -114,6 +117,7 @@ def main():
     argument_spec.update(get_account_argument_spec())
     argument_spec.update(get_network_argument_spec())
     mutually_exclusive = []
+    mutually_exclusive += get_client_mutually_exclusive()
     mutually_exclusive += [
         ['account_href', 'network_href']
     ]

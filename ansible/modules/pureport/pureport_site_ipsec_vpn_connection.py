@@ -125,7 +125,8 @@ author:
 EXAMPLES = '''
 - name: Create a simple ROUTE_BASED_BGP Site IPSec VPN connection for a network
   pureport_aws_direct_connect_connection:
-    api_access_token: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    api_key: XXXXXXXXXXXXX
+    api_secret: XXXXXXXXXXXXXXXXX
     network_href: /networks/network-XXXXXXXXXXXXXXXXXXXXXX
     name: My Ansible Site IPSec VPN Connection
     speed: 50
@@ -148,7 +149,8 @@ EXAMPLES = '''
 
 - name: Update the newly created connection with changed properties
   pureport_aws_direct_connect_connection:
-    api_access_token: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    api_key: XXXXXXXXXXXXX
+    api_secret: XXXXXXXXXXXXXXXXX
     network_href: /networks/network-XXXXXXXXXXXXXXXXXXXXXX
     name: {{ result.connection.name }}
     speed: 100
@@ -171,7 +173,8 @@ EXAMPLES = '''
 
 - name: Delete the newly created connection using the 'absent' state
   pureport_aws_direct_connect_connection:
-    api_access_token: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    api_key: XXXXXXXXXXXXX
+    api_secret: XXXXXXXXXXXXXXXXX
     network_href: /networks/network-XXXXXXXXXXXXXXXXXXXXXX
     state: absent
     name: {{ result.connection.name }}
@@ -194,7 +197,8 @@ EXAMPLES = '''
 
 - name: Create a ROUTE_BASED_BGP Site IPSec VPN connection with all properties configured
   pureport_aws_direct_connect_connection:
-    api_access_token: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    api_key: XXXXXXXXXXXXX
+    api_secret: XXXXXXXXXXXXXXXXX
     network_href: /networks/network-XXXXXXXXXXXXXXXXXXXXXX
     name: My Ansible Site IPSec VPN Connection
     speed: 50
@@ -225,7 +229,8 @@ EXAMPLES = '''
 
 - name: Create a ROUTE_BASED_STATIC Site IPSec VPN connection with all properties configured
   pureport_aws_direct_connect_connection:
-    api_access_token: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    api_key: XXXXXXXXXXXXX
+    api_secret: XXXXXXXXXXXXXXXXX
     network_href: /networks/network-XXXXXXXXXXXXXXXXXXXXXX
     name: My Ansible Site IPSec VPN Connection
     speed: 50
@@ -254,7 +259,8 @@ EXAMPLES = '''
 
 - name: Create a POLICY_BASED Site IPSec VPN connection with all properties configured
   pureport_aws_direct_connect_connection:
-    api_access_token: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    api_key: XXXXXXXXXXXXX
+    api_secret: XXXXXXXXXXXXXXXXX
     network_href: /networks/network-XXXXXXXXXXXXXXXXXXXXXX
     name: My Ansible Site IPSec VPN Connection
     speed: 50
@@ -297,6 +303,7 @@ from ansible.module_utils.common.dict_transformations import snake_dict_to_camel
 
 from ansible.module_utils.pureport.pureport import \
     get_client_argument_spec, \
+    get_client_mutually_exclusive, \
     get_network_argument_spec
 from ansible.module_utils.pureport.pureport_crud import get_state_argument_spec
 from ansible.module_utils.pureport.pureport_connection_crud import \
@@ -408,6 +415,7 @@ def main():
         )
     )
     mutually_exclusive = []
+    mutually_exclusive += get_client_mutually_exclusive()
     mutually_exclusive += [
         ['ike_integrity', 'ike_prf']
     ]

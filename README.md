@@ -3,7 +3,9 @@ This is a collection of Ansible [library modules](https://docs.ansible.com/ansib
 interact with the [Pureport](https://www.pureport.com/) ReST API.
 
 It provides the following modules you can use in your own roles:
-- `pureport_access_token_fact` - used to obtain an API access token required by all other modules
+- `pureport_access_token_fact` - Obtain an OAuth access token which can be used as the `api_access_token` param 
+  for all other modules in lieu of passing them the `api_key`/`api_secret`.  This allows other modules to skip their own retrieval 
+  of the `access_token`, further reducing the number of API calls and execution time. 
 - `pureport_location_facts` - used to list a set of locations
 - `pureport_option_facts` - used to list a set of enum options used for creating connections
 - `pureport_cloud_service_facts` - used to list a set of cloud service objects for public connections

@@ -38,12 +38,14 @@ author:
 EXAMPLES = '''
 - name: List options
   pureport_location_facts:
-    api_access_token: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    api_key: XXXXXXXXXXXXX
+    api_secret: XXXXXXXXXXXXXXXXX
   register: result   # Registers result.options
 
 - name: List a subset of options
   pureport_location_facts:
-    api_access_token: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    api_key: XXXXXXXXXXXXX
+    api_secret: XXXXXXXXXXXXXXXXX
     types:
       - IKEV2IKEPRF
   register: result   # Registers result.options
@@ -64,6 +66,7 @@ except ImportError:
     ClientHttpException = None
 from ansible.module_utils.pureport.pureport import \
     get_client_argument_spec, \
+    get_client_mutually_exclusive, \
     get_client
 
 
@@ -105,6 +108,7 @@ def main():
         )
     ))
     mutually_exclusive = []
+    mutually_exclusive += get_client_mutually_exclusive()
     module = AnsibleModule(
         argument_spec=argument_spec,
         mutually_exclusive=mutually_exclusive

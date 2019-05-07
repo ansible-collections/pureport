@@ -48,14 +48,16 @@ author:
 EXAMPLES = '''
 - name: Create a network for an account
   pureport_network:
-    api_access_token: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    api_key: XXXXXXXXXXXXX
+    api_secret: XXXXXXXXXXXXXXXXX
     account_href: /accounts/ac-XXXXXXXXXXXXXXXXXXXXXX
     name: My Ansible Account
   register: result  # Registers result.network
 
 - name: Update the newly created network with changed properties
   pureport_network:
-    api_access_token: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    api_key: XXXXXXXXXXXXX
+    api_secret: XXXXXXXXXXXXXXXXX
     account_href: /accounts/ac-XXXXXXXXXXXXXXXXXXXXXX
     id: {{ result.network.id }}
     name: My Updated Ansible Account
@@ -64,7 +66,8 @@ EXAMPLES = '''
 
 - name: Delete the newly created network using the 'absent' state
   pureport_network:
-    api_access_token: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    api_key: XXXXXXXXXXXXX
+    api_secret: XXXXXXXXXXXXXXXXX
     account_href: /accounts/ac-XXXXXXXXXXXXXXXXXXXXXX
     state: absent
     id: {{ result.network.id }}
@@ -88,6 +91,7 @@ except ImportError:
     NotFoundException = None
 from ansible.module_utils.pureport.pureport import \
     get_client_argument_spec, \
+    get_client_mutually_exclusive, \
     get_client, \
     get_account_argument_spec, \
     get_account
@@ -198,6 +202,7 @@ def main():
         )
     )
     mutually_exclusive = []
+    mutually_exclusive += get_client_mutually_exclusive()
     module = AnsibleModule(
         argument_spec=argument_spec,
         mutually_exclusive=mutually_exclusive,
