@@ -8,14 +8,14 @@ ANSIBLE_METADATA = {
 
 DOCUMENTATION = '''
 ---
-module: pureport_cloud_service_facts
+module: pureport_cloud_region_facts
 
-short_description: Retrieve a list of cloud services
+short_description: Retrieve a list of cloud regions
 
 version_added: "2.8"
 
 description:
-    - "Retrieve a list of cloud services"
+    - "Retrieve a list of cloud regions"
 
 extends_documentation_fragment:
     - pureport_client
@@ -25,22 +25,22 @@ author:
 '''
 
 EXAMPLES = '''
-- name: List cloud services
-  pureport_cloud_service_facts:
+- name: List cloud regions
+  pureport_cloud_region_facts:
     api_key: XXXXXXXXXXXXX
     api_secret: XXXXXXXXXXXXXXXXX
-  register: result   # Registers result.cloud_services
+  register: result   # Registers result.cloud_regions
 
-- name: Display all cloud service hrefs using a json_query filter
+- name: Display all cloud region hrefs using a json_query filter
   debug:
     var: item
-  loop: "{{ result.cloud_services | json_query('[*].href') }}"
+  loop: "{{ result.cloud_regions | json_query('[*].href') }}"
 '''
 
 RETURN = '''
-cloud_services:
-    description: a list of CloudService (dict) objects
-    type: list[CloudService]
+cloud_regions:
+    description: a list of CloudRegion (dict) objects
+    type: list[CloudRegion]
 '''
 
 from ansible.module_utils.basic import AnsibleModule
@@ -56,15 +56,15 @@ from ansible.module_utils.pureport.pureport import \
     get_client
 
 
-def find_cloud_services(module):
+def find_cloud_regions(module):
     """
-    List cloud services
+    List cloud regions
     :param AnsibleModule module: the ansible module
     """
     client = get_client(module)
     try:
-        cloud_services = client.cloud_services.list()
-        module.exit_json(cloud_services=cloud_services)
+        cloud_regions = client.cloud_regions.list()
+        module.exit_json(cloud_regions=cloud_regions)
     except ClientHttpException as e:
         module.fail_json(msg=e.response.text, exception=format_exc())
 
@@ -78,7 +78,7 @@ def main():
         argument_spec=argument_spec,
         mutually_exclusive=mutually_exclusive
     )
-    find_cloud_services(module)
+    find_cloud_regions(module)
 
 
 if __name__ == '__main__':

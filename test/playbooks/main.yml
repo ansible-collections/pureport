@@ -1,6 +1,7 @@
 ---
 - import_playbook: pureport_location_facts.yml
 - import_playbook: pureport_option_facts.yml
+- import_playbook: pureport_cloud_region_facts.yml
 - import_playbook: pureport_cloud_service_facts.yml
 - import_playbook: pureport_account_facts.yml
 - import_playbook: pureport_supported_connection_facts.yml
