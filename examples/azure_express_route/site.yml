@@ -92,7 +92,7 @@
             peeringType: AzurePrivatePeering
             peerASN: "{{ pureport_connection.connection.primaryGateway.bgpConfig.pureportASN }}"
             primaryPeerAddressPrefix: "{{ pureport_connection.connection.primaryGateway.bgpConfig.peeringSubnet }}"
-            secondaryPeerAddressPrefix: "{{ pureport_connection.connection.secondaryGateway.bgpConfig.peeringSubnet | default(omit) }}"
+            secondaryPeerAddressPrefix: "{{ pureport_connection.connection.secondaryGateway.bgpConfig.peeringSubnet }}"
             vlanId: 100
             sharedKey: "{{ pureport_connection.connection.primaryGateway.bgpConfig.password }}"
       register: azure_express_route_peering

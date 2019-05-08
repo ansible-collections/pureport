@@ -7,7 +7,7 @@ pip install -r requirements.txt
 ```
 
 - A valid Service Account private key file (json format).  This is obtained from the 
-[Service Accounts](https://console.cloud.google.com/iam-admin/serviceaccounts) page.
+[Google Service Accounts](https://console.cloud.google.com/iam-admin/serviceaccounts) page.
 
 
 ## Creating a Google Cloud Interconnect Connection
