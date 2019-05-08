@@ -1,8 +1,6 @@
 ## Requirements
-A virtualenv with ansible, ansible[azure], azure-cli, and pureport-client.
+A virtualenv with ansible[azure] and the pureport-client.
 
-**Note:** The following will probably throw errors, because of version mismatches with the azure-cli and
-ansible[azure] requirements.  You can ignore these.
 ```bash
 virtualenv venv
 source venv/bin/activate
@@ -11,9 +9,10 @@ pip install -r requirements.txt
 
 ## Creating an Azure Express Route Connection
 This example creates:
-- a Azure Express Route Circuit, 
+- a Azure Express Route Circuit,
+- a Azure Route Filter (for Microsoft Peering)
 - a Pureport Network, & 
-- a Pureport Google Cloud Interconnect Connection
+- a Pureport Azure Express Route Connection
 
 ### Running the Example
 Add a `group_vars/all.yml` file with the following contents, filling in the parameters where required:
