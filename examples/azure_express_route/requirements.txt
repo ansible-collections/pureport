@@ -1,0 +1,2 @@
+ansible[azure]==2.8.0rc2
+pureport-client==0.0.4
