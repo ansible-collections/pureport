@@ -12,10 +12,10 @@ pip install -r requirements.txt
 
 ## Creating a Google Cloud Interconnect Connection
 This example creates:
-- a GCP Network, 
-- a GCP Router(s), 
-- a GCP Interconnect Attachment(s), 
-- a Pureport Network, & 
+- a GCP Network
+- a GCP Router(s)
+- a GCP Interconnect Attachment(s)
+- a Pureport Network
 - a Pureport Google Cloud Interconnect Connection
 
 ### Running the Example

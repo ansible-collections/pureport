@@ -9,9 +9,9 @@ pip install -r requirements.txt
 
 ## Creating an Azure Express Route Connection
 This example creates:
-- a Azure Express Route Circuit,
+- a Azure Express Route Circuit
 - a Azure Route Filter (for Microsoft Peering)
-- a Pureport Network, & 
+- a Pureport Network
 - a Pureport Azure Express Route Connection
 
 ### Running the Example
