@@ -38,6 +38,8 @@ options:
 extends_documentation_fragment:
     - pureport_client
     - pureport_network
+    - pureport_state
+    - pureport_resolve_existing
     - pureport_wait_for_server
     - pureport_connection_args
     - pureport_peering_connection_args
@@ -145,7 +147,9 @@ from ansible.module_utils.pureport.pureport import \
     get_client_argument_spec, \
     get_client_mutually_exclusive, \
     get_network_argument_spec
-from ansible.module_utils.pureport.pureport_crud import get_state_argument_spec
+from ansible.module_utils.pureport.pureport_crud import \
+    get_state_argument_spec, \
+    get_resolve_existing_argument_spec
 from ansible.module_utils.pureport.pureport_connection_crud import \
     get_wait_for_server_argument_spec, \
     get_connection_argument_spec, \
@@ -200,6 +204,7 @@ def main():
     argument_spec.update(get_client_argument_spec())
     argument_spec.update(get_network_argument_spec(True))
     argument_spec.update(get_state_argument_spec())
+    argument_spec.update(get_resolve_existing_argument_spec())
     argument_spec.update(get_wait_for_server_argument_spec())
     argument_spec.update(get_connection_argument_spec())
     argument_spec.update(get_cloud_connection_argument_spec())

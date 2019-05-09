@@ -10,6 +10,16 @@ def get_state_argument_spec():
     )
 
 
+def get_resolve_existing_argument_spec():
+    """
+    Return the basic resolve_existing param
+    :rtype: dict[str, dict]
+    """
+    return dict(
+        resolve_existing=dict(type='bool', default=True)
+    )
+
+
 def deep_compare(item, existing_item):
     """
     Given an item and an existing item, this recursively compares that all
@@ -55,6 +65,7 @@ def deep_compare(item, existing_item):
 def item_crud(module,
               construct_item_fn,
               retrieve_existing_item_fn,
+              resolve_existing_item_fn,
               create_item_fn,
               update_item_fn,
               delete_item_fn,
@@ -68,6 +79,8 @@ def item_crud(module,
         A function that creates the item from the Ansible module params
     :param (T) -> T|None retrieve_existing_item_fn:
         A function that retrieves the existing item if applicable, otherwise None
+    :param (T) -> T|None resolve_existing_item_fn:
+        A function that resolves the existing item if applicable, otherwise None
     :param (T) -> T create_item_fn:
         A function that creates the item
     :param (T) -> T update_item_fn:
@@ -87,6 +100,8 @@ def item_crud(module,
 
     # Retrieve the existing item if applicable
     existing_item = retrieve_existing_item_fn(item)
+    if not existing_item and module.params.get('resolve_existing'):
+        resolve_existing_item_fn(item)
 
     # Perform a simple comparison of the passed in item and existing item
     items_differ = not compare_item_fn(item, existing_item)

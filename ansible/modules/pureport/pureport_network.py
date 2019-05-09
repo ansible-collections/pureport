@@ -20,7 +20,7 @@ options:
         required: true
     id:
         description:
-            - The id of the network (required if updating/deleting)
+            - The id of the existing network
         required: false
         type: str
     name:
@@ -37,6 +37,7 @@ extends_documentation_fragment:
     - pureport_client
     - pureport_account
     - pureport_state
+    - pureport_resolve_existing
 '''
 
 EXAMPLES = '''
@@ -117,6 +118,7 @@ from ansible.module_utils.pureport.pureport import \
     get_account
 from ansible.module_utils.pureport.pureport_crud import \
     get_state_argument_spec, \
+    get_resolve_existing_argument_spec, \
     item_crud
 
 
@@ -146,6 +148,35 @@ def retrieve_network(module, client, network):
             return None
         except ClientHttpException as e:
             module.fail_json(msg=e.response.text, exception=format_exc())
+    return None
+
+
+def resolve_network(module, client, network):
+    """
+    Resolve the existing network from the server via some properties of the
+    user provided network
+    :param AnsibleModule module: the Ansible module
+    :param pureport.api.client.Client client: the Pureport client
+    :param Network network: the Ansible inferred Network
+    :rtype: Network|None
+    """
+    account = get_account(module)
+    if account is not None:
+        try:
+            existing_networks = client.accounts.networks(account).list()
+            matched_networks = [existing_network for existing_network in existing_networks
+                                if all([existing_network.get(k) == network.get(k)
+                                        for k in ['name']])]
+            if len(matched_networks) == 1:
+                return matched_networks[0]
+            elif len(matched_networks) > 1:
+                module.fail_json(msg="Resolved more than one existing network.  Please provide an 'id' "
+                                     "if you are attempting to update/delete an existing network.  "
+                                     "Otherwise, use a more distinct name or set "
+                                     "'resolve_existing' to false.")
+        except ClientHttpException as e:
+            module.fail_json(msg=e.response.text, exception=format_exc())
+    return None
 
 
 def copy_existing_network_properties(network, existing_network):
@@ -159,6 +190,7 @@ def copy_existing_network_properties(network, existing_network):
     copied_network = dict()
     copied_network.update(network)
     copied_network.update(dict(
+        id=existing_network.get('id'),
         href=existing_network.get('href')
     ))
     return copied_network
@@ -214,6 +246,7 @@ def main():
     argument_spec.update(get_client_argument_spec())
     argument_spec.update(get_account_argument_spec(True))
     argument_spec.update(get_state_argument_spec())
+    argument_spec.update(get_resolve_existing_argument_spec())
     argument_spec.update(
         dict(
             id=dict(type='str'),
@@ -239,6 +272,7 @@ def main():
         module,
         partial(construct_network, module),
         partial(retrieve_network, module, client),
+        partial(resolve_network, module, client),
         partial(create_network, module, client),
         partial(update_network, module, client),
         partial(delete_network, module, client),

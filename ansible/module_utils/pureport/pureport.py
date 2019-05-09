@@ -68,9 +68,10 @@ def get_account(module):
     """
     Get the account from the passed in module
     :param ansible.module_utils.basic.AnsibleModule module: the Ansible module
-    :rtype: Account
+    :rtype: Account|None
     """
-    return dict(href=module.params.get('account_href'))
+    account_href = module.params.get('account_href')
+    return dict(href=account_href) if account_href else None
 
 
 def get_network_argument_spec(required=False):
@@ -88,6 +89,7 @@ def get_network(module):
     """
     Get the account from the passed in module
     :param ansible.module_utils.basic.AnsibleModule module: the Ansible module
-    :rtype: Network
+    :rtype: Network|None
     """
-    return dict(href=module.params.get('network_href'))
+    network_href = module.params.get('network_href')
+    return dict(href=network_href) if network_href else None
