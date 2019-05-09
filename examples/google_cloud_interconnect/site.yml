@@ -4,65 +4,43 @@
     ansible_python_interpreter: "./venv/bin/python"  # Required for virtualenv...
   tasks:
     # https://docs.ansible.com/ansible/latest/modules/gcp_compute_network_module.html
-    - name: Create a Google Cloud Network
+    - name: Create Google Cloud Network
       gcp_compute_network:
         auth_kind: serviceaccount
         service_account_file: "{{ gcp_service_account_file }}"
         project: "{{ gcp_project }}"
-        name: "{{ gcp_network_prefix }}-network"
+        name: "{{ gcp_network_name }}"
       register: gcp_network
 
     # https://docs.ansible.com/ansible/latest/modules/gcp_compute_router_module.html
-    - name: Create a Google Cloud Router (1)
+    - name: Create Google Cloud Router(s)
       gcp_compute_router:
         auth_kind: serviceaccount
         service_account_file: "{{ gcp_service_account_file }}"
         project: "{{ gcp_project }}"
-        name: "{{ gcp_network_prefix }}-router-1"
+        name: "{{ gcp_router_name }}-{{ item }}"
         region: "{{ gcp_region }}"
         bgp:
           asn: 16550  # Must be 16550
         network: "{{ gcp_network }}"
-      register: gcp_router_1
-
-    - name: Create a Google Cloud Router (2)
-      gcp_compute_router:
-        auth_kind: serviceaccount
-        service_account_file: "{{ gcp_service_account_file }}"
-        project: "{{ gcp_project }}"
-        name: "{{ gcp_network_prefix }}-router-2"
-        region: "{{ gcp_region }}"
-        bgp:
-          asn: 16550  # Must be 16550
-        network: "{{ gcp_network }}"
-      register: gcp_router_2
-      when: pureport_connection_high_availability | default(false)
+      with_sequence: start=1 count={{2 if pureport_connection_high_availability else 1}}
+      register: gcp_routers
 
     # https://docs.ansible.com/ansible/devel/modules/gcp_compute_interconnect_attachment_module.html
-    - name: Create Google Cloud Interconnect Attachment (1)
+    - name: Create Google Cloud Interconnect Attachment(s)
       gcp_compute_interconnect_attachment:
         auth_kind: serviceaccount
         service_account_file: "{{ gcp_service_account_file }}"
         project: "{{ gcp_project }}"
-        name: "{{ gcp_network_prefix }}-interconnect-attachment-1"
+        name: "{{ gcp_interconnect_attachment_name }}-{{ idx + 1 }}"
         region: "{{ gcp_region }}"
         type: PARTNER
-        edge_availability_domain: AVAILABILITY_DOMAIN_1
-        router: "{{ gcp_router_1 }}"
-      register: gcp_interconnect_attachment_1
-
-    - name: Create Google Cloud Interconnect Attachment (2)
-      gcp_compute_interconnect_attachment:
-        auth_kind: serviceaccount
-        service_account_file: "{{ gcp_service_account_file }}"
-        project: "{{ gcp_project }}"
-        name: "{{ gcp_network_prefix }}-interconnect-attachment-2"
-        region: "{{ gcp_region }}"
-        type: PARTNER
-        edge_availability_domain: AVAILABILITY_DOMAIN_2
-        router: "{{ gcp_router_2 }}"
-      register: gcp_interconnect_attachment_2
-      when: pureport_connection_high_availability | default(false)
+        edge_availability_domain: "AVAILABILITY_DOMAIN_{{ idx + 1 }}"
+        router: "{{ item }}"
+      loop: "{{ gcp_routers.results }}"
+      loop_control:
+        index_var: idx
+      register: gcp_interconnect_attachments
 
     - name: Create Pureport Network
       pureport_network:
@@ -86,7 +64,7 @@
         high_availability: "{{ pureport_connection_high_availability | default(omit) }}"
         location_href: "{{ pureport_connection_location_href }}"
         billing_term: "{{ pureport_connection_billing_term }}"
-        primary_pairing_key: "{{ gcp_interconnect_attachment_1.pairingKey }}"
-        secondary_pairing_key: "{{ gcp_interconnect_attachment_2.pairingKey | default(omit) }}"
+        primary_pairing_key: "{{ gcp_interconnect_attachments.results[0].pairingKey }}"
+        secondary_pairing_key: "{{ gcp_interconnect_attachments.results[1].pairingKey | default(omit) }}"
         wait_for_server: true
       register: pureport_connection

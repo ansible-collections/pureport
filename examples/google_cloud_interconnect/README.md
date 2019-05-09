@@ -24,8 +24,10 @@ Add a `group_vars/all.yml` file with the following contents, filling in the para
 ```yaml
 gcp_service_account_file: YOUR SERVICE ACCOUNT FILE PATH HERE
 gcp_project: YOUR GCP PROJECT NAME
-gcp_network_prefix: A PREFIX TO USE FOR ALL THE GCP OBJECTS  # keep it somewhat short, GCP has 64 character limit on some of these things
+gcp_network_name: A GCP NETWORK NAME  # keep it somewhat short, GCP has 64 character limit on some of these things
 gcp_region: YOUR GCP REGION  # e.g us-west-2
+gcp_router_name: A GCP ROUTER NAME  # keep it somewhat short, GCP has 64 character limit on some of these things
+gcp_interconnect_attachment_name: A GCP INTERCONNECT ATTACHMENT NAME   # keep it somewhat short, GCP has 64 character limit on some of these things
 
 pureport_api_key: XXXXXXXXXXXX
 pureport_api_secret: XXXXXXXXXXXXXXXX
@@ -34,10 +36,8 @@ pureport_network_name: My Simple Google Cloud Network
 pureport_connection_name: My Simple Google Cloud Connection
 pureport_connection_location_href: /locations/us-sea
 pureport_connection_speed: 50
+pureport_connection_high_availability: true
 pureport_connection_billing_term: HOURLY
-
-## Set this if you want to turn on high availability
-# pureport_connection_high_availability: true
 
 ## Set these if you are performing Pureport network/connection updates
 # pureport_network_id: network-XXXXXXXXXXXXXXXXXXXXXXXX
