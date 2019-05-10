@@ -9,19 +9,14 @@ ANSIBLE_METADATA = {
 DOCUMENTATION = '''
 ---
 module: pureport_location_facts
-
 short_description: Retrieve a list of locations
-
-version_added: "2.8"
-
 description:
     - "Retrieve a list of locations"
-
+version_added: "2.8"
+requirements: [ pureport-client ]
+author: Matt Traynham (@mtraynham)
 extends_documentation_fragment:
     - pureport_client
-
-author:
-    - Matt Traynham (@mtraynham)
 '''
 
 EXAMPLES = '''
@@ -39,8 +34,70 @@ EXAMPLES = '''
 
 RETURN = '''
 locations:
-    description: a list of Location (dict) objects
-    type: list[Location]
+    description: A list of Location (dict) objects.
+    returned: success
+    type: complex
+    contains:
+        id:
+            description:
+                - The location id.
+            returned: success
+            type: str
+            sample: "us-sea"
+        href:
+            description:
+                - The location href, a path to resource on the server.
+            returned: success
+            type: str
+            sample: "/locations/us-sea"
+        name:
+            description:
+                - The location name.
+            returned: success
+            type: str
+            sample: "Seattle, WA"
+        geoCoordinates:
+            description:
+                - The location's geo-coordinates.
+            returned: success
+            type: complex
+            contains:
+                latitude:
+                    description:
+                        - The location's latitude.
+                    returned: success
+                    type: double
+                    sample: 47.6062
+                longitude:
+                    description:
+                        - The location's longitude.
+                    returned: success
+                    type: double
+                    sample: -122.3321
+        locationLinks:
+            description:
+                - A list of other Location Link objects that this Location has a Pureport backbone connection to.
+            returned: success
+            type: complex
+            contains:
+                id:
+                    description:
+                        - The other location id.
+                    returned: success
+                    type: str
+                    sample: "us-ral"
+                href:
+                    description:
+                        - The other location href.
+                    returned: success
+                    type: str
+                    sample: "/locations/us-ral"
+                title:
+                    description:
+                        - The other location name.
+                    returned: success
+                    type: str
+                    sample: "Raleigh, NC"
 '''
 
 from ansible.module_utils.basic import AnsibleModule

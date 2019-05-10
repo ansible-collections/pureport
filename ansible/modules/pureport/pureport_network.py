@@ -9,14 +9,12 @@ ANSIBLE_METADATA = {
 DOCUMENTATION = '''
 ---
 module: pureport_network
-
 short_description: Create, update or delete a network
-
-version_added: "2.8"
-
 description:
     - "Create, update or delete a network"
-
+version_added: "2.8"
+requirements: [ pureport-client ]
+author: Matt Traynham (@mtraynham)
 options:
     account_href:
         required: true
@@ -35,14 +33,10 @@ options:
             - A description for the network
         required: false
         type: str
-
 extends_documentation_fragment:
     - pureport_client
     - pureport_account
     - pureport_state
-
-author:
-    - Matt Traynham (@mtraynham)
 '''
 
 EXAMPLES = '''
@@ -77,7 +71,33 @@ EXAMPLES = '''
 RETURN = '''
 network:
     description: the created, updated, or deleted network returned from the server
-    type: Network
+    returned: success
+    type: complex
+    contains:
+        id:
+            description:
+                - The network id.
+            returned: success
+            type: str
+            sample: "network-rfqj4qc9fO8hDOczEB7Z_Q"
+        href:
+            description:
+                - The network href, a path to resource on the server.
+            returned: success
+            type: str
+            sample: "/networks/network-rfqj4qc9fO8hDOczEB7Z_Q"
+        name:
+            description:
+                - The name of the network.
+            returned: success
+            type: str
+            sample: "My Network Name"
+        description:
+            description:
+                - The description of the network.
+            returned: success
+            type: str
+            sample: "My network description"
 '''
 
 from ansible.module_utils.basic import AnsibleModule

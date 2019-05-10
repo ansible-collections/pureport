@@ -9,24 +9,18 @@ ANSIBLE_METADATA = {
 DOCUMENTATION = '''
 ---
 module: pureport_network_facts
-
 short_description: Retrieve a list of networks for an account
-
-version_added: "2.8"
-
 description:
     - "Retrieve a list of networks for an account"
-
+version_added: "2.8"
+requirements: [ pureport-client ]
+author: Matt Traynham (@mtraynham)
 options:
     account_href:
         required: true
-
 extends_documentation_fragment:
     - pureport_client
     - pureport_account
-
-author:
-    - Matt Traynham (@mtraynham)
 '''
 
 EXAMPLES = '''
@@ -45,8 +39,34 @@ EXAMPLES = '''
 
 RETURN = '''
 networks:
-    description: a list of Network (dict) objects
-    type: list[Network]
+    description: A list of Network (dict) objects.
+    returned: success
+    type: complex
+    contains:
+        id:
+            description:
+                - The network id.
+            returned: success
+            type: str
+            sample: "network-rfqj4qc9fO8hDOczEB7Z_Q"
+        href:
+            description:
+                - The network href, a path to resource on the server.
+            returned: success
+            type: str
+            sample: "/networks/network-rfqj4qc9fO8hDOczEB7Z_Q"
+        name:
+            description:
+                - The name of the network.
+            returned: success
+            type: str
+            sample: "My Network Name"
+        description:
+            description:
+                - The description of the network.
+            returned: success
+            type: str
+            sample: "My network description"
 '''
 
 from ansible.module_utils.basic import AnsibleModule

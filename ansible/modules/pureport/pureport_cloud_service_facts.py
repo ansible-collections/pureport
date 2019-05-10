@@ -9,19 +9,14 @@ ANSIBLE_METADATA = {
 DOCUMENTATION = '''
 ---
 module: pureport_cloud_service_facts
-
 short_description: Retrieve a list of cloud services
-
-version_added: "2.8"
-
 description:
     - "Retrieve a list of cloud services"
-
+version_added: "2.8"
+requirements: [ pureport-client ]
+author: Matt Traynham (@mtraynham)
 extends_documentation_fragment:
     - pureport_client
-
-author:
-    - Matt Traynham (@mtraynham)
 '''
 
 EXAMPLES = '''
@@ -39,8 +34,75 @@ EXAMPLES = '''
 
 RETURN = '''
 cloud_services:
-    description: a list of CloudService (dict) objects
-    type: list[CloudService]
+    description: A list of CloudService (dict) objects.
+    returned: success
+    type: complex
+    contains:
+        id:
+            description:
+                - The cloud service id.
+            returned: success
+            type: str
+            sample: "aws-s3-us-west-1"
+        href:
+            description:
+                - The cloud service href, a path to resource on the server.
+            returned: success
+            type: str
+            sample: "/cloudServices/aws-s3-us-west-1"
+        provider:
+            description:
+                - The cloud service provider.
+            returned: success
+            type: str
+            sample: "AWS"
+        name:
+            description:
+                - A name for this cloud service.
+            returned: success
+            type: str
+            sample: "AWS S3 us-west-1"
+        service:
+            description:
+                - The service name for the provider.
+            returned: success
+            type: str
+            sample: "S3"
+        ipv4PrefixCount:
+            description:
+                - The number of ipv4 prefixes this service uses.
+            returned: success
+            type: int
+            sample: 3
+        ipv6PrefixCount:
+            description:
+                - The number of ipv6 prefixes this service uses.
+            returned: success
+            type: int
+            sample: 4
+        cloudRegion:
+            description:
+                - The Cloud Region Link object which this service corresponds to.
+            type: complex
+            contains:
+                id:
+                    description:
+                        - The cloud region id.
+                    returned: success
+                    type: str
+                    sample: "aws-us-west-1"
+                href:
+                    description:
+                        - The cloud region href.
+                    returned: success
+                    type: str
+                    sample: "/cloudRegions/aws-us-west-1"
+                title:
+                    description:
+                        - The cloud region display name.
+                    returned: success
+                    type: str
+                    sample: "US West (N. California)"
 '''
 
 from ansible.module_utils.basic import AnsibleModule

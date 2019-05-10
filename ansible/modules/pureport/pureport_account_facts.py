@@ -9,19 +9,14 @@ ANSIBLE_METADATA = {
 DOCUMENTATION = '''
 ---
 module: pureport_account_facts
-
 short_description: Retrieve a list of accounts for the given api credentials
-
-version_added: "2.8"
-
 description:
     - "Retrieve a list of accounts for the given api credentials"
-
+version_added: "2.8"
+requirements: [ pureport-client ]
+author: Matt Traynham (@mtraynham)
 extends_documentation_fragment:
     - pureport_client
-
-author:
-    - Matt Traynham (@mtraynham)
 '''
 
 EXAMPLES = '''
@@ -39,8 +34,58 @@ EXAMPLES = '''
 
 RETURN = '''
 accounts:
-    description: a list of Account (dict) objects
-    type: list[Account]
+    description: A list of Account (dict) objects.
+    returned: success
+    type: complex
+    contains:
+        id:
+            description:
+                - The account id
+            returned: success
+            type: str
+            sample: "ac-1kAtS97scnsIkdB291YCbg"
+        href:
+            description:
+                - The account href, a path to resource on the server.
+            returned: success
+            type: str
+            sample: "/accounts/ac-1kAtS97scnsIkdB291YCbg"
+        name:
+            description:
+                - The account name.
+            returned: success
+            type: str
+            sample: "My Account Name"
+        description:
+            description:
+                - The account description.
+            returned: success
+            type: str
+            sample: "My account description"
+        parent:
+            description:
+                - The parent Account Link object.
+            returned: success
+            type: complex
+            contains:
+                id:
+                    description:
+                        - The parent account id.
+                    returned: success
+                    type: str
+                    sample: "ac-K0TL4YjBctBOHyVKj9hHaQ"
+                href:
+                    description:
+                        - The parent account href.
+                    returned: success
+                    type: str
+                    sample: "/accounts/ac-K0TL4YjBctBOHyVKj9hHaQ"
+                title:
+                    description:
+                        - The parent account name.
+                    returned: success
+                    type: str
+                    sample: "My Parent Account Name"
 '''
 
 from ansible.module_utils.basic import AnsibleModule

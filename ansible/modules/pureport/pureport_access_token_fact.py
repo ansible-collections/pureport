@@ -9,14 +9,12 @@ ANSIBLE_METADATA = {
 DOCUMENTATION = '''
 ---
 module: pureport_access_token_fact
-
 short_description: Retrieve an access token to use with the Pureport API
-
-version_added: "2.8"
-
 description:
     - "Retrieve an access token to use with the Pureport API"
-
+version_added: "2.8"
+requirements: [ pureport-client ]
+author: Matt Traynham (@mtraynham)
 options:
     api_base_url:
         description:
@@ -33,9 +31,6 @@ options:
             - The pre-configured API Secret for a Pureport Account.
         required: true
         type: str
-
-author:
-    - Matt Traynham (@mtraynham)
 '''
 
 EXAMPLES = '''
@@ -52,7 +47,9 @@ EXAMPLES = '''
 
 RETURN = '''
 access_token:
-    description: an access token that can be used with other Pureport facts
+    description:
+        - An access token that can be used with other Pureport facts.
+    returned: success
     type: str
 '''
 

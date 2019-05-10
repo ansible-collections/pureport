@@ -9,14 +9,12 @@ ANSIBLE_METADATA = {
 DOCUMENTATION = '''
 ---
 module: pureport_azure_express_route_connection
-
 short_description: Create, update or delete a Azure Express Route connection
-
-version_added: "2.8"
-
 description:
     - "Create, update or delete a Azure Express Route connection"
-
+version_added: "2.8"
+requirements: [ pureport-client ]
+author: Matt Traynham (@mtraynham)
 options:
     network_href:
         required: true
@@ -25,16 +23,12 @@ options:
             - The Azure Express Route service key.
         required: true
         type: str
-
 extends_documentation_fragment:
     - pureport_client
     - pureport_network
     - pureport_wait_for_server
     - pureport_connection_args
     - pureport_peering_connection_args
-
-author:
-    - Matt Traynham (@mtraynham)
 '''
 
 EXAMPLES = '''

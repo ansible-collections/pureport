@@ -9,14 +9,12 @@ ANSIBLE_METADATA = {
 DOCUMENTATION = '''
 ---
 module: pureport_site_ipsec_vpn_connection
-
 short_description: Create, update or delete a Site IPSec VPN connection
-
-version_added: "2.8"
-
 description:
     - "Create, update or delete a Site IPSec VPN connection"
-
+version_added: "2.8"
+requirements: [ pureport-client ]
+author: Matt Traynham (@mtraynham)
 options:
     network_href:
         required: true
@@ -165,15 +163,11 @@ options:
             - Enable a BGP password for the 'ROUTE_BASED_BGP' VPN connection gateways.
         required: false
         type: bool
-
 extends_documentation_fragment:
     - pureport_client
     - pureport_network
     - pureport_wait_for_server
     - pureport_connection_args
-
-author:
-    - Matt Traynham (@mtraynham)
 '''
 
 EXAMPLES = '''

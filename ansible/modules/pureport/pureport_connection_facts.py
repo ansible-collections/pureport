@@ -9,14 +9,12 @@ ANSIBLE_METADATA = {
 DOCUMENTATION = '''
 ---
 module: pureport_connection_facts
-
 short_description: Retrieve a list of connections for a account or network
-
-version_added: "2.8"
-
 description:
     - "Retrieve a list of connections for a account or network"
-
+version_added: "2.8"
+requirements: [ pureport-client ]
+author: Matt Traynham (@mtraynham)
 options:
     account_href:
         description:
@@ -28,14 +26,10 @@ options:
             - The Pureport Network object.
             - This should be the full 'href' path to the Network ReST object (e.g /networks/abc).
             - One of 'account_href' or 'network_href' should be supplied for this command, but not both.
-
 extends_documentation_fragment:
     - pureport_client
     - pureport_account
     - pureport_network
-
-author:
-    - Matt Traynham (@mtraynham)
 '''
 
 EXAMPLES = '''

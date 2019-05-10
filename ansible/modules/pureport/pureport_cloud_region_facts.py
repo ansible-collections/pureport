@@ -9,19 +9,14 @@ ANSIBLE_METADATA = {
 DOCUMENTATION = '''
 ---
 module: pureport_cloud_region_facts
-
 short_description: Retrieve a list of cloud regions
-
-version_added: "2.8"
-
 description:
     - "Retrieve a list of cloud regions"
-
+version_added: "2.8"
+requirements: [ pureport-client ]
+author: Matt Traynham (@mtraynham)
 extends_documentation_fragment:
     - pureport_client
-
-author:
-    - Matt Traynham (@mtraynham)
 '''
 
 EXAMPLES = '''
@@ -39,8 +34,40 @@ EXAMPLES = '''
 
 RETURN = '''
 cloud_regions:
-    description: a list of CloudRegion (dict) objects
-    type: list[CloudRegion]
+    description: A list of CloudRegion (dict) objects.
+    returned: success
+    type: complex
+    contains:
+        id:
+            description:
+                - The cloud region id.
+            returned: success
+            type: str
+            sample: "aws-us-west-1"
+        href:
+            description:
+                - The cloud region href, a path to resource on the server.
+            returned: success
+            type: str
+            sample: "/cloudRegions/aws-us-west-1"
+        provider:
+            description:
+                - The cloud region provider.
+            returned: success
+            type: str
+            sample: "AWS"
+        providerAssignedId:
+            description:
+                - The cloud region provider's id.
+            returned: success
+            type: str
+            sample: "us-west-1"
+        displayName:
+            description:
+                - A display name for this cloud region.
+            returned: success
+            type: str
+            sample: "US West (N. California)"
 '''
 
 from ansible.module_utils.basic import AnsibleModule

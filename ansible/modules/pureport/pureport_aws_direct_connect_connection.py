@@ -9,14 +9,12 @@ ANSIBLE_METADATA = {
 DOCUMENTATION = '''
 ---
 module: pureport_aws_direct_connect_connection
-
 short_description: Create, update or delete an AWS Direct Connect connection
-
-version_added: "2.8"
-
 description:
     - "Create, update or delete an AWS Direct Connect connection"
-
+version_added: "2.8"
+requirements: [ pureport-client ]
+author: Matt Traynham (@mtraynham)
 options:
     network_href:
         required: true
@@ -37,16 +35,12 @@ options:
         required: false
         type: list
         default: []
-
 extends_documentation_fragment:
     - pureport_client
     - pureport_network
     - pureport_wait_for_server
     - pureport_connection_args
     - pureport_peering_connection_args
-
-author:
-    - Matt Traynham (@mtraynham)
 '''
 
 EXAMPLES = '''

@@ -9,14 +9,12 @@ ANSIBLE_METADATA = {
 DOCUMENTATION = '''
 ---
 module: pureport_option_facts
-
 short_description: Retrieve a list of option enumerations used for creating connections
-
-version_added: "2.8"
-
 description:
     - "Retrieve a list of option enumerations used for creating connections"
-
+version_added: "2.8"
+requirements: [ pureport-client ]
+author: Matt Traynham (@mtraynham)
 options:
     types:
         description:
@@ -27,12 +25,8 @@ options:
                   'IKEV2IKEIntegrity', 'IKEV2IKEDHGroup', 'IKEV2ESPEncryption', 'IKEV2ESPIntegrity',
                   'IKEV2ESPDHGroup']
         default: []
-
 extends_documentation_fragment:
     - pureport_client
-
-author:
-    - Matt Traynham (@mtraynham)
 '''
 
 EXAMPLES = '''
@@ -53,8 +47,52 @@ EXAMPLES = '''
 
 RETURN = '''
 options:
-    description: a list of Option (dict) objects
-    type: list[Option]
+    description: a dict of Option type keys to their list of available Option values (dict) objects.
+    returned: success
+    type: complex
+    contains:
+        key:
+            description:
+                - The option group type.
+            returned: success
+            type: str
+            sample: "IKEV1IKEEncryption"
+        value:
+            description:
+                - The option group available values.
+            returned: success
+            type: complex
+            contains:
+                value:
+                    description:
+                        - The option's value.
+                    returned: success
+                    type: str
+                    sample: "AES_128"
+                description:
+                    description:
+                        - The option's description.
+                    returned: success
+                    type: str
+                    sample: "128 bit AES-CBC"
+                aead:
+                    description:
+                        - If the option is considered authenticated encryption with associated data (AEAD).
+                    returned: success
+                    type: bool
+                    sample: false
+                unsafe:
+                    description:
+                        - If the option is deemed unsafe because of encryption standards.
+                    returned: success
+                    type: bool
+                    sample: false
+                default:
+                    description:
+                        - If the option is considered the default option for this group type.
+                    returned: success
+                    type: bool
+                    sample: true
 '''
 
 from ansible.module_utils.basic import AnsibleModule

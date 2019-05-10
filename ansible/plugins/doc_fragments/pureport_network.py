@@ -6,5 +6,5 @@ options:
             - The Pureport Network object.
             - This should be the full 'href' path to the Network ReST object (e.g /networks/abc).
         required: false
-        type: dict
+        type: str
     '''
