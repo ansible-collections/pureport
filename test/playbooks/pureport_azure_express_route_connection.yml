@@ -52,6 +52,25 @@
     - fail:
       when: result.changed == true
 
+    - name: Test update Private Azure Express Route connection (no id, no changes)
+      pureport_azure_express_route_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        name: "{{ result.connection.name }}"
+        speed: "{{ result.connection.speed }}"
+        high_availability: "{{ result.connection.highAvailability }}"
+        peering_type: "{{ result.connection.peering.type }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.connection.billingTerm }}"
+        service_key: "{{ azure_service_key }}"
+        customer_networks: "{{ result.connection.customerNetworks }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed == true
+
     - name: Test update Private Azure Express Route connection (changes)
       pureport_azure_express_route_connection:
         api_base_url: "{{ api_base_url }}"
@@ -74,14 +93,33 @@
     - fail:
       when: result.changed != true
 
-    - name: Test delete Private Azure Express Route connection
+    - name: Test update Private Azure Express Route connection (no id, changes)
+      pureport_azure_express_route_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        id: "{{ result.connection.id }}"
+        name: "{{ result.connection.name }}"
+        speed: 100
+        high_availability: "{{ result.connection.highAvailability }}"
+        peering_type: "{{ result.connection.peering.type }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.connection.billingTerm }}"
+        service_key: "{{ azure_service_key }}"
+        customer_networks: "{{ result.connection.customerNetworks }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test delete Private Azure Express Route connection (no id)
       pureport_azure_express_route_connection:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         state: 'absent'
         wait_for_server: true
-        id: "{{ result.connection.id }}"
         name: "{{ result.connection.name }}"
         speed: "{{ result.connection.speed }}"
         high_availability: "{{ result.connection.highAvailability }}"
@@ -133,6 +171,25 @@
     - fail:
       when: result.changed == true
 
+    - name: Test update Public Azure Express Route connection (no id, no changes)
+      pureport_azure_express_route_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        name: "{{ result.connection.name }}"
+        speed: "{{ result.connection.speed }}"
+        high_availability: "{{ result.connection.highAvailability }}"
+        peering_type: "{{ result.connection.peering.type }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.connection.billingTerm }}"
+        service_key: "{{ azure_service_key }}"
+        customer_networks: "{{ result.connection.customerNetworks }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed == true
+
     - name: Test update Public Azure Express Route connection (changes)
       pureport_azure_express_route_connection:
         api_base_url: "{{ api_base_url }}"
@@ -142,6 +199,26 @@
         id: "{{ result.connection.id }}"
         name: "{{ result.connection.name }}"
         speed: 100
+        high_availability: "{{ result.connection.highAvailability }}"
+        peering_type: "{{ result.connection.peering.type }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.connection.billingTerm }}"
+        service_key: "{{ azure_service_key }}"
+        customer_networks: "{{ result.connection.customerNetworks }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test update Public Azure Express Route connection (no id, changes)
+      pureport_azure_express_route_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        id: "{{ result.connection.id }}"
+        name: "{{ result.connection.name }}"
+        speed: 50
         high_availability: "{{ result.connection.highAvailability }}"
         peering_type: "{{ result.connection.peering.type }}"
         location_href: "{{ location_href }}"
