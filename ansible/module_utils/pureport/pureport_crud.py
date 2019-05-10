@@ -101,10 +101,15 @@ def item_crud(module,
     # Retrieve the existing item if applicable
     existing_item = retrieve_existing_item_fn(item)
     if not existing_item and module.params.get('resolve_existing'):
-        resolve_existing_item_fn(item)
+        existing_item = resolve_existing_item_fn(item)
+
+    # Construct changed_item from existing properties
+    changed_item = item
+    if existing_item:
+        changed_item = copy_existing_item_properties_fn(item, existing_item)
 
     # Perform a simple comparison of the passed in item and existing item
-    items_differ = not compare_item_fn(item, existing_item)
+    items_differ = not compare_item_fn(changed_item, existing_item)
 
     state = module.params.get('state')
     create_item = state == 'present' and existing_item is None
@@ -115,13 +120,12 @@ def item_crud(module,
     if module.check_mode:
         module.exit_json(changed=changed)
 
-    changed_item = existing_item if existing_item is not None else item
     if create_item:
-        changed_item = create_item_fn(item)
+        changed_item = create_item_fn(changed_item)
     elif update_item:
-        changed_item = update_item_fn(copy_existing_item_properties_fn(item, existing_item))
+        changed_item = update_item_fn(changed_item)
     elif delete_item:
-        delete_item_fn(copy_existing_item_properties_fn(item, existing_item))
+        delete_item_fn(changed_item)
         changed_item = existing_item
 
     return changed, changed_item, item, existing_item
