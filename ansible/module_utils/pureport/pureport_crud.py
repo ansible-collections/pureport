@@ -127,5 +127,7 @@ def item_crud(module,
     elif delete_item:
         delete_item_fn(changed_item)
         changed_item = existing_item
+    elif existing_item is not None:
+        changed_item = existing_item
 
     return changed, changed_item, item, existing_item
