@@ -34,6 +34,17 @@
     - fail:
       when: result.changed == true
 
+    - name: Test update network (no id; no changes)
+      pureport_network:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        account_href: "{{ account_href }}"
+        name: "{{ result.network.name }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed == true
+
     - name: Test update network
       pureport_network:
         api_base_url: "{{ api_base_url }}"
@@ -42,6 +53,18 @@
         id: "{{ result.network.id }}"
         name: "{{ result.network.name }}"
         description: Update
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test update network (no id; changes)
+      pureport_network:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        account_href: "{{ account_href }}"
+        name: "{{ result.network.name }}"
+        description: Update 2
       register: result
     - debug: var=result
     - fail:
@@ -76,7 +99,6 @@
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         account_href: "{{ account_href }}"
-        id: "{{ result.network.id }}"
         name: "{{ result.network.name }}"
       register: result
     - debug: var=result

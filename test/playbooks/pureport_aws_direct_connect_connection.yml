@@ -52,6 +52,26 @@
     - fail:
       when: result.changed == true
 
+    - name: Test update Public AWS connection (no id; no changes)
+      pureport_aws_direct_connect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        name: "{{ result.connection.name }}"
+        speed: "{{ result.connection.speed }}"
+        high_availability: "{{ result.connection.highAvailability }}"
+        peering_type: "{{ result.connection.peering.type }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.connection.billingTerm }}"
+        aws_account_id: "{{ aws_account_id }}"
+        aws_region: "{{ result.connection.awsRegion }}"
+        cloud_service_hrefs: "{{ cloud_service_hrefs }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed == true
+
     - name: Test update Public AWS connection (changes)
       pureport_aws_direct_connect_connection:
         api_base_url: "{{ api_base_url }}"
@@ -73,14 +93,33 @@
     - fail:
       when: result.changed != true
 
-    - name: Test delete Public AWS connection
+    - name: Test update Public AWS connection (no id; changes)
+      pureport_aws_direct_connect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        name: "{{ result.connection.name }}"
+        speed: 50
+        high_availability: "{{ result.connection.highAvailability }}"
+        peering_type: "{{ result.connection.peering.type }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.connection.billingTerm }}"
+        aws_account_id: "{{ aws_account_id }}"
+        aws_region: "{{ result.connection.awsRegion }}"
+        cloud_service_hrefs: "{{ cloud_service_hrefs }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test delete Public AWS connection (no id)
       pureport_aws_direct_connect_connection:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         state: 'absent'
         wait_for_server: true
-        id: "{{ result.connection.id }}"
         name: "{{ result.connection.name }}"
         speed: "{{ result.connection.speed }}"
         high_availability: "{{ result.connection.highAvailability }}"
@@ -143,6 +182,28 @@
     - fail:
       when: result.changed == true
 
+    - name: Test update Private AWS connection (no id, no changes)
+      pureport_aws_direct_connect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        name: "{{ result.connection.name }}"
+        speed: "{{ result.connection.speed }}"
+        high_availability: "{{ result.connection.highAvailability }}"
+        peering_type: "{{ result.connection.peering.type }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.connection.billingTerm }}"
+        customer_networks: "{{ result.connection.customerNetworks }}"
+        nat_enabled: "{{ result.connection.nat.enabled }}"
+        nat_mappings: "{{ result.connection.nat.mappings | json_query('[*].nativeCidr') }}"
+        aws_account_id: "{{ aws_account_id }}"
+        aws_region: "{{ result.connection.awsRegion }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed == true
+
     - name: Test update Private AWS connection (changes)
       pureport_aws_direct_connect_connection:
         api_base_url: "{{ api_base_url }}"
@@ -152,6 +213,28 @@
         id: "{{ result.connection.id }}"
         name: "{{ result.connection.name }}"
         speed: 100
+        high_availability: "{{ result.connection.highAvailability }}"
+        peering_type: "{{ result.connection.peering.type }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.connection.billingTerm }}"
+        customer_networks: "{{ result.connection.customerNetworks }}"
+        nat_enabled: "{{ result.connection.nat.enabled }}"
+        nat_mappings: "{{ result.connection.nat.mappings | json_query('[*].nativeCidr') }}"
+        aws_account_id: "{{ aws_account_id }}"
+        aws_region: "{{ result.connection.awsRegion }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test update Private AWS connection (no id, changes)
+      pureport_aws_direct_connect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        name: "{{ result.connection.name }}"
+        speed: 50
         high_availability: "{{ result.connection.highAvailability }}"
         peering_type: "{{ result.connection.peering.type }}"
         location_href: "{{ location_href }}"

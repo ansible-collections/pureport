@@ -73,6 +73,35 @@
     - fail:
       when: result.changed == true
 
+    - name: Test update Site IPSec VPN connection (ikeV1) (no id, no changes)
+      pureport_site_ipsec_vpn_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        name: "{{ result.connection.name }}"
+        speed: "{{ result.connection.speed }}"
+        high_availability: "{{ result.connection.highAvailability }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.connection.billingTerm }}"
+        primary_customer_router_ip: "{{ result.connection.primaryCustomerRouterIP }}"
+        secondary_customer_router_ip: "{{ result.connection.secondaryCustomerRouterIP }}"
+        customer_asn: "{{ result.connection.customerASN }}"
+        ike_version: "{{ result.connection.ikeVersion }}"
+        ike_encryption: "{{ result.connection.ikeV1.ike.encryption }}"
+        ike_integrity: "{{ result.connection.ikeV1.ike.integrity }}"
+        ike_dh_group: "{{ result.connection.ikeV1.ike.dhGroup }}"
+        esp_encryption: "{{ result.connection.ikeV1.esp.encryption }}"
+        esp_dh_group: "{{ result.connection.ikeV1.esp.dhGroup }}"
+        customer_networks: "{{ result.connection.customerNetworks }}"
+        nat_enabled: "{{ result.connection.nat.enabled }}"
+        nat_mappings: "{{ result.connection.nat.mappings | json_query('[*].nativeCidr') }}"
+        enable_bgp_password: "{{ result.connection.enableBGPPassword }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed == true
+
     - name: Test update Site IPSec VPN connection (ikeV1) (changes)
       pureport_site_ipsec_vpn_connection:
         api_base_url: "{{ api_base_url }}"
@@ -103,14 +132,42 @@
     - fail:
       when: result.changed != true
 
-    - name: Test delete Site IPSec VPN connection (ikeV1)
+    - name: Test update Site IPSec VPN connection (ikeV1) (no id, changes)
+      pureport_site_ipsec_vpn_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        name: "{{ result.connection.name }}"
+        speed: 50
+        high_availability: "{{ result.connection.highAvailability }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.connection.billingTerm }}"
+        primary_customer_router_ip: "{{ result.connection.primaryCustomerRouterIP }}"
+        secondary_customer_router_ip: "{{ result.connection.secondaryCustomerRouterIP }}"
+        customer_asn: "{{ result.connection.customerASN }}"
+        ike_version: "{{ result.connection.ikeVersion }}"
+        ike_encryption: "{{ result.connection.ikeV1.ike.encryption }}"
+        ike_integrity: "{{ result.connection.ikeV1.ike.integrity }}"
+        ike_dh_group: "{{ result.connection.ikeV1.ike.dhGroup }}"
+        esp_encryption: "{{ result.connection.ikeV1.esp.encryption }}"
+        esp_dh_group: "{{ result.connection.ikeV1.esp.dhGroup }}"
+        customer_networks: "{{ result.connection.customerNetworks }}"
+        nat_enabled: "{{ result.connection.nat.enabled }}"
+        nat_mappings: "{{ result.connection.nat.mappings | json_query('[*].nativeCidr') }}"
+        enable_bgp_password: "{{ result.connection.enableBGPPassword }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test delete Site IPSec VPN connection (no id, ikeV1)
       pureport_site_ipsec_vpn_connection:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         wait_for_server: true
         state: 'absent'
-        id: "{{ result.connection.id }}"
         name: "{{ result.connection.name }}"
         speed: "{{ result.connection.speed }}"
         high_availability: "{{ result.connection.highAvailability }}"
@@ -196,6 +253,35 @@
     - fail:
       when: result.changed == true
 
+    - name: Test update Site IPSec VPN connection (ikeV2) (no id, no changes)
+      pureport_site_ipsec_vpn_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        name: "{{ result.connection.name }}"
+        speed: "{{ result.connection.speed }}"
+        high_availability: "{{ result.connection.highAvailability }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.connection.billingTerm }}"
+        primary_customer_router_ip: "{{ result.connection.primaryCustomerRouterIP }}"
+        secondary_customer_router_ip: "{{ result.connection.secondaryCustomerRouterIP }}"
+        customer_asn: "{{ result.connection.customerASN }}"
+        ike_version: "{{ result.connection.ikeVersion }}"
+        ike_encryption: "{{ result.connection.ikeV2.ike.encryption }}"
+        ike_prf: "{{ result.connection.ikeV2.ike.prf }}"
+        ike_dh_group: "{{ result.connection.ikeV2.ike.dhGroup }}"
+        esp_encryption: "{{ result.connection.ikeV2.esp.encryption }}"
+        esp_dh_group: "{{ result.connection.ikeV2.esp.dhGroup }}"
+        customer_networks: "{{ result.connection.customerNetworks }}"
+        nat_enabled: "{{ result.connection.nat.enabled }}"
+        nat_mappings: "{{ result.connection.nat.mappings | json_query('[*].nativeCidr') }}"
+        enable_bgp_password: "{{ result.connection.enableBGPPassword }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed == true
+
     - name: Test update Site IPSec VPN connection (ikeV2) (changes)
       pureport_site_ipsec_vpn_connection:
         api_base_url: "{{ api_base_url }}"
@@ -205,6 +291,35 @@
         id: "{{ result.connection.id }}"
         name: "{{ result.connection.name }}"
         speed: 100
+        high_availability: "{{ result.connection.highAvailability }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.connection.billingTerm }}"
+        primary_customer_router_ip: "{{ result.connection.primaryCustomerRouterIP }}"
+        secondary_customer_router_ip: "{{ result.connection.secondaryCustomerRouterIP }}"
+        customer_asn: "{{ result.connection.customerASN }}"
+        ike_version: "{{ result.connection.ikeVersion }}"
+        ike_encryption: "{{ result.connection.ikeV2.ike.encryption }}"
+        ike_prf: "{{ result.connection.ikeV2.ike.prf }}"
+        ike_dh_group: "{{ result.connection.ikeV2.ike.dhGroup }}"
+        esp_encryption: "{{ result.connection.ikeV2.esp.encryption }}"
+        esp_dh_group: "{{ result.connection.ikeV2.esp.dhGroup }}"
+        customer_networks: "{{ result.connection.customerNetworks }}"
+        nat_enabled: "{{ result.connection.nat.enabled }}"
+        nat_mappings: "{{ result.connection.nat.mappings | json_query('[*].nativeCidr') }}"
+        enable_bgp_password: "{{ result.connection.enableBGPPassword }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test update Site IPSec VPN connection (ikeV2) (no id, changes)
+      pureport_site_ipsec_vpn_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        name: "{{ result.connection.name }}"
+        speed: 50
         high_availability: "{{ result.connection.highAvailability }}"
         location_href: "{{ location_href }}"
         billing_term: "{{ result.connection.billingTerm }}"

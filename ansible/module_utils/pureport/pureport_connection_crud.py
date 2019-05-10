@@ -74,6 +74,35 @@ def __retrieve_connection(module, client, connection):
             return None
         except ClientHttpException as e:
             module.fail_json(msg=e.response.text, exception=format_exc())
+    return None
+
+
+def __resolve_connection(module, client, connection):
+    """
+    Resolve the existing connection from the server via some properties of the
+    user provided connection
+    :param ansible.module_utils.basic.AnsibleModule module: the Ansible module
+    :param pureport.api.client.Client client: the Pureport client
+    :param Connection connection: the Ansible inferred Connection
+    :rtype: Connection|None
+    """
+    network = get_network(module)
+    if network is not None:
+        try:
+            existing_connections = client.networks.connections(network).list()
+            matched_connections = [existing_connection for existing_connection in existing_connections
+                                   if all([existing_connection.get(k) == connection.get(k)
+                                           for k in ['name', 'type']])]
+            if len(matched_connections) == 1:
+                return matched_connections[0]
+            elif len(matched_connections) > 1:
+                module.fail_json(msg="Resolved more than one existing connection.  Please provide an 'id' "
+                                     "if you are attempting to update/delete an existing connection.  "
+                                     "Otherwise, use a more distinct name & type or set "
+                                     "'resolve_existing' to false.")
+        except ClientHttpException as e:
+            module.fail_json(msg=e.response.text, exception=format_exc())
+    return None
 
 
 def __copy_existing_connection_properties(connection, existing_connection):
@@ -87,6 +116,7 @@ def __copy_existing_connection_properties(connection, existing_connection):
     copied_connection = dict()
     copied_connection.update(connection)
     copied_connection.update(dict(
+        id=existing_connection.get('id'),
         network=existing_connection.get('network'),
         href=existing_connection.get('href')
     ))
@@ -157,6 +187,7 @@ def connection_crud(module,
         module,
         construct_item_fn,
         partial(__retrieve_connection, module, client),
+        partial(__resolve_connection, module, client),
         partial(__create_connection, module, client, wait_for_server),
         partial(__update_connection, module, client, wait_for_server),
         partial(__delete_connection, module, client, wait_for_server),

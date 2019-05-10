@@ -49,6 +49,24 @@
     - fail:
       when: result.changed == true
 
+    - name: Test update Non-HA GCI connection (no id, no changes)
+      pureport_google_cloud_interconnect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        name: "{{ result.connection.name }}"
+        speed: "{{ result.connection.speed }}"
+        high_availability: "{{ result.connection.highAvailability }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.connection.billingTerm }}"
+        primary_pairing_key: "{{ gci_primary_pairing_key }}"
+        customer_networks: "{{ result.connection.customerNetworks }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed == true
+
     - name: Test update Non-HA GCI connection (changes)
       pureport_google_cloud_interconnect_connection:
         api_base_url: "{{ api_base_url }}"
@@ -70,14 +88,32 @@
     - fail:
       when: result.changed != true
 
-    - name: Test delete Non-HA GCI connection
+    - name: Test update Non-HA GCI connection (no id, changes)
+      pureport_google_cloud_interconnect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        name: "{{ result.connection.name }}"
+        description: Test123
+        speed: "{{ result.connection.speed }}"
+        high_availability: "{{ result.connection.highAvailability }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.connection.billingTerm }}"
+        primary_pairing_key: "{{ gci_primary_pairing_key }}"
+        customer_networks: "{{ result.connection.customerNetworks }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test delete Non-HA GCI connection (no id)
       pureport_google_cloud_interconnect_connection:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         state: 'absent'
         wait_for_server: true
-        id: "{{ result.connection.id }}"
         name: "{{ result.connection.name }}"
         speed: "{{ result.connection.speed }}"
         high_availability: "{{ result.connection.highAvailability }}"
@@ -131,6 +167,25 @@
     - fail:
       when: result.changed == true
 
+    - name: Test update Non-HA GCI connection (no id, no changes)
+      pureport_google_cloud_interconnect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        name: "{{ result.connection.name }}"
+        speed: "{{ result.connection.speed }}"
+        high_availability: "{{ result.connection.highAvailability }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.connection.billingTerm }}"
+        primary_pairing_key: "{{ gci_primary_pairing_key }}"
+        secondary_pairing_key: "{{ gci_secondary_pairing_key }}"
+        customer_networks: "{{ result.connection.customerNetworks }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed == true
+
     - name: Test update Non-HA GCI connection (changes)
       pureport_google_cloud_interconnect_connection:
         api_base_url: "{{ api_base_url }}"
@@ -148,6 +203,26 @@
         customer_networks:
           - address: 192.167.1.2/32
             name: My Custom Address
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test update Non-HA GCI connection (no id, changes)
+      pureport_google_cloud_interconnect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        name: "{{ result.connection.name }}"
+        description: Test123
+        speed: "{{ result.connection.speed }}"
+        high_availability: "{{ result.connection.highAvailability }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.connection.billingTerm }}"
+        primary_pairing_key: "{{ gci_primary_pairing_key }}"
+        secondary_pairing_key: "{{ gci_secondary_pairing_key }}"
+        customer_networks: "{{ result.connection.customerNetworks }}"
       register: result
     - debug: var=result
     - fail:

@@ -3,7 +3,7 @@ class ModuleDocFragment(object):
 options:
     id:
         description:
-            - The id of the connection (required if updating/deleting).
+            - The id of the existing connection.
         required: false
         type: str
     name:
