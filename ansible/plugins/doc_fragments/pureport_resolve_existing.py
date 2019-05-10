@@ -3,8 +3,7 @@ class ModuleDocFragment(object):
 options:
     resolve_existing:
         description:
-            - If an id was not provided, attempt to resolve the existing item
-            - via some of the provided properties.
+            - If an id was not provided, attempt to resolve the existing item using the name.
         required: false
         type: bool
         default: true
