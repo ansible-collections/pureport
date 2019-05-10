@@ -90,11 +90,11 @@
         body:
           properties:
             peeringType: AzurePrivatePeering
-            peerASN: "{{ pureport_connection.primaryGateway.bgpConfig.pureportASN }}"
-            primaryPeerAddressPrefix: "{{ pureport_connection.primaryGateway.bgpConfig.peeringSubnet }}"
-            secondaryPeerAddressPrefix: "{{ pureport_connection.secondaryGateway.bgpConfig.peeringSubnet }}"
+            peerASN: "{{ pureport_connection.primary_gateway.bgp_config.pureport_asn }}"
+            primaryPeerAddressPrefix: "{{ pureport_connection.primary_gateway.bgp_config.peering_subnet }}"
+            secondaryPeerAddressPrefix: "{{ pureport_connection.secondary_gateway.bgp_config.peering_subnet }}"
             vlanId: 100
-            sharedKey: "{{ pureport_connection.primaryGateway.bgpConfig.password }}"
+            sharedKey: "{{ pureport_connection.primary_gateway.bgp_config.password }}"
       register: azure_express_route_peering
       when: pureport_connection.peering.type == 'PRIVATE'
 
@@ -141,16 +141,16 @@
         body:
           properties:
             peeringType: MicrosoftPeering
-            peerASN: "{{ pureport_connection.primaryGateway.bgpConfig.pureportASN }}"
-            primaryPeerAddressPrefix: "{{ pureport_connection.primaryGateway.bgpConfig.peeringSubnet }}"
-            secondaryPeerAddressPrefix: "{{ pureport_connection.secondaryGateway.bgpConfig.peeringSubnet | default(omit) }}"
+            peerASN: "{{ pureport_connection.primary_gateway.bgp_config.pureport_asn }}"
+            primaryPeerAddressPrefix: "{{ pureport_connection.primary_gateway.bgp_config.peering_subnet }}"
+            secondaryPeerAddressPrefix: "{{ pureport_connection.secondary_gateway.bgp_config.peering_subnet | default(omit) }}"
             vlanId: 100
-            sharedKey: "{{ pureport_connection.primaryGateway.bgpConfig.password }}"
+            sharedKey: "{{ pureport_connection.primary_gateway.bgp_config.password }}"
             microsoftPeeringConfig:
-              customerASN: "{{ pureport_connection.primaryGateway.bgpConfig.pureportASN }}"
+              customerASN: "{{ pureport_connection.primary_gateway.bgp_config.pureport_asn }}"
               advertisedPublicPrefixes:
-                - "{{ pureport_connection.primaryGateway.bgpConfig.publicNatIp }}"
-                - "{{ pureport_connection.secondaryGateway.bgpConfig.publicNatIp | default(omit) }}"
+                - "{{ pureport_connection.primary_gateway.bgp_config.public_nat_ip }}"
+                - "{{ pureport_connection.secondary_gateway.bgp_config.public_nat_ip | default(omit) }}"
               routingRegistryName: ARIN
             routeFilter:
               id: "{{ azure_express_route_filter.response.id }}"

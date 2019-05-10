@@ -56,7 +56,7 @@ locations:
             returned: success
             type: str
             sample: "Seattle, WA"
-        geoCoordinates:
+        geo_coordinates:
             description:
                 - The location's geo-coordinates.
             returned: success
@@ -74,7 +74,7 @@ locations:
                     returned: success
                     type: double
                     sample: -122.3321
-        locationLinks:
+        location_links:
             description:
                 - A list of other Location Link objects that this Location has a Pureport backbone connection to.
             returned: success
@@ -101,6 +101,7 @@ locations:
 '''
 
 from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils.common.dict_transformations import camel_dict_to_snake_dict
 from traceback import format_exc
 
 try:
@@ -121,7 +122,7 @@ def find_locations(module):
     client = get_client(module)
     try:
         locations = client.locations.list()
-        module.exit_json(locations=locations)
+        module.exit_json(locations=[camel_dict_to_snake_dict(location) for location in locations])
     except ClientHttpException as e:
         module.fail_json(msg=e.response.text, exception=format_exc())
 

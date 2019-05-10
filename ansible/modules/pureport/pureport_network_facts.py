@@ -70,6 +70,7 @@ networks:
 '''
 
 from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils.common.dict_transformations import camel_dict_to_snake_dict
 from traceback import format_exc
 
 try:
@@ -93,7 +94,7 @@ def find_networks(module):
     account = get_account(module)
     try:
         networks = client.accounts.networks(account).list()
-        module.exit_json(networks=networks)
+        module.exit_json(networks=[camel_dict_to_snake_dict(network) for network in networks])
     except ClientHttpException as e:
         module.fail_json(msg=e.response.text, exception=format_exc())
 

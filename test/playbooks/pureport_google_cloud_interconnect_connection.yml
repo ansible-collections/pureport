@@ -39,11 +39,11 @@
         id: "{{ result.id }}"
         name: "{{ result.name }}"
         speed: "{{ result.speed }}"
-        high_availability: "{{ result.highAvailability }}"
+        high_availability: "{{ result.high_availability }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.billingTerm }}"
+        billing_term: "{{ result.billing_term }}"
         primary_pairing_key: "{{ gci_primary_pairing_key }}"
-        customer_networks: "{{ result.customerNetworks }}"
+        customer_networks: "{{ result.customer_networks }}"
       register: result
     - debug: var=result
     - fail:
@@ -57,11 +57,11 @@
         wait_for_server: true
         name: "{{ result.name }}"
         speed: "{{ result.speed }}"
-        high_availability: "{{ result.highAvailability }}"
+        high_availability: "{{ result.high_availability }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.billingTerm }}"
+        billing_term: "{{ result.billing_term }}"
         primary_pairing_key: "{{ gci_primary_pairing_key }}"
-        customer_networks: "{{ result.customerNetworks }}"
+        customer_networks: "{{ result.customer_networks }}"
       register: result
     - debug: var=result
     - fail:
@@ -76,9 +76,9 @@
         id: "{{ result.id }}"
         name: "{{ result.name }}"
         speed: "{{ result.speed }}"
-        high_availability: "{{ result.highAvailability }}"
+        high_availability: "{{ result.high_availability }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.billingTerm }}"
+        billing_term: "{{ result.billing_term }}"
         primary_pairing_key: "{{ gci_primary_pairing_key }}"
         customer_networks:
           - address: 192.167.1.2/32
@@ -97,11 +97,11 @@
         name: "{{ result.name }}"
         description: Test123
         speed: "{{ result.speed }}"
-        high_availability: "{{ result.highAvailability }}"
+        high_availability: "{{ result.high_availability }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.billingTerm }}"
+        billing_term: "{{ result.billing_term }}"
         primary_pairing_key: "{{ gci_primary_pairing_key }}"
-        customer_networks: "{{ result.customerNetworks }}"
+        customer_networks: "{{ result.customer_networks }}"
       register: result
     - debug: var=result
     - fail:
@@ -116,11 +116,11 @@
         wait_for_server: true
         name: "{{ result.name }}"
         speed: "{{ result.speed }}"
-        high_availability: "{{ result.highAvailability }}"
+        high_availability: "{{ result.high_availability }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.billingTerm }}"
+        billing_term: "{{ result.billing_term }}"
         primary_pairing_key: "{{ gci_primary_pairing_key }}"
-        customer_networks: "{{ result.customerNetworks }}"
+        customer_networks: "{{ result.customer_networks }}"
       register: result
     - debug: var=result
     - fail:
@@ -156,12 +156,12 @@
         id: "{{ result.id }}"
         name: "{{ result.name }}"
         speed: "{{ result.speed }}"
-        high_availability: "{{ result.highAvailability }}"
+        high_availability: "{{ result.high_availability }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.billingTerm }}"
+        billing_term: "{{ result.billing_term }}"
         primary_pairing_key: "{{ gci_primary_pairing_key }}"
         secondary_pairing_key: "{{ gci_secondary_pairing_key }}"
-        customer_networks: "{{ result.customerNetworks }}"
+        customer_networks: "{{ result.customer_networks }}"
       register: result
     - debug: var=result
     - fail:
@@ -175,12 +175,12 @@
         wait_for_server: true
         name: "{{ result.name }}"
         speed: "{{ result.speed }}"
-        high_availability: "{{ result.highAvailability }}"
+        high_availability: "{{ result.high_availability }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.billingTerm }}"
+        billing_term: "{{ result.billing_term }}"
         primary_pairing_key: "{{ gci_primary_pairing_key }}"
         secondary_pairing_key: "{{ gci_secondary_pairing_key }}"
-        customer_networks: "{{ result.customerNetworks }}"
+        customer_networks: "{{ result.customer_networks }}"
       register: result
     - debug: var=result
     - fail:
@@ -195,9 +195,9 @@
         id: "{{ result.id }}"
         name: "{{ result.name }}"
         speed: "{{ result.speed }}"
-        high_availability: "{{ result.highAvailability }}"
+        high_availability: "{{ result.high_availability }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.billingTerm }}"
+        billing_term: "{{ result.billing_term }}"
         primary_pairing_key: "{{ gci_primary_pairing_key }}"
         secondary_pairing_key: "{{ gci_secondary_pairing_key }}"
         customer_networks:
@@ -217,12 +217,12 @@
         name: "{{ result.name }}"
         description: Test123
         speed: "{{ result.speed }}"
-        high_availability: "{{ result.highAvailability }}"
+        high_availability: "{{ result.high_availability }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.billingTerm }}"
+        billing_term: "{{ result.billing_term }}"
         primary_pairing_key: "{{ gci_primary_pairing_key }}"
         secondary_pairing_key: "{{ gci_secondary_pairing_key }}"
-        customer_networks: "{{ result.customerNetworks }}"
+        customer_networks: "{{ result.customer_networks }}"
       register: result
     - debug: var=result
     - fail:
@@ -238,12 +238,12 @@
         id: "{{ result.id }}"
         name: "{{ result.name }}"
         speed: "{{ result.speed }}"
-        high_availability: "{{ result.highAvailability }}"
+        high_availability: "{{ result.high_availability }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.billingTerm }}"
+        billing_term: "{{ result.billing_term }}"
         primary_pairing_key: "{{ gci_primary_pairing_key }}"
         secondary_pairing_key: "{{ gci_secondary_pairing_key }}"
-        customer_networks: "{{ result.customerNetworks }}"
+        customer_networks: "{{ result.customer_networks }}"
       register: result
     - debug: var=result
     - fail:

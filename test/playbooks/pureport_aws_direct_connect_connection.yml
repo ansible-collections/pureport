@@ -40,12 +40,12 @@
         id: "{{ result.id }}"
         name: "{{ result.name }}"
         speed: "{{ result.speed }}"
-        high_availability: "{{ result.highAvailability }}"
+        high_availability: "{{ result.high_availability }}"
         peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.billingTerm }}"
+        billing_term: "{{ result.billing_term }}"
         aws_account_id: "{{ aws_account_id }}"
-        aws_region: "{{ result.awsRegion }}"
+        aws_region: "{{ result.aws_region }}"
         cloud_service_hrefs: "{{ cloud_service_hrefs }}"
       register: result
     - debug: var=result
@@ -60,12 +60,12 @@
         wait_for_server: true
         name: "{{ result.name }}"
         speed: "{{ result.speed }}"
-        high_availability: "{{ result.highAvailability }}"
+        high_availability: "{{ result.high_availability }}"
         peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.billingTerm }}"
+        billing_term: "{{ result.billing_term }}"
         aws_account_id: "{{ aws_account_id }}"
-        aws_region: "{{ result.awsRegion }}"
+        aws_region: "{{ result.aws_region }}"
         cloud_service_hrefs: "{{ cloud_service_hrefs }}"
       register: result
     - debug: var=result
@@ -81,12 +81,12 @@
         id: "{{ result.id }}"
         name: "{{ result.name }}"
         speed: 100
-        high_availability: "{{ result.highAvailability }}"
+        high_availability: "{{ result.high_availability }}"
         peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.billingTerm }}"
+        billing_term: "{{ result.billing_term }}"
         aws_account_id: "{{ aws_account_id }}"
-        aws_region: "{{ result.awsRegion }}"
+        aws_region: "{{ result.aws_region }}"
         cloud_service_hrefs: "{{ cloud_service_hrefs }}"
       register: result
     - debug: var=result
@@ -101,12 +101,12 @@
         wait_for_server: true
         name: "{{ result.name }}"
         speed: 50
-        high_availability: "{{ result.highAvailability }}"
+        high_availability: "{{ result.high_availability }}"
         peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.billingTerm }}"
+        billing_term: "{{ result.billing_term }}"
         aws_account_id: "{{ aws_account_id }}"
-        aws_region: "{{ result.awsRegion }}"
+        aws_region: "{{ result.aws_region }}"
         cloud_service_hrefs: "{{ cloud_service_hrefs }}"
       register: result
     - debug: var=result
@@ -122,12 +122,12 @@
         wait_for_server: true
         name: "{{ result.name }}"
         speed: "{{ result.speed }}"
-        high_availability: "{{ result.highAvailability }}"
+        high_availability: "{{ result.high_availability }}"
         peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.billingTerm }}"
+        billing_term: "{{ result.billing_term }}"
         aws_account_id: "{{ aws_account_id }}"
-        aws_region: "{{ result.awsRegion }}"
+        aws_region: "{{ result.aws_region }}"
         cloud_service_hrefs: "{{ cloud_service_hrefs }}"
       register: result
     - debug: var=result
@@ -168,15 +168,15 @@
         id: "{{ result.id }}"
         name: "{{ result.name }}"
         speed: "{{ result.speed }}"
-        high_availability: "{{ result.highAvailability }}"
+        high_availability: "{{ result.high_availability }}"
         peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.billingTerm }}"
-        customer_networks: "{{ result.customerNetworks }}"
+        billing_term: "{{ result.billing_term }}"
+        customer_networks: "{{ result.customer_networks }}"
         nat_enabled: "{{ result.nat.enabled }}"
-        nat_mappings: "{{ result.nat.mappings | json_query('[*].nativeCidr') }}"
+        nat_mappings: "{{ result.nat.mappings | json_query('[*].native_cidr') }}"
         aws_account_id: "{{ aws_account_id }}"
-        aws_region: "{{ result.awsRegion }}"
+        aws_region: "{{ result.aws_region }}"
       register: result
     - debug: var=result
     - fail:
@@ -190,15 +190,15 @@
         wait_for_server: true
         name: "{{ result.name }}"
         speed: "{{ result.speed }}"
-        high_availability: "{{ result.highAvailability }}"
+        high_availability: "{{ result.high_availability }}"
         peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.billingTerm }}"
-        customer_networks: "{{ result.customerNetworks }}"
+        billing_term: "{{ result.billing_term }}"
+        customer_networks: "{{ result.customer_networks }}"
         nat_enabled: "{{ result.nat.enabled }}"
-        nat_mappings: "{{ result.nat.mappings | json_query('[*].nativeCidr') }}"
+        nat_mappings: "{{ result.nat.mappings | json_query('[*].native_cidr') }}"
         aws_account_id: "{{ aws_account_id }}"
-        aws_region: "{{ result.awsRegion }}"
+        aws_region: "{{ result.aws_region }}"
       register: result
     - debug: var=result
     - fail:
@@ -213,15 +213,15 @@
         id: "{{ result.id }}"
         name: "{{ result.name }}"
         speed: 100
-        high_availability: "{{ result.highAvailability }}"
+        high_availability: "{{ result.high_availability }}"
         peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.billingTerm }}"
-        customer_networks: "{{ result.customerNetworks }}"
+        billing_term: "{{ result.billing_term }}"
+        customer_networks: "{{ result.customer_networks }}"
         nat_enabled: "{{ result.nat.enabled }}"
-        nat_mappings: "{{ result.nat.mappings | json_query('[*].nativeCidr') }}"
+        nat_mappings: "{{ result.nat.mappings | json_query('[*].native_cidr') }}"
         aws_account_id: "{{ aws_account_id }}"
-        aws_region: "{{ result.awsRegion }}"
+        aws_region: "{{ result.aws_region }}"
       register: result
     - debug: var=result
     - fail:
@@ -235,15 +235,15 @@
         wait_for_server: true
         name: "{{ result.name }}"
         speed: 50
-        high_availability: "{{ result.highAvailability }}"
+        high_availability: "{{ result.high_availability }}"
         peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.billingTerm }}"
-        customer_networks: "{{ result.customerNetworks }}"
+        billing_term: "{{ result.billing_term }}"
+        customer_networks: "{{ result.customer_networks }}"
         nat_enabled: "{{ result.nat.enabled }}"
-        nat_mappings: "{{ result.nat.mappings | json_query('[*].nativeCidr') }}"
+        nat_mappings: "{{ result.nat.mappings | json_query('[*].native_cidr') }}"
         aws_account_id: "{{ aws_account_id }}"
-        aws_region: "{{ result.awsRegion }}"
+        aws_region: "{{ result.aws_region }}"
       register: result
     - debug: var=result
     - fail:
@@ -259,15 +259,15 @@
         id: "{{ result.id }}"
         name: "{{ result.name }}"
         speed: "{{ result.speed }}"
-        high_availability: "{{ result.highAvailability }}"
+        high_availability: "{{ result.high_availability }}"
         peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.billingTerm }}"
-        customer_networks: "{{ result.customerNetworks }}"
+        billing_term: "{{ result.billing_term }}"
+        customer_networks: "{{ result.customer_networks }}"
         nat_enabled: "{{ result.nat.enabled }}"
-        nat_mappings: "{{ result.nat.mappings | json_query('[*].nativeCidr') }}"
+        nat_mappings: "{{ result.nat.mappings | json_query('[*].native_cidr') }}"
         aws_account_id: "{{ aws_account_id }}"
-        aws_region: "{{ result.awsRegion }}"
+        aws_region: "{{ result.aws_region }}"
       register: result
     - debug: var=result
     - fail:

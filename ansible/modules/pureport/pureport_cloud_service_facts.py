@@ -68,19 +68,19 @@ cloud_services:
             returned: success
             type: str
             sample: "S3"
-        ipv4PrefixCount:
+        ipv4_prefix_count:
             description:
                 - The number of ipv4 prefixes this service uses.
             returned: success
             type: int
             sample: 3
-        ipv6PrefixCount:
+        ipv6_prefix_count:
             description:
                 - The number of ipv6 prefixes this service uses.
             returned: success
             type: int
             sample: 4
-        cloudRegion:
+        cloud_region:
             description:
                 - The Cloud Region Link object which this service corresponds to.
             type: complex
@@ -106,6 +106,7 @@ cloud_services:
 '''
 
 from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils.common.dict_transformations import camel_dict_to_snake_dict
 from traceback import format_exc
 
 try:
@@ -126,7 +127,7 @@ def find_cloud_services(module):
     client = get_client(module)
     try:
         cloud_services = client.cloud_services.list()
-        module.exit_json(cloud_services=cloud_services)
+        module.exit_json(cloud_services=[camel_dict_to_snake_dict(cloud_service) for cloud_service in cloud_services])
     except ClientHttpException as e:
         module.fail_json(msg=e.response.text, exception=format_exc())
 

@@ -89,6 +89,7 @@ accounts:
 '''
 
 from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils.common.dict_transformations import camel_dict_to_snake_dict
 from traceback import format_exc
 
 try:
@@ -109,7 +110,7 @@ def find_accounts(module):
     client = get_client(module)
     try:
         accounts = client.accounts.list()
-        module.exit_json(accounts=accounts)
+        module.exit_json(accounts=[camel_dict_to_snake_dict(account) for account in accounts])
     except ClientHttpException as e:
         module.fail_json(msg=e.response.text, exception=format_exc())
 

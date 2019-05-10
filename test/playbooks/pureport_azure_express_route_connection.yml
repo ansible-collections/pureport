@@ -41,12 +41,12 @@
         id: "{{ result.id }}"
         name: "{{ result.name }}"
         speed: "{{ result.speed }}"
-        high_availability: "{{ result.highAvailability }}"
+        high_availability: "{{ result.high_availability }}"
         peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.billingTerm }}"
+        billing_term: "{{ result.billing_term }}"
         service_key: "{{ azure_service_key }}"
-        customer_networks: "{{ result.customerNetworks }}"
+        customer_networks: "{{ result.customer_networks }}"
       register: result
     - debug: var=result
     - fail:
@@ -60,12 +60,12 @@
         wait_for_server: true
         name: "{{ result.name }}"
         speed: "{{ result.speed }}"
-        high_availability: "{{ result.highAvailability }}"
+        high_availability: "{{ result.high_availability }}"
         peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.billingTerm }}"
+        billing_term: "{{ result.billing_term }}"
         service_key: "{{ azure_service_key }}"
-        customer_networks: "{{ result.customerNetworks }}"
+        customer_networks: "{{ result.customer_networks }}"
       register: result
     - debug: var=result
     - fail:
@@ -80,10 +80,10 @@
         id: "{{ result.id }}"
         name: "{{ result.name }}"
         speed: "{{ result.speed }}"
-        high_availability: "{{ result.highAvailability }}"
+        high_availability: "{{ result.high_availability }}"
         peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.billingTerm }}"
+        billing_term: "{{ result.billing_term }}"
         service_key: "{{ azure_service_key }}"
         customer_networks:
           - address: 192.167.1.2/32
@@ -102,12 +102,12 @@
         id: "{{ result.id }}"
         name: "{{ result.name }}"
         speed: 100
-        high_availability: "{{ result.highAvailability }}"
+        high_availability: "{{ result.high_availability }}"
         peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.billingTerm }}"
+        billing_term: "{{ result.billing_term }}"
         service_key: "{{ azure_service_key }}"
-        customer_networks: "{{ result.customerNetworks }}"
+        customer_networks: "{{ result.customer_networks }}"
       register: result
     - debug: var=result
     - fail:
@@ -122,12 +122,12 @@
         wait_for_server: true
         name: "{{ result.name }}"
         speed: "{{ result.speed }}"
-        high_availability: "{{ result.highAvailability }}"
+        high_availability: "{{ result.high_availability }}"
         peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.billingTerm }}"
+        billing_term: "{{ result.billing_term }}"
         service_key: "{{ azure_service_key }}"
-        customer_networks: "{{ result.customerNetworks }}"
+        customer_networks: "{{ result.customer_networks }}"
       register: result
     - debug: var=result
     - fail:
@@ -160,12 +160,12 @@
         id: "{{ result.id }}"
         name: "{{ result.name }}"
         speed: "{{ result.speed }}"
-        high_availability: "{{ result.highAvailability }}"
+        high_availability: "{{ result.high_availability }}"
         peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.billingTerm }}"
+        billing_term: "{{ result.billing_term }}"
         service_key: "{{ azure_service_key }}"
-        customer_networks: "{{ result.customerNetworks }}"
+        customer_networks: "{{ result.customer_networks }}"
       register: result
     - debug: var=result
     - fail:
@@ -179,12 +179,12 @@
         wait_for_server: true
         name: "{{ result.name }}"
         speed: "{{ result.speed }}"
-        high_availability: "{{ result.highAvailability }}"
+        high_availability: "{{ result.high_availability }}"
         peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.billingTerm }}"
+        billing_term: "{{ result.billing_term }}"
         service_key: "{{ azure_service_key }}"
-        customer_networks: "{{ result.customerNetworks }}"
+        customer_networks: "{{ result.customer_networks }}"
       register: result
     - debug: var=result
     - fail:
@@ -199,12 +199,12 @@
         id: "{{ result.id }}"
         name: "{{ result.name }}"
         speed: 100
-        high_availability: "{{ result.highAvailability }}"
+        high_availability: "{{ result.high_availability }}"
         peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.billingTerm }}"
+        billing_term: "{{ result.billing_term }}"
         service_key: "{{ azure_service_key }}"
-        customer_networks: "{{ result.customerNetworks }}"
+        customer_networks: "{{ result.customer_networks }}"
       register: result
     - debug: var=result
     - fail:
@@ -219,12 +219,12 @@
         id: "{{ result.id }}"
         name: "{{ result.name }}"
         speed: 50
-        high_availability: "{{ result.highAvailability }}"
+        high_availability: "{{ result.high_availability }}"
         peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.billingTerm }}"
+        billing_term: "{{ result.billing_term }}"
         service_key: "{{ azure_service_key }}"
-        customer_networks: "{{ result.customerNetworks }}"
+        customer_networks: "{{ result.customer_networks }}"
       register: result
     - debug: var=result
     - fail:
@@ -240,12 +240,12 @@
         id: "{{ result.id }}"
         name: "{{ result.name }}"
         speed: "{{ result.speed }}"
-        high_availability: "{{ result.highAvailability }}"
+        high_availability: "{{ result.high_availability }}"
         peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
-        billing_term: "{{ result.billingTerm }}"
+        billing_term: "{{ result.billing_term }}"
         service_key: "{{ azure_service_key }}"
-        customer_networks: "{{ result.customerNetworks }}"
+        customer_networks: "{{ result.customer_networks }}"
       register: result
     - debug: var=result
     - fail:
