@@ -349,7 +349,9 @@ connection:
 
 from functools import partial
 from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.common.dict_transformations import snake_dict_to_camel_dict
+from ansible.module_utils.common.dict_transformations import \
+    camel_dict_to_snake_dict, \
+    snake_dict_to_camel_dict
 
 from ansible.module_utils.pureport.pureport import \
     get_client_argument_spec, \
@@ -488,9 +490,7 @@ def main():
     )
     module.exit_json(
         changed=changed,
-        connection=changed_connection,
-        argument_connection=argument_connection,
-        existing_connection=existing_connection
+        **camel_dict_to_snake_dict(changed_connection)
     )
 
 

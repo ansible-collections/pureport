@@ -85,7 +85,7 @@ supported_connections:
                     returned: success
                     type: str
                     sample: "Seattle, WA"
-        reachableCloudRegions:
+        reachable_cloud_Regions:
             description:
                 - A list of Cloud Region Link objects supported by the supported connection.
             returned: success
@@ -139,25 +139,25 @@ supported_connections:
             returned: success
             type: int
             sample: 50
-        highAvailability:
+        high_availability:
             description:
                 - If the connection supports high availability.
             returned: success
             type: bool
             sample: false
-        peeringType:
+        peering_type:
             description:
                 - The peering type of the supported connection.
             returned: success
             type: str
             sample: "PRIVATE"
-        billingProductId:
+        billing_product_id:
             description:
                 - The billing product id, a reference to the billing plan for this connection.
             returned: success
             type: str
             sample: "prod_EJ36Dg42H2a9AX"
-        billingPlans:
+        billing_plans:
             description:
                 - A list of supported billing plans for this supported connection.
             returned: success
@@ -181,7 +181,7 @@ supported_connections:
                     returned: success
                     type: str
                     sample: "HOURLY"
-                billingInterval:
+                billing_interval:
                     description:
                         - The time period billing is accumulated and sent to the user for payment.
                     returned: success
@@ -190,6 +190,7 @@ supported_connections:
 '''
 
 from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils.common.dict_transformations import camel_dict_to_snake_dict
 from traceback import format_exc
 
 try:
@@ -213,7 +214,8 @@ def find_supported_connections(module):
     account = get_account(module)
     try:
         supported_connections = client.accounts.supported_connections(account).list()
-        module.exit_json(supported_connections=supported_connections)
+        module.exit_json(supported_connections=[camel_dict_to_snake_dict(supported_connection)
+                                                for supported_connection in supported_connections])
     except ClientHttpException as e:
         module.fail_json(msg=e.response.text, exception=format_exc())
 

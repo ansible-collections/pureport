@@ -60,6 +60,7 @@ connections:
 '''
 
 from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils.common.dict_transformations import camel_dict_to_snake_dict
 from traceback import format_exc
 
 try:
@@ -102,7 +103,7 @@ def find_connections(module):
         module.fail_json(msg='One of account_href or network_href '
                              'arguments should be provided.')
 
-    module.exit_json(connections=connections)
+    module.exit_json(connections=[camel_dict_to_snake_dict(connection) for connection in connections])
 
 
 def main():
