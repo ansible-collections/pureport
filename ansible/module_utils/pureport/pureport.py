@@ -71,7 +71,7 @@ def get_account(module):
     :rtype: Account|None
     """
     account_href = module.params.get('account_href')
-    return dict(href=account_href) if account_href else None
+    return dict(href=account_href) if account_href is not None else None
 
 
 def get_network_argument_spec(required=False):
@@ -92,4 +92,4 @@ def get_network(module):
     :rtype: Network|None
     """
     network_href = module.params.get('network_href')
-    return dict(href=network_href) if network_href else None
+    return dict(href=network_href) if network_href is not None else None

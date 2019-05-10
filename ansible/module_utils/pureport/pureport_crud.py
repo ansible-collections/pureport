@@ -100,12 +100,12 @@ def item_crud(module,
 
     # Retrieve the existing item if applicable
     existing_item = retrieve_existing_item_fn(item)
-    if not existing_item and module.params.get('resolve_existing'):
+    if existing_item is None and module.params.get('resolve_existing'):
         existing_item = resolve_existing_item_fn(item)
 
     # Construct changed_item from existing properties
     changed_item = item
-    if existing_item:
+    if existing_item is not None:
         changed_item = copy_existing_item_properties_fn(item, existing_item)
 
     # Perform a simple comparison of the passed in item and existing item
