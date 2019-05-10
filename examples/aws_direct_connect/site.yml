@@ -18,6 +18,17 @@
       register: aws_vpc
       when: public_connection != true
 
+    # https://docs.ansible.com/ansible/latest/modules/ec2_vpc_subnet_module.html#ec2-vpc-subnet-module
+    - name: Create AWS VPC Subnet
+      ec2_vpc_subnet:
+        aws_access_key: "{{ aws_access_key }}"
+        aws_secret_key: "{{ aws_secret_key }}"
+        region: "{{ aws_region }}"
+        vpc_id: "{{ aws_vpc.vpc.id }}"
+        cidr: "{{ aws_vpc_subnet_cidr }}"
+      register: aws_vpc_subnet
+      when: public_connection != true
+
     # https://docs.ansible.com/ansible/latest/modules/ec2_vpc_vgw_module.html#ec2-vpc-vgw-module
     - name: Create AWS Virtual Private Gateway
       ec2_vpc_vgw:
@@ -27,6 +38,22 @@
         name: "{{ aws_vgw_name }}"
         vpc_id: "{{ aws_vpc.vpc.id }}"
       register: aws_vgw
+      when: public_connection != true
+
+    # https://docs.ansible.com/ansible/latest/modules/ec2_vpc_route_table_module.html#ec2-vpc-route-table-module
+    - name: Create AWS VPC Route Table
+      ec2_vpc_route_table:
+        aws_access_key: "{{ aws_access_key }}"
+        aws_secret_key: "{{ aws_secret_key }}"
+        region: "{{ aws_region }}"
+        vpc_id: "{{ aws_vpc.vpc.id }}"
+        tags:  # Used to uniquely identify without 'id'
+          Name: "{{ aws_vpc_route_table_name }}"
+        propagating_vgw_ids:
+          - "{{ aws_vgw.vgw.id }}"
+        subnets:
+          - "{{ aws_vpc_subnet.subnet.id }}"
+      register: aws_vpc_route_table
       when: public_connection != true
 
     # https://docs.ansible.com/ansible/latest/modules/aws_direct_connect_gateway_module.html
@@ -47,7 +74,6 @@
         api_key: "{{ pureport_api_key }}"
         api_secret: "{{ pureport_api_secret }}"
         account_href: "{{ pureport_account_href }}"
-        id: "{{ pureport_network_id | default(omit) }}"
         name: "{{ pureport_network_name }}"
       register: pureport_network
 
@@ -57,7 +83,6 @@
         api_key: "{{ pureport_api_key }}"
         api_secret: "{{ pureport_api_secret }}"
         network_href: "{{ pureport_network.network.href }}"
-        id: "{{ pureport_connection_id | default(omit) }}"
         name: "{{ pureport_connection_name }}"
         speed: "{{ pureport_connection_speed }}"
         high_availability: "{{ pureport_connection_high_availability | default(omit) }}"
