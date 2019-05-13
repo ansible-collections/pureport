@@ -48,7 +48,6 @@
         api_key: "{{ pureport_api_key }}"
         api_secret: "{{ pureport_api_secret }}"
         account_href: "{{ pureport_account_href }}"
-        id: "{{ pureport_network_id | default(omit) }}"
         name: "{{ pureport_network_name }}"
       register: pureport_network
 
@@ -58,7 +57,6 @@
         api_key: "{{ pureport_api_key }}"
         api_secret: "{{ pureport_api_secret }}"
         network_href: "{{ pureport_network.href }}"
-        id: "{{ pureport_connection_id | default(omit) }}"
         name: "{{ pureport_connection_name }}"
         speed: "{{ pureport_connection_speed }}"
         high_availability: "{{ pureport_connection_high_availability | default(omit) }}"

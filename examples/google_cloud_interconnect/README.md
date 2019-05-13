@@ -38,10 +38,6 @@ pureport_connection_location_href: /locations/us-sea
 pureport_connection_speed: 50
 pureport_connection_high_availability: true
 pureport_connection_billing_term: HOURLY
-
-## Set these if you are performing Pureport network/connection updates
-# pureport_network_id: network-XXXXXXXXXXXXXXXXXXXXXXXX
-# pureport_connection_id: conn-XXXXXXXXXXXXXXXXXXXXXXXX
 ```
 
 ### Some Notes
