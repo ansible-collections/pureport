@@ -32,7 +32,6 @@
         virtual_network_name: "{{ azure_virtual_network_name }}"
         name: default
         address_prefix_cidr: "{{ azure_virtual_network_default_subnet }}"
-      register: azure_virtual_network_default_subnet
       when: is_public_connection != true
 
     # https://docs.ansible.com/ansible/latest/modules/azure_rm_subnet_module.html#azure-rm-subnet-module
@@ -45,7 +44,6 @@
         virtual_network_name: "{{ azure_virtual_network_name }}"
         name: GatewaySubnet
         address_prefix_cidr: "{{ azure_virtual_network_gateway_subnet }}"
-      register: azure_virtual_network_default_subnet
       when: is_public_connection != true
 
     # https://docs.ansible.com/ansible/latest/modules/azure_rm_publicipaddress_module.html#azure-rm-publicipaddress-module

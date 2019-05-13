@@ -9,18 +9,18 @@ pip install -r requirements.txt
 
 ## Creating an Azure Express Route Connection
 For Private peering, this example creates:
-- a Azure Virtual Network (with 2 subnets)
-- a Azure Public IP Address
-- a Azure Virtual Network Gateway
-- a Azure Express Route Circuit
-- a Azure Virtual Network Gateway to Express Route Connection
+- an Azure Virtual Network (with 2 subnets)
+- an Azure Public IP Address
+- an Azure Virtual Network Gateway
+- an Azure Express Route Circuit
+- an Azure Virtual Network Gateway to Express Route Connection
 - a Pureport Network
 - a Pureport Azure Express Route Connection
 - Private Express Route Peering
 
 For Microsoft peering, this example creates:
-- a Azure Express Route Circuit
-- a Azure Route Filter
+- an Azure Express Route Circuit
+- an Azure Route Filter
 - a Pureport Network
 - a Pureport Azure Express Route Connection
 - Microsoft Express Route Peering
@@ -97,8 +97,8 @@ ansible-playbook site.yml
 There is an [open issue](https://github.com/ansible/ansible/issues/56356) with Ansible that may mark some of these
 tasks as changed on subsequent runs when they really are not.
 
-Also, the peering steps may signal that they have changed for two reasons, also related to similar issues with the above
-bug.
+Also, the peering steps may signal that they have changed for two reasons listed below.  These are also related to the bug
+described above and how the `azure_rm_resource` module detects idempotency changes.
 - The server does not return the `sharedKey` back, so the step will always be marked as `changed`.
 - Also, there doesn't seem to be a proper way to [cast int's](https://github.com/ansible/ansible/issues/30366), so the ASN
   will also signal a change because Ansible treats it as a string, but the server is returning a int/long.

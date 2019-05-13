@@ -124,5 +124,14 @@ ansible-doc aws_direct_connect_confirm_connection -s
 ansible-doc pr_48711_aws_direct_connect_virtual_interface -s
 ```
 
+### Obtaining and Using Pureport `href`
+Many of the Ansible modules provided above have parameters that reference a Pureport object's `href`.  Pureport uses
+the `href` link object to build relationships between various other objects, such as Connections belonging to a Network.
+
+An `href` is simply the object's resource path within the Pureport ReST API.
+
+A Pureport Account would have an `href` which is its `id` prefixed with `/accounts/`, like `/accounts/ac-XXXXXXXX`.
+Similarly, a Pureport Network would have an `href` which is its `id` prefixed with `/networks/`.
+
 ## Examples
 There are various examples on how to use these modules in the [examples directory](examples/README.md).
