@@ -34,10 +34,10 @@ For general information about this module, see the [Ansible docs](https://docs.a
 This "role" is distributed via [ansible-galaxy](https://galaxy.ansible.com/) (bundled with Ansible).
 
 ```bash
-ansible-galaxy install pureport.pureport-ansible-modules
+ansible-galaxy install pureport.pureport_ansible_modules
 ```
 
-Because this is not a collection of "roles" and is instead intended to be used within your own roles, you'll need to tell
+Because this is not a collection of "roles" and is instead intended to be used within your own playbooks/roles, you'll need to tell
 Ansible where to find these modules and their utilities.
 
 This can be done via Environment variables ([1](https://docs.ansible.com/ansible/2.8/dev_guide/developing_locally.html#adding-a-module-locally),
@@ -46,7 +46,7 @@ This can be done via Environment variables ([1](https://docs.ansible.com/ansible
 
 ```bash
 ANSIBLE_GALAXY_ROLES_DIRECTORY="YOUR ANSIBLE GALAXY ROLES DIRECTORY"
-PUREPORT_ANSIBLE_MODULES_DIR=${ANSIBLE_GALAXY_ROLES_DIRECTORY}/pureport.pureport-ansible-modules/ansible
+PUREPORT_ANSIBLE_MODULES_DIR=${ANSIBLE_GALAXY_ROLES_DIRECTORY}/pureport.pureport_ansible_modules/ansible
 export ANSIBLE_LIBRARY=${PUREPORT_ANSIBLE_MODULES_DIR}/modules
 export ANSIBLE_MODULE_UTILS=${PUREPORT_ANSIBLE_MODULES_DIR}/module_utils
 ```
@@ -55,8 +55,8 @@ It can also be done via `ansible.cfg` file ([1](https://docs.ansible.com/ansible
 [2](https://docs.ansible.com/ansible/2.8/reference_appendices/config.html#default-module-utils-path)):
 ```ini
 [defaults]
-library = ./roles/pureport.pureport-ansible-modules/ansible/modules
-module_utils = ./roles/pureport.pureport-ansible-modules/ansible/module_utils
+library = ./roles/pureport.pureport_ansible_modules/ansible/modules
+module_utils = ./roles/pureport.pureport_ansible_modules/ansible/module_utils
 ```
 
 **NOTE:** The above assumes your Ansible Galaxy roles are installed to the `./roles` directory.
@@ -70,14 +70,14 @@ Because the modules for this are external to Ansible and some of the documentati
 documentation to work with the `ansible-doc`, simply do the following:
 ```bash
 ANSIBLE_GALAXY_ROLES_DIRECTORY="YOUR ANSIBLE GALAXY ROLES DIRECTORY"
-PUREPORT_ANSIBLE_MODULES_DIR=${ANSIBLE_GALAXY_ROLES_DIRECTORY}/pureport.pureport-ansible-modules/ansible
+PUREPORT_ANSIBLE_MODULES_DIR=${ANSIBLE_GALAXY_ROLES_DIRECTORY}/pureport.pureport_ansible_modules/ansible
 export ANSIBLE_DOC_FRAGMENT_PLUGINS=${PUREPORT_ANSIBLE_MODULES_DIR}/plugins/doc_fragments
 ```
 
 It can also be done via `ansible.cfg` file ([1](https://docs.ansible.com/ansible/2.8/reference_appendices/config.html#doc-fragment-plugin-path))
 ```yaml
 [defaults]
-doc_fragment_plugins = ./roles/pureport.pureport-ansible-modules/ansible/plugins/doc_fragments
+doc_fragment_plugins = ./roles/pureport.pureport_ansible_modules/ansible/plugins/doc_fragments
 ```
 
 **NOTE:** The above assumes your Ansible Galaxy roles are installed to the `./roles` directory.
