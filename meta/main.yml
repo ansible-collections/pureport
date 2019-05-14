@@ -7,11 +7,23 @@ galaxy_info:
   min_ansible_version: 2.7
   galaxy_tags:
     - networking
+    - multicloud
     - cloud
+    - aws
+    - azure
+    - google
     - vpn
     - pureport
+    - web
+    - sdn
+    - bgp
+    - nat
   platforms:
     - name: GenericLinux
       versions:
         - any
+  cloud_platforms:
+    - amazon
+    - azure
+    - google
 dependencies: []
