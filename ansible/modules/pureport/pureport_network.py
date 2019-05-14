@@ -47,17 +47,17 @@ EXAMPLES = '''
     api_secret: XXXXXXXXXXXXXXXXX
     account_href: /accounts/ac-XXXXXXXXXXXXXXXXXXXXXX
     name: My Ansible Account
-  register: result  # Registers result.network
+  register: result  # Registers network as the result
 
 - name: Update the newly created network with changed properties
   pureport_network:
     api_key: XXXXXXXXXXXXX
     api_secret: XXXXXXXXXXXXXXXXX
     account_href: /accounts/ac-XXXXXXXXXXXXXXXXXXXXXX
-    id: {{ result.network.id }}
+    id: {{ result.id }}
     name: My Updated Ansible Account
     description: My updated ansible account description
-  register: result  # Registers result.network
+  register: result  # Registers network as the result
 
 - name: Delete the newly created network using the 'absent' state
   pureport_network:
@@ -65,8 +65,8 @@ EXAMPLES = '''
     api_secret: XXXXXXXXXXXXXXXXX
     account_href: /accounts/ac-XXXXXXXXXXXXXXXXXXXXXX
     state: absent
-    id: {{ result.network.id }}
-    name: {{ result.network.name }}
+    id: {{ result.id }}
+    name: {{ result.name }}
 '''
 
 RETURN = '''

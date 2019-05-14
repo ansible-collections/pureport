@@ -46,21 +46,21 @@ EXAMPLES = '''
     billing_term: HOURLY
     service_key: XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
     wait_for_server: true  # Wait for the server to finish provisioning the connection
-  register: result  # Registers result.connection
+  register: result  # Registers the connection as the result
 
 - name: Update the newly created connection with changed properties
   pureport_azure_express_route_connection:
     api_key: XXXXXXXXXXXXX
     api_secret: XXXXXXXXXXXXXXXXX
     network_href: /networks/network-XXXXXXXXXXXXXXXXXXXXXX
-    name: {{ result.connection.name }}
+    name: {{ result.name }}
     speed: 100
-    high_availability: {{ result.connection.highAvailability }}
-    location_href: {{ result.connection.location.href }}
-    billing_term: {{ result.connection.billingTerm }}
-    service_key: {{ result.connection.serviceKey }}
+    high_availability: {{ result.high_availability }}
+    location_href: {{ result.location.href }}
+    billing_term: {{ result.billing_term }}
+    service_key: {{ result.service_key }}
     wait_for_server: true  # Wait for the server to finish updating the connection
-  register: result  # Registers result.connection
+  register: result  # Registers the connection as the result
 
 - name: Delete the newly created connection using the 'absent' state
   pureport_azure_express_route_connection:
@@ -68,12 +68,12 @@ EXAMPLES = '''
     api_secret: XXXXXXXXXXXXXXXXX
     network_href: /networks/network-XXXXXXXXXXXXXXXXXXXXXX
     state: absent
-    name: {{ result.connection.name }}
-    speed: {{ result.connection.speed }}
-    high_availability: {{ result.connection.highAvailability }}
-    location_href: {{ result.connection.location.href }}
-    billing_term: {{ result.connection.billingTerm }}
-    service_key: {{ result.connection.serviceKey }}
+    name: {{ result.name }}
+    speed: {{ result.speed }}
+    high_availability: {{ result.high_availability }}
+    location_href: {{ result.location.href }}
+    billing_term: {{ result.billing_term }}
+    service_key: {{ result.service_key }}
     wait_for_server: true  # Wait for the server to finish deleting the connection
 
 - name: Create a PRIVATE Azure Express Route connection with all properties configured

@@ -195,31 +195,31 @@ EXAMPLES = '''
     esp_integrity: SHA256_HMAC
     esp_dh_group: MODP_2048
     wait_for_server: true  # Wait for the server to finish provisioning the connection
-  register: result  # Registers result.connection
+  register: result  # Registers the connection as the result
 
 - name: Update the newly created connection with changed properties
   pureport_aws_direct_connect_connection:
     api_key: XXXXXXXXXXXXX
     api_secret: XXXXXXXXXXXXXXXXX
     network_href: /networks/network-XXXXXXXXXXXXXXXXXXXXXX
-    name: {{ result.connection.name }}
+    name: {{ result.name }}
     speed: 100
-    high_availability: {{ result.connection.highAvailability }}
-    location_href: {{ result.connection.location.href }}
-    billing_term: {{ result.connection.billingTerm }}
-    primary_customer_router_ip: {{ result.connection.primaryCustomerRouterIP }}
-    secondary_customer_router_ip: {{ result.connection.secondaryCustomerRouterIP }}
-    routing_type: {{ result.connection.routingType }}
-    customer_asn: {{ result.connection.customerASN }}
-    ike_version: {{ result.connection.ikeVersion }}
-    ike_encryption: {{ result.connection.ikeV2.ike.encryption }}
-    ike_integrity: {{ result.connection.ikeV2.ike.integrity }}
-    ike_dh_group: {{ result.connection.ikeV2.ike.dhGroup }}
-    esp_encryption: {{ result.connection.ikeV2.esp.encryption }}
-    esp_integrity: {{ result.connection.ikeV2.esp.integrity }}
-    esp_dh_group: {{ result.connection.ikeV2.esp.dhGroup }}
+    high_availability: {{ result.high_availability }}
+    location_href: {{ result.location.href }}
+    billing_term: {{ result.billing_term }}
+    primary_customer_router_ip: {{ result.primary_customer_router_ip }}
+    secondary_customer_router_ip: {{ result.secondary_customer_router_ip }}
+    routing_type: {{ result.routing_type }}
+    customer_asn: {{ result.customer_asn }}
+    ike_version: {{ result.ike_version }}
+    ike_encryption: {{ result.ike_v2.ike.encryption }}
+    ike_integrity: {{ result.ike_v2.ike.integrity }}
+    ike_dh_group: {{ result.ike_v2.ike.dh_group }}
+    esp_encryption: {{ result.ike_v2.esp.encryption }}
+    esp_integrity: {{ result.ike_v2.esp.integrity }}
+    esp_dh_group: {{ result.ike_v2.esp.dh_group }}
     wait_for_server: true  # Wait for the server to finish updating the connection
-  register: result  # Registers result.connection
+  register: result  # Registers the connection as the result
 
 - name: Delete the newly created connection using the 'absent' state
   pureport_aws_direct_connect_connection:
@@ -227,22 +227,22 @@ EXAMPLES = '''
     api_secret: XXXXXXXXXXXXXXXXX
     network_href: /networks/network-XXXXXXXXXXXXXXXXXXXXXX
     state: absent
-    name: {{ result.connection.name }}
-    speed: {{ result.connection.speed }}
-    high_availability: {{ result.connection.highAvailability }}
-    location_href: {{ result.connection.location.href }}
-    billing_term: {{ result.connection.billingTerm }}
-    primary_customer_router_ip: {{ result.connection.primaryCustomerRouterIP }}
-    secondary_customer_router_ip: {{ result.connection.secondaryCustomerRouterIP }}
-    routing_type: {{ result.connection.routingType }}
-    customer_asn: {{ result.connection.customerASN }}
-    ike_version: {{ result.connection.ikeVersion }}
-    ike_encryption: {{ result.connection.ikeV2.ike.encryption }}
-    ike_integrity: {{ result.connection.ikeV2.ike.integrity }}
-    ike_dh_group: {{ result.connection.ikeV2.ike.dhGroup }}
-    esp_encryption: {{ result.connection.ikeV2.esp.encryption }}
-    esp_integrity: {{ result.connection.ikeV2.esp.integrity }}
-    esp_dh_group: {{ result.connection.ikeV2.esp.dhGroup }}
+    name: {{ result.name }}
+    speed: {{ result.speed }}
+    high_availability: {{ result.high_availability }}
+    location_href: {{ result.location.href }}
+    billing_term: {{ result.billing_term }}
+    primary_customer_router_ip: {{ result.primary_customer_router_ip }}
+    secondary_customer_router_ip: {{ result.secondary_customer_router_ip }}
+    routing_type: {{ result.routing_type }}
+    customer_asn: {{ result.customer_asn }}
+    ike_version: {{ result.ike_version }}
+    ike_encryption: {{ result.ike_v2.ike.encryption }}
+    ike_integrity: {{ result.ike_v2.ike.integrity }}
+    ike_dh_group: {{ result.ike_v2.ike.dh_group }}
+    esp_encryption: {{ result.ike_v2.esp.encryption }}
+    esp_integrity: {{ result.ike_v2.esp.integrity }}
+    esp_dh_group: {{ result.ike_v2.esp.dh_group }}
     wait_for_server: true  # Wait for the server to finish deleting the connection
 
 - name: Create a ROUTE_BASED_BGP Site IPSec VPN connection with all properties configured

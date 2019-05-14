@@ -59,22 +59,22 @@ EXAMPLES = '''
     aws_account_id: XXXXXXXXXXXX
     aws_region: XX-XXXX-#
     wait_for_server: true  # Wait for the server to finish provisioning the connection
-  register: result  # Registers result.connection
+  register: result  # Registers the connection as the result
 
 - name: Update the newly created connection with changed properties
   pureport_aws_direct_connect_connection:
     api_key: XXXXXXXXXXXXX
     api_secret: XXXXXXXXXXXXXXXXX
     network_href: /networks/network-XXXXXXXXXXXXXXXXXXXXXX
-    name: {{ result.connection.name }}
+    name: {{ result.name }}
     speed: 100
-    high_availability: {{ result.connection.highAvailability }}
-    location_href: {{ result.connection.location.href }}
-    billing_term: {{ result.connection.billingTerm }}
-    aws_account_id: {{ result.connection.awsAccountId }}
-    aws_region: {{ result.connection.awsRegion }}
+    high_availability: {{ result.high_availability }}
+    location_href: {{ result.location.href }}
+    billing_term: {{ result.billing_term }}
+    aws_account_id: {{ result.aws_account_id }}
+    aws_region: {{ result.aws_region }}
     wait_for_server: true  # Wait for the server to finish updating the connection
-  register: result  # Registers result.connection
+  register: result  # Registers the connection as the result
 
 - name: Delete the newly created connection using the 'absent' state
   pureport_aws_direct_connect_connection:
@@ -82,13 +82,13 @@ EXAMPLES = '''
     api_secret: XXXXXXXXXXXXXXXXX
     network_href: /networks/network-XXXXXXXXXXXXXXXXXXXXXX
     state: absent
-    name: {{ result.connection.name }}
-    speed: {{ result.connection.speed }}
-    high_availability: {{ result.connection.highAvailability }}
-    location_href: {{ result.connection.location.href }}
-    billing_term: {{ result.connection.billingTerm }}
-    aws_account_id: {{ result.connection.awsAccountId }}
-    aws_region: {{ result.connection.awsRegion }}
+    name: {{ result.name }}
+    speed: {{ result.speed }}
+    high_availability: {{ result.high_availability }}
+    location_href: {{ result.location.href }}
+    billing_term: {{ result.billing_term }}
+    aws_account_id: {{ result.aws_account_id }}
+    aws_region: {{ result.aws_region }}
     wait_for_server: true  # Wait for the server to finish deleting the connection
 
 - name: Create a PRIVATE AWS Direct Connect connection with all properties configured
