@@ -79,8 +79,9 @@
         network_href: "{{ network_href }}"
         wait_for_server: true
         id: "{{ result.id }}"
+        description: "Test"
         name: "{{ result.name }}"
-        speed: 100
+        speed: "{{ result.speed }}"
         high_availability: "{{ result.high_availability }}"
         peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
@@ -100,7 +101,8 @@
         network_href: "{{ network_href }}"
         wait_for_server: true
         name: "{{ result.name }}"
-        speed: 50
+        description: "Test123"
+        speed: "{{ result.speed }}"
         high_availability: "{{ result.high_availability }}"
         peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
@@ -121,6 +123,7 @@
         state: 'absent'
         wait_for_server: true
         name: "{{ result.name }}"
+        description: "{{ result.description }}"
         speed: "{{ result.speed }}"
         high_availability: "{{ result.high_availability }}"
         peering_type: "{{ result.peering.type }}"
@@ -212,7 +215,8 @@
         wait_for_server: true
         id: "{{ result.id }}"
         name: "{{ result.name }}"
-        speed: 100
+        description: "Test"
+        speed: "{{ result.speed }}"
         high_availability: "{{ result.high_availability }}"
         peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
@@ -234,7 +238,8 @@
         network_href: "{{ network_href }}"
         wait_for_server: true
         name: "{{ result.name }}"
-        speed: 50
+        description: "Test123"
+        speed: "{{ result.speed }}"
         high_availability: "{{ result.high_availability }}"
         peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
@@ -258,6 +263,7 @@
         wait_for_server: true
         id: "{{ result.id }}"
         name: "{{ result.name }}"
+        description: "{{ result.description }}"
         speed: "{{ result.speed }}"
         high_availability: "{{ result.high_availability }}"
         peering_type: "{{ result.peering.type }}"

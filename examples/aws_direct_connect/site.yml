@@ -1,7 +1,7 @@
 ---
 - hosts: localhost
   vars:
-    ansible_python_interpreter: "./venv/bin/python"  # Required for virtualenv...
+    ansible_python_interpreter: "python"  # Required for virtualenv...
   tasks:
     - name: Set facts
       set_fact:
