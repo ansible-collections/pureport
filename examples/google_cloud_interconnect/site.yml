@@ -1,7 +1,7 @@
 ---
 - hosts: localhost
   vars:
-    ansible_python_interpreter: "./venv/bin/python"  # Required for virtualenv...
+    ansible_python_interpreter: "python"  # Required for virtualenv...
   tasks:
     # https://docs.ansible.com/ansible/latest/modules/gcp_compute_network_module.html
     - name: Create Google Cloud Network
