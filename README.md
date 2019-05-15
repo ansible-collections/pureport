@@ -46,7 +46,7 @@ This can be done via Environment variables ([1](https://docs.ansible.com/ansible
 
 ```bash
 ANSIBLE_GALAXY_ROLES_DIRECTORY="YOUR ANSIBLE GALAXY ROLES DIRECTORY"
-PUREPORT_ANSIBLE_MODULES_DIR=${ANSIBLE_GALAXY_ROLES_DIRECTORY}/pureport.pureport_ansible_modules/ansible
+PUREPORT_ANSIBLE_MODULES_DIR=${ANSIBLE_GALAXY_ROLES_DIRECTORY}/pureport.pureport_ansible_modules
 export ANSIBLE_LIBRARY=${PUREPORT_ANSIBLE_MODULES_DIR}/modules
 export ANSIBLE_MODULE_UTILS=${PUREPORT_ANSIBLE_MODULES_DIR}/module_utils
 ```
@@ -55,8 +55,8 @@ It can also be done via `ansible.cfg` file ([1](https://docs.ansible.com/ansible
 [2](https://docs.ansible.com/ansible/2.8/reference_appendices/config.html#default-module-utils-path)):
 ```ini
 [defaults]
-library = ./roles/pureport.pureport_ansible_modules/ansible/modules
-module_utils = ./roles/pureport.pureport_ansible_modules/ansible/module_utils
+library = ./roles/pureport.pureport_ansible_modules/library
+module_utils = ./roles/pureport.pureport_ansible_modules/module_utils
 ```
 
 **NOTE:** The above assumes your Ansible Galaxy roles are installed to the `./roles` directory.
@@ -70,14 +70,14 @@ Because the modules for this are external to Ansible and some of the documentati
 documentation to work with the `ansible-doc`, simply do the following:
 ```bash
 ANSIBLE_GALAXY_ROLES_DIRECTORY="YOUR ANSIBLE GALAXY ROLES DIRECTORY"
-PUREPORT_ANSIBLE_MODULES_DIR=${ANSIBLE_GALAXY_ROLES_DIRECTORY}/pureport.pureport_ansible_modules/ansible
+PUREPORT_ANSIBLE_MODULES_DIR=${ANSIBLE_GALAXY_ROLES_DIRECTORY}/pureport.pureport_ansible_modules
 export ANSIBLE_DOC_FRAGMENT_PLUGINS=${PUREPORT_ANSIBLE_MODULES_DIR}/plugins/doc_fragments
 ```
 
 It can also be done via `ansible.cfg` file ([1](https://docs.ansible.com/ansible/2.8/reference_appendices/config.html#doc-fragment-plugin-path))
 ```yaml
 [defaults]
-doc_fragment_plugins = ./roles/pureport.pureport_ansible_modules/ansible/plugins/doc_fragments
+doc_fragment_plugins = ./roles/pureport.pureport_ansible_modules/plugins/doc_fragments
 ```
 
 **NOTE:** The above assumes your Ansible Galaxy roles are installed to the `./roles` directory.
