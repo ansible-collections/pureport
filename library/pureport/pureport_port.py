@@ -253,8 +253,7 @@ def construct_port(module):
                                'provider', 'speed', 'media_type',
                                'availability_domain', 'billing_term')))
     port.update(dict(
-        facility=dict(href=module.params.get('facility_href'),
-                      id=module.params.get('facility_href').split('/')[-1]),
+        facility=dict(href=module.params.get('facility_href')),
     ))
     port = snake_dict_to_camel_dict(port)
     return port

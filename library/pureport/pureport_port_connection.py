@@ -96,11 +96,8 @@ def construct_connection(module):
     ))
     connection.update(dict(
         type='PORT',
-        # TODO(mtraynham): Remove id parsing once we only need to pass href
-        location=dict(href=module.params.get('location_href'),
-                      id=module.params.get('location_href').split('/')[-1]),
-        primary_port=dict(href=module.params.get('primary_port_href'),
-                          id=module.params.get('primary_port_href').split('/')[-1]),
+        location=dict(href=module.params.get('location_href')),
+        primary_port=dict(href=module.params.get('primary_port_href')),
         nat=dict(
             enabled=module.params.get('nat_enabled'),
             mappings=[dict(native_cidr=nat_mapping)
@@ -109,8 +106,7 @@ def construct_connection(module):
     ))
     if module.params.get('secondary_port_href') is not None:
         connection.update(dict(
-            secondary_port=dict(href=module.params.get('secondary_port_href'),
-                                id=module.params.get('secondary_port_href').split('/')[-1]),
+            secondary_port=dict(href=module.params.get('secondary_port_href')),
         ))
     connection = snake_dict_to_camel_dict(connection)
     # Correct naming
