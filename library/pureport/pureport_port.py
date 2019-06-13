@@ -361,7 +361,6 @@ def delete_port(module, client, port):
     :param Port port: the Ansible inferred Port
     :rtype: Port
     """
-    # Copy over href, the client needs it to properly execute the call
     try:
         return client.ports.delete(port)
     except ClientHttpException as e:

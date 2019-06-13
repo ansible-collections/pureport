@@ -70,7 +70,7 @@ facilities:
             sample: "ACTIVE"
         physical_address:
             description:
-                - Information about the physical address of the VPN appliance.
+                - Information about the physical address of the facility.
             returned: success
             type: complex
             contains:
