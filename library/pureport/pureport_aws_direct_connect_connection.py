@@ -181,11 +181,8 @@ def construct_connection(module):
     connection.update(dict(
         type='AWS_DIRECT_CONNECT',
         peering=dict(type=module.params.get('peering_type')),
-        # TODO(mtraynham): Remove id parsing once we only need to pass href
-        location=dict(href=module.params.get('location_href'),
-                      id=module.params.get('location_href').split('/')[-1]),
-        # TODO(mtraynham): Remove id parsing once we only need to pass href
-        cloud_services=[dict(href=cloud_service_href, id=cloud_service_href.split('/')[-1])
+        location=dict(href=module.params.get('location_href')),
+        cloud_services=[dict(href=cloud_service_href)
                         for cloud_service_href in module.params.get('cloud_service_hrefs')],
         nat=dict(
             enabled=module.params.get('nat_enabled'),

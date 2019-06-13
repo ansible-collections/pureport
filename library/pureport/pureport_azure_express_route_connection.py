@@ -159,9 +159,7 @@ def construct_connection(module):
     connection.update(dict(
         type='AZURE_EXPRESS_ROUTE',
         peering=dict(type=module.params.get('peering_type')),
-        # TODO(mtraynham): Remove id parsing once we only need to pass href
-        location=dict(href=module.params.get('location_href'),
-                      id=module.params.get('location_href').split('/')[-1]),
+        location=dict(href=module.params.get('location_href')),
         nat=dict(
             enabled=module.params.get('nat_enabled'),
             mappings=[dict(native_cidr=nat_mapping)

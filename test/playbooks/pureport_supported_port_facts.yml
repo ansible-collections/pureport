@@ -1,0 +1,32 @@
+---
+- hosts: localhost
+  tasks:
+    - name: Retrieve the access token for an api key and secret
+      pureport_access_token_fact:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+      register: result
+    - name: Set the access token as a fact
+      set_fact:
+        access_token: "{{ result.access_token }}"
+
+    - name: List Facilities
+      pureport_facility_facts:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+      register: result
+
+    - name: Set test facilities
+      set_fact:
+        facilities: "{{ result.facilities[0:4] }}"
+
+    - name: List supported ports for an account
+      pureport_supported_port_facts:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        account_href: "{{ account_href }}"
+        facility_href: "{{ item.href }}"
+      loop: "{{ facilities }}"
+      register: result
+    - debug: var=result

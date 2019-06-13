@@ -414,8 +414,7 @@ def construct_connection(module):
         type='SITE_IPSEC_VPN',
         authType='PSK',
         # TODO(mtraynham): Remove id parsing once we only need to pass href
-        location=dict(href=module.params.get('location_href'),
-                      id=module.params.get('location_href').split('/')[-1]),
+        location=dict(href=module.params.get('location_href')),
         nat=dict(
             enabled=module.params.get('nat_enabled'),
             mappings=[dict(native_cidr=nat_mapping)

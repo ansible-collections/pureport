@@ -1,0 +1,139 @@
+---
+- hosts: localhost
+  tasks:
+    - name: Retrieve the access token for an api key and secret
+      pureport_access_token_fact:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+      register: result
+    - name: Set the access token as a fact
+      set_fact:
+        access_token: "{{ result.access_token }}"
+
+    - name: List facilities
+      pureport_facility_facts:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+      register: facilities
+    - name: Set Facility
+      set_fact:
+        facility: "{{ facilities.facilities[0] }}"
+
+    - name: List supported ports
+      pureport_supported_port_facts:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        account_href: "{{ account_href }}"
+        facility_href: "{{ facility.href }}"
+      register: supported_ports
+    - name: Set Supported Ports
+      set_fact:
+        supported_ports: "{{ supported_ports.supported_ports }}"
+
+    - name: Test create Port
+      pureport_port:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        account_href: "{{ account_href }}"
+        facility_href: "{{ facility.href }}"
+        name: "Test Port"
+        provider: "{{ supported_ports[0].provider }}"
+        speed: "{{ supported_ports[0].speed }}"
+        availability_domain: "{{ supported_ports[0].availability_domains[0] }}"
+        media_type: "{{ supported_ports[0].media_types[0] }}"
+        billing_term: "{{ supported_ports[0].billing_plans[0].term }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test update port (no changes)
+      pureport_port:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        account_href: "{{ result.account.href }}"
+        facility_href: "{{ result.facility.href }}"
+        id: "{{ result.id }}"
+        name: "{{ result.name }}"
+        provider: "{{ result.provider }}"
+        speed: "{{ result.speed }}"
+        availability_domain: "{{ result.availability_domain }}"
+        media_type: "{{ result.media_type }}"
+        billing_term: "{{ result.billing_term }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed == true
+
+    - name: Test update port (no id, no changes)
+      pureport_port:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        account_href: "{{ result.account.href }}"
+        facility_href: "{{ result.facility.href }}"
+        name: "{{ result.name }}"
+        provider: "{{ result.provider }}"
+        speed: "{{ result.speed }}"
+        availability_domain: "{{ result.availability_domain }}"
+        media_type: "{{ result.media_type }}"
+        billing_term: "{{ result.billing_term }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed == true
+
+    - name: Test update port (changes)
+      pureport_port:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        account_href: "{{ result.account.href }}"
+        facility_href: "{{ result.facility.href }}"
+        id: "{{ result.id }}"
+        name: "{{ result.name }}"
+        description: "Foobar"
+        provider: "{{ supported_ports[1].provider }}"
+        speed: "{{ supported_ports[1].speed }}"
+        availability_domain: "{{ supported_ports[1].availability_domains[0] }}"
+        media_type: "{{ supported_ports[1].media_types[0] }}"
+        billing_term: "{{ supported_ports[1].billing_plans[0].term }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test update port (no id, changes)
+      pureport_port:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        account_href: "{{ result.account.href }}"
+        facility_href: "{{ result.facility.href }}"
+        name: "{{ result.name }}"
+        description: ""
+        provider: "{{ supported_ports[0].provider }}"
+        speed: "{{ supported_ports[0].speed }}"
+        availability_domain: "{{ supported_ports[0].availability_domains[0] }}"
+        media_type: "{{ supported_ports[0].media_types[0] }}"
+        billing_term: "{{ supported_ports[0].billing_plans[0].term }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test delete port (no id)
+      pureport_port:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        state: 'absent'
+        account_href: "{{ result.account.href }}"
+        facility_href: "{{ result.facility.href }}"
+        name: "{{ result.name }}"
+        provider: "{{ result.provider }}"
+        speed: "{{ result.speed }}"
+        availability_domain: "{{ result.availability_domain }}"
+        media_type: "{{ result.media_type }}"
+        billing_term: "{{ result.billing_term }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
