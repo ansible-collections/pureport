@@ -1,3 +1,4 @@
+---
 - name: Set facts
   set_fact:
     is_public_connection: "{{ (pureport_connection_peering_type | default(PRIVATE)) == 'PUBLIC' }}"

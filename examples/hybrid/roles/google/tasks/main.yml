@@ -1,3 +1,4 @@
+---
 # https://docs.ansible.com/ansible/latest/modules/gcp_compute_network_module.html
 - name: Create Google Cloud Network
   gcp_compute_network:
