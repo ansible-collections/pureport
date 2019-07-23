@@ -1,0 +1,63 @@
+# https://docs.ansible.com/ansible/latest/modules/gcp_compute_network_module.html
+- name: Create Google Cloud Network
+  gcp_compute_network:
+    auth_kind: serviceaccount
+    service_account_file: "{{ gcp_service_account_file }}"
+    project: "{{ gcp_project }}"
+    name: "{{ gcp_network_name }}"
+  register: gcp_network
+
+# https://docs.ansible.com/ansible/latest/modules/gcp_compute_router_module.html
+- name: Create Google Cloud Router(s)
+  gcp_compute_router:
+    auth_kind: serviceaccount
+    service_account_file: "{{ gcp_service_account_file }}"
+    project: "{{ gcp_project }}"
+    name: "{{ gcp_router_name }}-{{ item }}"
+    region: "{{ gcp_region }}"
+    bgp:
+      asn: 16550  # Must be 16550
+    network: "{{ gcp_network }}"
+  with_sequence: start=1 count={{2 if pureport_connection_high_availability else 1}}
+  register: gcp_routers
+
+# https://docs.ansible.com/ansible/devel/modules/gcp_compute_interconnect_attachment_module.html
+- name: Create Google Cloud Interconnect Attachment(s)
+  gcp_compute_interconnect_attachment:
+    auth_kind: serviceaccount
+    service_account_file: "{{ gcp_service_account_file }}"
+    project: "{{ gcp_project }}"
+    name: "{{ gcp_interconnect_attachment_name }}-{{ idx + 1 }}"
+    region: "{{ gcp_region }}"
+    type: PARTNER
+    edge_availability_domain: "AVAILABILITY_DOMAIN_{{ idx + 1 }}"
+    router: "{{ item }}"
+  loop: "{{ gcp_routers.results }}"
+  loop_control:
+    index_var: idx
+  register: gcp_interconnect_attachments
+
+- name: Create Pureport Network
+  pureport_network:
+    api_base_url: "{{ pureport_api_base_url | default(omit) }}"
+    api_key: "{{ pureport_api_key }}"
+    api_secret: "{{ pureport_api_secret }}"
+    account_href: "{{ pureport_account_href }}"
+    name: "{{ pureport_network_name }}"
+  register: pureport_network
+
+- name: Create Pureport Google Cloud Interconnect Connection
+  pureport_google_cloud_interconnect_connection:
+    api_base_url: "{{ pureport_api_base_url | default(omit) }}"
+    api_key: "{{ pureport_api_key }}"
+    api_secret: "{{ pureport_api_secret }}"
+    network_href: "{{ pureport_network.href }}"
+    name: "{{ pureport_connection_name }}"
+    speed: "{{ pureport_connection_speed }}"
+    high_availability: "{{ pureport_connection_high_availability | default(omit) }}"
+    location_href: "{{ pureport_connection_location_href }}"
+    billing_term: "{{ pureport_connection_billing_term }}"
+    primary_pairing_key: "{{ gcp_interconnect_attachments.results[0].pairingKey }}"
+    secondary_pairing_key: "{{ gcp_interconnect_attachments.results[1].pairingKey | default(omit) }}"
+    wait_for_server: true
+  register: pureport_connection
