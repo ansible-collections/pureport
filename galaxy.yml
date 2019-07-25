@@ -1,6 +1,6 @@
 ---
 namespace: "pureport"
-name: "pureport-ansible-modules"
+name: "pureport_ansible_modules"
 version: "0.0.6"
 readme: "README.md"
 authors:
