@@ -2,6 +2,8 @@
 - hosts: localhost
   vars:
     ansible_python_interpreter: "python"  # Required for virtualenv...
+  collections:
+    - pureport.pureport_ansible_modules
   tasks:
     # https://docs.ansible.com/ansible/latest/modules/gcp_compute_network_module.html
     - name: Create Google Cloud Network

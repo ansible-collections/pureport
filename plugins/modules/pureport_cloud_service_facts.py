@@ -8,10 +8,10 @@ ANSIBLE_METADATA = {
 
 DOCUMENTATION = '''
 ---
-module: pureport_account_facts
-short_description: Retrieve a list of accounts for the given api credentials
+module: pureport_cloud_service_facts
+short_description: Retrieve a list of cloud services
 description:
-    - "Retrieve a list of accounts for the given api credentials"
+    - "Retrieve a list of cloud services"
 version_added: "2.8"
 requirements: [ pureport-client ]
 author: Matt Traynham (@mtraynham)
@@ -20,72 +20,89 @@ extends_documentation_fragment:
 '''
 
 EXAMPLES = '''
-- name: List accounts for an API key pair
-  pureport_account_facts:
+- name: List cloud services
+  pureport_cloud_service_facts:
     api_key: XXXXXXXXXXXXX
     api_secret: XXXXXXXXXXXXXXXXX
-  register: result   # Registers result.accounts
+  register: result   # Registers result.cloud_services
 
-- name: Display all account hrefs using a json_query filter
+- name: Display all cloud service hrefs using a json_query filter
   debug:
     var: item
-  loop: "{{ result.accounts | json_query('[*].href') }}"
+  loop: "{{ result.cloud_services | json_query('[*].href') }}"
 '''
 
 RETURN = '''
-accounts:
-    description: A list of Account (dict) objects.
+cloud_services:
+    description: A list of CloudService (dict) objects.
     returned: success
     type: complex
     contains:
         id:
             description:
-                - The account id
+                - The cloud service id.
             returned: success
             type: str
-            sample: "ac-1kAtS97scnsIkdB291YCbg"
+            sample: "aws-s3-us-west-1"
         href:
             description:
-                - The account href, a path to resource on the server.
+                - The cloud service href, a path to resource on the server.
             returned: success
             type: str
-            sample: "/accounts/ac-1kAtS97scnsIkdB291YCbg"
+            sample: "/cloudServices/aws-s3-us-west-1"
+        provider:
+            description:
+                - The cloud service provider.
+            returned: success
+            type: str
+            sample: "AWS"
         name:
             description:
-                - The account name.
+                - A name for this cloud service.
             returned: success
             type: str
-            sample: "My Account Name"
-        description:
+            sample: "AWS S3 us-west-1"
+        service:
             description:
-                - The account description.
+                - The service name for the provider.
             returned: success
             type: str
-            sample: "My account description"
-        parent:
+            sample: "S3"
+        ipv4_prefix_count:
             description:
-                - The parent Account Link object.
+                - The number of ipv4 prefixes this service uses.
             returned: success
+            type: int
+            sample: 3
+        ipv6_prefix_count:
+            description:
+                - The number of ipv6 prefixes this service uses.
+            returned: success
+            type: int
+            sample: 4
+        cloud_region:
+            description:
+                - The Cloud Region Link object which this service corresponds to.
             type: complex
             contains:
                 id:
                     description:
-                        - The parent account id.
+                        - The cloud region id.
                     returned: success
                     type: str
-                    sample: "ac-K0TL4YjBctBOHyVKj9hHaQ"
+                    sample: "aws-us-west-1"
                 href:
                     description:
-                        - The parent account href.
+                        - The cloud region href.
                     returned: success
                     type: str
-                    sample: "/accounts/ac-K0TL4YjBctBOHyVKj9hHaQ"
+                    sample: "/cloudRegions/aws-us-west-1"
                 title:
                     description:
-                        - The parent account name.
+                        - The cloud region display name.
                     returned: success
                     type: str
-                    sample: "My Parent Account Name"
+                    sample: "US West (N. California)"
 '''
 
 from ansible.module_utils.basic import AnsibleModule
@@ -96,21 +113,21 @@ try:
     from pureport.exception.api import ClientHttpException
 except ImportError:
     ClientHttpException = None
-from ansible.module_utils.pureport.pureport import \
+from ansible_collections.pureport.pureport_ansible_modules.plugins.module_utils.pureport import \
     get_client_argument_spec, \
     get_client_mutually_exclusive, \
     get_client
 
 
-def find_accounts(module):
+def find_cloud_services(module):
     """
-    List accounts
+    List cloud services
     :param AnsibleModule module: the ansible module
     """
     client = get_client(module)
     try:
-        accounts = client.accounts.list()
-        module.exit_json(accounts=[camel_dict_to_snake_dict(account) for account in accounts])
+        cloud_services = client.cloud_services.list()
+        module.exit_json(cloud_services=[camel_dict_to_snake_dict(cloud_service) for cloud_service in cloud_services])
     except ClientHttpException as e:
         module.fail_json(msg=e.response.text, exception=format_exc())
 
@@ -124,7 +141,7 @@ def main():
         argument_spec=argument_spec,
         mutually_exclusive=mutually_exclusive
     )
-    find_accounts(module)
+    find_cloud_services(module)
 
 
 if __name__ == '__main__':

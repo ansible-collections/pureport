@@ -102,7 +102,7 @@ try:
     from pureport.exception.api import ClientHttpException
 except ImportError:
     ClientHttpException = None
-from ansible.module_utils.pureport.pureport import \
+from ansible_collections.pureport.pureport_ansible_modules.plugins.module_utils.pureport import \
     get_client_argument_spec, \
     get_client_mutually_exclusive, \
     get_client

@@ -8,65 +8,66 @@ ANSIBLE_METADATA = {
 
 DOCUMENTATION = '''
 ---
-module: pureport_network_facts
-short_description: Retrieve a list of networks for an account
+module: pureport_cloud_region_facts
+short_description: Retrieve a list of cloud regions
 description:
-    - "Retrieve a list of networks for an account"
+    - "Retrieve a list of cloud regions"
 version_added: "2.8"
 requirements: [ pureport-client ]
 author: Matt Traynham (@mtraynham)
-options:
-    account_href:
-        required: true
 extends_documentation_fragment:
     - pureport_client
-    - pureport_account
 '''
 
 EXAMPLES = '''
-- name: List networks for an account
-  pureport_networks_facts:
+- name: List cloud regions
+  pureport_cloud_region_facts:
     api_key: XXXXXXXXXXXXX
     api_secret: XXXXXXXXXXXXXXXXX
-    account_href: /accounts/ac-XXXXXXXXXXXXXXXXXXXXXX
-  register: result   # Registers result.networks
+  register: result   # Registers result.cloud_regions
 
-- name: Display all network hrefs using a json_query filter
+- name: Display all cloud region hrefs using a json_query filter
   debug:
     var: item
-  loop: "{{ result.networks | json_query('[*].href') }}"
+  loop: "{{ result.cloud_regions | json_query('[*].href') }}"
 '''
 
 RETURN = '''
-networks:
-    description: A list of Network (dict) objects.
+cloud_regions:
+    description: A list of CloudRegion (dict) objects.
     returned: success
     type: complex
     contains:
         id:
             description:
-                - The network id.
+                - The cloud region id.
             returned: success
             type: str
-            sample: "network-rfqj4qc9fO8hDOczEB7Z_Q"
+            sample: "aws-us-west-1"
         href:
             description:
-                - The network href, a path to resource on the server.
+                - The cloud region href, a path to resource on the server.
             returned: success
             type: str
-            sample: "/networks/network-rfqj4qc9fO8hDOczEB7Z_Q"
-        name:
+            sample: "/cloudRegions/aws-us-west-1"
+        provider:
             description:
-                - The name of the network.
+                - The cloud region provider.
             returned: success
             type: str
-            sample: "My Network Name"
-        description:
+            sample: "AWS"
+        provider_assigned_id:
             description:
-                - The description of the network.
+                - The cloud region provider's id.
             returned: success
             type: str
-            sample: "My network description"
+            sample: "us-west-1"
+        display_name:
+            description:
+                - A display name for this cloud region.
+            returned: success
+            type: str
+            sample: "US West (N. California)"
 '''
 
 from ansible.module_utils.basic import AnsibleModule
@@ -77,24 +78,21 @@ try:
     from pureport.exception.api import ClientHttpException
 except ImportError:
     ClientHttpException = None
-from ansible.module_utils.pureport.pureport import \
+from ansible_collections.pureport.pureport_ansible_modules.plugins.module_utils.pureport import \
     get_client_argument_spec, \
     get_client_mutually_exclusive, \
-    get_client, \
-    get_account_argument_spec, \
-    get_account
+    get_client
 
 
-def find_networks(module):
+def find_cloud_regions(module):
     """
-    List networks
+    List cloud regions
     :param AnsibleModule module: the ansible module
     """
     client = get_client(module)
-    account = get_account(module)
     try:
-        networks = client.accounts.networks(account).list()
-        module.exit_json(networks=[camel_dict_to_snake_dict(network) for network in networks])
+        cloud_regions = client.cloud_regions.list()
+        module.exit_json(cloud_regions=[camel_dict_to_snake_dict(cloud_region) for cloud_region in cloud_regions])
     except ClientHttpException as e:
         module.fail_json(msg=e.response.text, exception=format_exc())
 
@@ -102,14 +100,13 @@ def find_networks(module):
 def main():
     argument_spec = dict()
     argument_spec.update(get_client_argument_spec())
-    argument_spec.update(get_account_argument_spec(True))
     mutually_exclusive = []
     mutually_exclusive += get_client_mutually_exclusive()
     module = AnsibleModule(
         argument_spec=argument_spec,
         mutually_exclusive=mutually_exclusive
     )
-    find_networks(module)
+    find_cloud_regions(module)
 
 
 if __name__ == '__main__':

@@ -2,6 +2,8 @@
 - hosts: localhost
   vars:
     ansible_python_interpreter: "python"  # Required for virtualenv...
+  collections:
+    - pureport.pureport_ansible_modules
   tasks:
     - name: Set facts
       set_fact:

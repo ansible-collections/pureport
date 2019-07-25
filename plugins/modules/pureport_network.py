@@ -106,13 +106,13 @@ try:
 except ImportError:
     ClientHttpException = None
     NotFoundException = None
-from ansible.module_utils.pureport.pureport import \
+from ansible_collections.pureport.pureport_ansible_modules.plugins.module_utils.pureport import \
     get_client_argument_spec, \
     get_client_mutually_exclusive, \
     get_client, \
     get_account_argument_spec, \
     get_account
-from ansible.module_utils.pureport.pureport_crud import \
+from ansible_collections.pureport.pureport_ansible_modules.plugins.module_utils.pureport_crud import \
     get_state_argument_spec, \
     get_resolve_existing_argument_spec, \
     item_crud

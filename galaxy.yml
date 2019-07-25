@@ -1,0 +1,35 @@
+---
+namespace: "pureport"
+name: "pureport-ansible-modules"
+version: "0.0.6"
+readme: "README.md"
+authors:
+  - "Matt Traynham <matt.traynham@pureport.com>"
+dependencies:
+license:
+  - "GPLv3"
+tags:
+  - networking
+  - multicloud
+  - cloud
+  - aws
+  - azure
+  - google
+  - vpn
+  - pureport
+  - web
+  - sdn
+  - bgp
+  - nat
+platforms:
+  - name: GenericLinux
+    versions:
+      - any
+cloud_platforms:
+  - amazon
+  - azure
+  - google
+repository: "https://www.github.com/pureport/pureport-ansible-modules"
+documentation: "https://github.com/pureport/pureport-ansible-modules/blob/develop/README.md"
+homepage: "https://www.pureport.com/"
+issues: "https://www.github.com/pureport/pureport-ansible-modules/issues"
