@@ -1,0 +1,19 @@
+---
+- hosts: localhost
+  vars:
+    ansible_python_interpreter: "./venv/bin/python"  # Required for virtualenv...
+  collections:
+    - pureport.pureport_ansible_modules
+  tasks:
+    - name: Create Pureport Site IPsec VPN Connection
+      include_role:
+        name: pureport_site_ipsec_vpn
+      vars:
+        pureport_connection_name: My VPN Connection
+        pureport_connection_speed: 50
+        pureport_connection_high_availability: true
+        pureport_connection_location_href: /locations/us-dal
+        pureport_connection_billing_term: HOURLY
+        pureport_connection_primary_router_ip: 192.167.1.1
+        pureport_connection_secondary_router_ip: 192.167.1.2
+        pureport_connection_customer_asn: 123

@@ -1,0 +1,25 @@
+---
+- hosts: localhost
+  vars:
+    ansible_python_interpreter: "./venv/bin/python"  # Required for virtualenv...
+  collections:
+    - pureport.pureport_ansible_modules
+  tasks:
+    - name: Create AWS Direct Connect Connection (Private)
+      include_role:
+        name: pureport_aws_direct_connect
+      vars:
+        aws_region: us-west-2
+        aws_vpc_name: Ansible-VPC
+        aws_vpc_cidr_block: 10.0.0.0/24
+        aws_vpc_subnet_cidr: 10.0.0.0/24
+        aws_vgw_name: Ansible-VGW
+        aws_vpc_route_table_name: Ansible-RouteTable
+        aws_direct_connect_gateway_name: Ansible-Gateway
+        aws_direct_connect_virtual_interface_name: Ansible-VIF
+        pureport_connection_name: My AWS Private Connection
+        pureport_connection_speed: 50
+        pureport_connection_high_availability: true
+        pureport_connection_location_href: /locations/us-sea
+        pureport_connection_peering_type: PRIVATE
+        pureport_connection_billing_term: HOURLY
