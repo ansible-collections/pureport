@@ -26,7 +26,7 @@ options:
                   'IKEV2ESPDHGroup']
         default: []
 extends_documentation_fragment:
-    - pureport_client
+    - pureport.pureport_ansible_modules.pureport_client
 '''
 
 EXAMPLES = '''

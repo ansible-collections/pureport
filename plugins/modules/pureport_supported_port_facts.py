@@ -25,8 +25,8 @@ options:
         required: true
         type: str
 extends_documentation_fragment:
-    - pureport_client
-    - pureport_account
+    - pureport.pureport_ansible_modules.pureport_client
+    - pureport.pureport_ansible_modules.pureport_account
 '''
 
 EXAMPLES = '''

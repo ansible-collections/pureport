@@ -16,7 +16,7 @@ version_added: "2.8"
 requirements: [ pureport-client ]
 author: Matt Traynham (@mtraynham)
 extends_documentation_fragment:
-    - pureport_client
+    - pureport.pureport_ansible_modules.pureport_client
 '''
 
 EXAMPLES = '''

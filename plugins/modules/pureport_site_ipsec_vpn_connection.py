@@ -164,12 +164,12 @@ options:
         required: false
         type: bool
 extends_documentation_fragment:
-    - pureport_client
-    - pureport_network
-    - pureport_state
-    - pureport_resolve_existing
-    - pureport_wait_for_server
-    - pureport_connection_args
+    - pureport.pureport_ansible_modules.pureport_client
+    - pureport.pureport_ansible_modules.pureport_network
+    - pureport.pureport_ansible_modules.pureport_state
+    - pureport.pureport_ansible_modules.pureport_resolve_existing
+    - pureport.pureport_ansible_modules.pureport_wait_for_server
+    - pureport.pureport_ansible_modules.pureport_connection_args
 '''
 
 EXAMPLES = '''

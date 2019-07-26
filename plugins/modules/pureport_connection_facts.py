@@ -27,9 +27,9 @@ options:
             - This should be the full 'href' path to the Network ReST object (e.g /networks/abc).
             - One of 'account_href' or 'network_href' should be supplied for this command, but not both.
 extends_documentation_fragment:
-    - pureport_client
-    - pureport_account
-    - pureport_network
+    - pureport.pureport_ansible_modules.pureport_client
+    - pureport.pureport_ansible_modules.pureport_account
+    - pureport.pureport_ansible_modules.pureport_network
 '''
 
 EXAMPLES = '''

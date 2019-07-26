@@ -89,54 +89,54 @@ doc_fragment_plugins = ./roles/pureport.pureport_ansible_modules/plugins/doc_fra
 
 You can then get information about each module:
 ```bash
-ansible-doc pureport_access_token_fact
-ansible-doc pureport_location_facts
-ansible-doc pureport_facility_facts
-ansible-doc pureport_option_facts
-ansible-doc pureport_cloud_region_facts
-ansible-doc pureport_cloud_service_facts
-ansible-doc pureport_account_facts
-ansible-doc pureport_supported_connection_facts
-ansible-doc pureport_supported_port_facts
-ansible-doc pureport_port_facts
-ansible-doc pureport_port
-ansible-doc pureport_network_facts
-ansible-doc pureport_network
-ansible-doc pureport_connection_facts
-ansible-doc pureport_aws_direct_connect_connection
-ansible-doc pureport_azure_express_route_connection
-ansible-doc pureport_google_cloud_interconnect_connection
-ansible-doc pureport_port_connection
-ansible-doc pureport_site_ipsec_vpn_connection
+ansible-doc pureport.pureport_ansible_modules.pureport_access_token_fact
+ansible-doc pureport.pureport_ansible_modules.pureport_location_facts
+ansible-doc pureport.pureport_ansible_modules.pureport_facility_facts
+ansible-doc pureport.pureport_ansible_modules.pureport_option_facts
+ansible-doc pureport.pureport_ansible_modules.pureport_cloud_region_facts
+ansible-doc pureport.pureport_ansible_modules.pureport_cloud_service_facts
+ansible-doc pureport.pureport_ansible_modules.pureport_account_facts
+ansible-doc pureport.pureport_ansible_modules.pureport_supported_connection_facts
+ansible-doc pureport.pureport_ansible_modules.pureport_supported_port_facts
+ansible-doc pureport.pureport_ansible_modules.pureport_port_facts
+ansible-doc pureport.pureport_ansible_modules.pureport_port
+ansible-doc pureport.pureport_ansible_modules.pureport_network_facts
+ansible-doc pureport.pureport_ansible_modules.pureport_network
+ansible-doc pureport.pureport_ansible_modules.pureport_connection_facts
+ansible-doc pureport.pureport_ansible_modules.pureport_aws_direct_connect_connection
+ansible-doc pureport.pureport_ansible_modules.pureport_azure_express_route_connection
+ansible-doc pureport.pureport_ansible_modules.pureport_google_cloud_interconnect_connection
+ansible-doc pureport.pureport_ansible_modules.pureport_port_connection
+ansible-doc pureport.pureport_ansible_modules.pureport_site_ipsec_vpn_connection
 
-ansible-doc aws_direct_connect_confirm_connection
-ansible-doc pr_48711_aws_direct_connect_virtual_interface
+ansible-doc pureport.pureport_ansible_modules.aws_direct_connect_confirm_connection
+ansible-doc pureport.pureport_ansible_modules.pr_48711_aws_direct_connect_virtual_interface
 ```
 
 Also dump a snippet of what invoking a module requires:
 ```bash
-ansible-doc pureport_access_token_fact -s
-ansible-doc pureport_facility_facts -s
-ansible-doc pureport_location_facts -s
-ansible-doc pureport_option_facts -s
-ansible-doc pureport_cloud_region_facts -s
-ansible-doc pureport_cloud_service_facts -s
-ansible-doc pureport_account_facts -s
-ansible-doc pureport_supported_connection_facts -s
-ansible-doc pureport_supported_port_facts -s
-ansible-doc pureport_port_facts -s
-ansible-doc pureport_port -s
-ansible-doc pureport_network_facts -s
-ansible-doc pureport_network -s
-ansible-doc pureport_connection_facts -s
-ansible-doc pureport_aws_direct_connect_connection -s
-ansible-doc pureport_azure_express_route_connection -s
-ansible-doc pureport_google_cloud_interconnect_connection -s
-ansible-doc pureport_port_connection -s
-ansible-doc pureport_site_ipsec_vpn_connection -s
+ansible-doc pureport.pureport_ansible_modules.pureport_access_token_fact -s
+ansible-doc pureport.pureport_ansible_modules.pureport_facility_facts -s
+ansible-doc pureport.pureport_ansible_modules.pureport_location_facts -s
+ansible-doc pureport.pureport_ansible_modules.pureport_option_facts -s
+ansible-doc pureport.pureport_ansible_modules.pureport_cloud_region_facts -s
+ansible-doc pureport.pureport_ansible_modules.pureport_cloud_service_facts -s
+ansible-doc pureport.pureport_ansible_modules.pureport_account_facts -s
+ansible-doc pureport.pureport_ansible_modules.pureport_supported_connection_facts -s
+ansible-doc pureport.pureport_ansible_modules.pureport_supported_port_facts -s
+ansible-doc pureport.pureport_ansible_modules.pureport_port_facts -s
+ansible-doc pureport.pureport_ansible_modules.pureport_port -s
+ansible-doc pureport.pureport_ansible_modules.pureport_network_facts -s
+ansible-doc pureport.pureport_ansible_modules.pureport_network -s
+ansible-doc pureport.pureport_ansible_modules.pureport_connection_facts -s
+ansible-doc pureport.pureport_ansible_modules.pureport_aws_direct_connect_connection -s
+ansible-doc pureport.pureport_ansible_modules.pureport_azure_express_route_connection -s
+ansible-doc pureport.pureport_ansible_modules.pureport_google_cloud_interconnect_connection -s
+ansible-doc pureport.pureport_ansible_modules.pureport_port_connection -s
+ansible-doc pureport.pureport_ansible_modules.pureport_site_ipsec_vpn_connection -s
 
-ansible-doc aws_direct_connect_confirm_connection -s
-ansible-doc pr_48711_aws_direct_connect_virtual_interface -s
+ansible-doc pureport.pureport_ansible_modules.aws_direct_connect_confirm_connection -s
+ansible-doc pureport.pureport_ansible_modules.pr_48711_aws_direct_connect_virtual_interface -s
 ```
 
 ### Obtaining and Using Pureport `href`
