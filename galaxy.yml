@@ -1,7 +1,7 @@
 ---
 namespace: "pureport"
 name: "pureport"
-version: "0.0.6"
+version: "0.0.7"
 readme: "README.md"
 authors:
   - "Matt Traynham <matt.traynham@pureport.com>"
