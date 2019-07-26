@@ -1,7 +1,13 @@
 ## Description
-This is a collection of Ansible [library modules](https://docs.ansible.com/ansible/2.8/user_guide/modules_intro.html) which can
-interact with the [Pureport](https://www.pureport.com/) ReST API.
+This is an [Ansible Collection](https://docs.ansible.com/ansible/devel/dev_guide/collections_tech_preview.html) of various 
+[library modules](https://docs.ansible.com/ansible/2.8/user_guide/modules_intro.html) and 
+[roles](https://docs.ansible.com/ansible/2.8/user_guide/playbooks_reuse_roles.html) which can interact with the 
+[Pureport](https://www.pureport.com/) ReST API.
 
+Because this is based on the newer Ansible Collections format, Ansible 2.8+ is required.  Please use version 0.0.5 if you
+are using Anisble < 2.8.
+
+### Modules
 It provides the following modules you can use in your own roles:
 - `pureport_access_token_fact` - Obtain an OAuth access token which can be used as the `api_access_token` param 
   for all other modules in lieu of passing them the `api_key`/`api_secret`.  This allows other modules to skip their own retrieval 
@@ -34,59 +40,47 @@ this module does that for you using credentials in a similar fashion as other AW
 That PR is [here](https://github.com/ansible/ansible/pull/48711).  This module just duplicates that effort here so it can be used.
 For general information about this module, see the [Ansible docs](https://docs.ansible.com/ansible/2.8/modules/aws_direct_connect_virtual_interface_module.html).
   - **NOTE**: This will likely be removed in the future.
+  
+### Roles
+It also provides the following roles you can use to create connections and their full infrastructure:
+- `pureport_aws_direct_connect` - Depending on the peering type (PUBLIC/PRIVATE), this will generate:
+  - an AWS VPC (PRIVATE only)
+  - an AWS VPC Subnet (PRIVATE only)
+  - an AWS Virtual Private Gateway (PRIVATE only)
+  - an AWS VPC Route Table (with VGW route propagation; PRIVATE only)
+  - an AWS Direct Connect Gateway
+  - a Pureport Network
+  - a Pureport AWS Direct Connect Connection
+  - an AWS Direct Connect Virtual Interface(s) (VIF)
+- `pureport_azure_express_route` - Depending on the peering type (PUBLIC/PRIVATE), this will generate:
+  - an Azure Virtual Network (with 2 subnets; PRIVATE only)
+  - an Azure Public IP Address (PRIVATE only)
+  - an Azure Virtual Network Gateway (PRIVATE only)
+  - an Azure Express Route Circuit
+  - an Azure Virtual Network Gateway to Express Route Connection (PRIVATE only)
+  - an Azure Route Filter (PUBLIC only)
+  - a Pureport Network
+  - a Pureport Azure Express Route Connection
+  - Private Express Route Peering (PRIVATE only)
+  - Microsoft Express Route Peering (PUBLIC only)
+- `pureport_google_cloud_interconnect`
+  - a GCP Network
+  - a GCP Router(s)
+  - a GCP Interconnect Attachment(s)
+  - a Pureport Network
+  - a Pureport Google Cloud Interconnect Connection
+- `pureport_site_ipsec_vpn`
+  - a Pureport Network
+  - a Pureport Site IPsec VPN Connection
 
 ## Installation
-This "role" is distributed via [ansible-galaxy](https://galaxy.ansible.com/) (bundled with Ansible).
+This collection is distributed via [ansible-galaxy](https://galaxy.ansible.com/) (bundled with Ansible).
 
 ```bash
 ansible-galaxy install pureport.pureport_ansible_modules
 ```
 
-Because this is not a collection of "roles" and is instead intended to be used within your own playbooks/roles, you'll need to tell
-Ansible where to find these modules and their utilities.
-
-This can be done via Environment variables ([1](https://docs.ansible.com/ansible/2.8/dev_guide/developing_locally.html#adding-a-module-locally),
-[1.1](https://docs.ansible.com/ansible/2.8/reference_appendices/config.html#envvar-ANSIBLE_LIBRARY),
-[2](https://docs.ansible.com/ansible/2.8/reference_appendices/config.html?highlight=module_utils#envvar-ANSIBLE_MODULE_UTILS)):
-
-```bash
-ANSIBLE_GALAXY_ROLES_DIRECTORY="YOUR ANSIBLE GALAXY ROLES DIRECTORY"
-PUREPORT_ANSIBLE_MODULES_DIR=${ANSIBLE_GALAXY_ROLES_DIRECTORY}/pureport.pureport_ansible_modules
-export ANSIBLE_LIBRARY=${PUREPORT_ANSIBLE_MODULES_DIR}/modules
-export ANSIBLE_MODULE_UTILS=${PUREPORT_ANSIBLE_MODULES_DIR}/module_utils
-```
-
-It can also be done via `ansible.cfg` file ([1](https://docs.ansible.com/ansible/2.8/reference_appendices/config.html#default-module-path),
-[2](https://docs.ansible.com/ansible/2.8/reference_appendices/config.html#default-module-utils-path)):
-```ini
-[defaults]
-library = ./roles/pureport.pureport_ansible_modules/library
-module_utils = ./roles/pureport.pureport_ansible_modules/module_utils
-```
-
-**NOTE:** The above assumes your Ansible Galaxy roles are installed to the `./roles` directory.
-
 ## Module Documentation
-**NOTE**: This will only work with Ansible 2.8 (via this [PR](https://github.com/ansible/ansible/pull/50172)) which opens up
-the `ANSIBLE_DOC_FRAGMENT_PLUGINS` environment variable for shared documentation in modules.
-
-Because the modules for this are external to Ansible and some of the documentation is shared via 
-[doc_fragments](https://docs.ansible.com/ansible/2.8/dev_guide/developing_modules_documenting.html#documentation-fragments), for 
-documentation to work with the `ansible-doc`, simply do the following:
-```bash
-ANSIBLE_GALAXY_ROLES_DIRECTORY="YOUR ANSIBLE GALAXY ROLES DIRECTORY"
-PUREPORT_ANSIBLE_MODULES_DIR=${ANSIBLE_GALAXY_ROLES_DIRECTORY}/pureport.pureport_ansible_modules
-export ANSIBLE_DOC_FRAGMENT_PLUGINS=${PUREPORT_ANSIBLE_MODULES_DIR}/plugins/doc_fragments
-```
-
-It can also be done via `ansible.cfg` file ([1](https://docs.ansible.com/ansible/2.8/reference_appendices/config.html#doc-fragment-plugin-path))
-```yaml
-[defaults]
-doc_fragment_plugins = ./roles/pureport.pureport_ansible_modules/plugins/doc_fragments
-```
-
-**NOTE:** The above assumes your Ansible Galaxy roles are installed to the `./roles` directory.
-
 You can then get information about each module:
 ```bash
 ansible-doc pureport.pureport_ansible_modules.pureport_access_token_fact

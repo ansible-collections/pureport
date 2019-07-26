@@ -20,23 +20,23 @@ tox
 ### Writing a Module
 Follow these guidelines for writing/maintaining Modules:
 - Follow the documentation on [writing your own module](https://docs.ansible.com/ansible/2.8/dev_guide/developing_locally.html).
-- Follow the documentation on the [module checklist](https://docs.ansible.com/ansible/latest/dev_guide/developing_modules_checklist.html).
+- Follow the documentation on the [module checklist](https://docs.ansible.com/ansible/2.8/dev_guide/developing_modules_checklist.html).
 - Write good documentation for the module [using this as a guide](https://docs.ansible.com/ansible/2.8/dev_guide/developing_modules_documenting.html).
 
-All modules should live in the `modules/pureport` package.  All modules should be prefixed with `pureport_`.
+All modules should live in the `plugins/modules` package.  All modules should be prefixed with `pureport_`.
 
 #### Writing a shared Module Utility
 [Module utilities](https://docs.ansible.com/ansible/2.8/dev_guide/developing_module_utilities.html) are a great way to share 
-code between modules.  They should be located in the `module_utils/pureport` package.
+code between modules.  They should be located in the `plugins/module_utils` package.
 
 When importing a `module_util` use the full path to Python module instead of relative paths.
 
 ```python
 # like this
-import ansible.module_utils.pureport.pureport
+import ansible_collections.pureport.pureport_ansible_modules.plugins.module_utils.pureport
 
 # or like this
-from ansible.module_utils.pureport.pureport import get_client
+from ansible_collections.pureport.pureport_ansible_modules.plugins.module_utils.pureport import get_client
 ```
 
 #### Writing shared Documentation
@@ -69,7 +69,7 @@ DOCUMENTATION = '''
 ...
 
 extends_documentation_fragment:
-    - pureport_my_parameter
+    - pureport.pureport_ansible_modules.pureport_my_parameter
 '''
 ```
 
@@ -77,7 +77,7 @@ extends_documentation_fragment:
 I encountered one or two errors while writing documentation.  If you see the following, it's likely because of a formatting error
 with an `options` description field.
 ```bash
-ansible-doc pureport_network_facts
+ansible-doc pureport.pureport_ansible_modules.pureport_network_facts
 ERROR! module pureport_network_facts has a documentation error formatting or is missing documentation.
 ```
 
