@@ -164,12 +164,12 @@ options:
         required: false
         type: bool
 extends_documentation_fragment:
-    - pureport.pureport_ansible_modules.pureport_client
-    - pureport.pureport_ansible_modules.pureport_network
-    - pureport.pureport_ansible_modules.pureport_state
-    - pureport.pureport_ansible_modules.pureport_resolve_existing
-    - pureport.pureport_ansible_modules.pureport_wait_for_server
-    - pureport.pureport_ansible_modules.pureport_connection_args
+    - pureport.pureport.pureport_client
+    - pureport.pureport.pureport_network
+    - pureport.pureport.pureport_state
+    - pureport.pureport.pureport_resolve_existing
+    - pureport.pureport.pureport_wait_for_server
+    - pureport.pureport.pureport_connection_args
 '''
 
 EXAMPLES = '''
@@ -353,14 +353,14 @@ from ansible.module_utils.common.dict_transformations import \
     camel_dict_to_snake_dict, \
     snake_dict_to_camel_dict
 
-from ansible_collections.pureport.pureport_ansible_modules.plugins.module_utils.pureport import \
+from ansible_collections.pureport.pureport.plugins.module_utils.pureport import \
     get_client_argument_spec, \
     get_client_mutually_exclusive, \
     get_network_argument_spec
-from ansible_collections.pureport.pureport_ansible_modules.plugins.module_utils.pureport_crud import \
+from ansible_collections.pureport.pureport.plugins.module_utils.pureport_crud import \
     get_state_argument_spec, \
     get_resolve_existing_argument_spec
-from ansible_collections.pureport.pureport_ansible_modules.plugins.module_utils.pureport_connection_crud import \
+from ansible_collections.pureport.pureport.plugins.module_utils.pureport_connection_crud import \
     get_wait_for_server_argument_spec, \
     get_connection_argument_spec, \
     connection_crud

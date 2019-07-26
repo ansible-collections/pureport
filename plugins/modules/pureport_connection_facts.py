@@ -27,9 +27,9 @@ options:
             - This should be the full 'href' path to the Network ReST object (e.g /networks/abc).
             - One of 'account_href' or 'network_href' should be supplied for this command, but not both.
 extends_documentation_fragment:
-    - pureport.pureport_ansible_modules.pureport_client
-    - pureport.pureport_ansible_modules.pureport_account
-    - pureport.pureport_ansible_modules.pureport_network
+    - pureport.pureport.pureport_client
+    - pureport.pureport.pureport_account
+    - pureport.pureport.pureport_network
 '''
 
 EXAMPLES = '''
@@ -67,7 +67,7 @@ try:
     from pureport.exception.api import ClientHttpException
 except ImportError:
     ClientHttpException = None
-from ansible_collections.pureport.pureport_ansible_modules.plugins.module_utils.pureport import \
+from ansible_collections.pureport.pureport.plugins.module_utils.pureport import \
     get_client_argument_spec, \
     get_client_mutually_exclusive, \
     get_client, \

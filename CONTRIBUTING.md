@@ -33,10 +33,10 @@ When importing a `module_util` use the full path to Python module instead of rel
 
 ```python
 # like this
-import ansible_collections.pureport.pureport_ansible_modules.plugins.module_utils.pureport
+import ansible_collections.pureport.pureport.plugins.module_utils.pureport
 
 # or like this
-from ansible_collections.pureport.pureport_ansible_modules.plugins.module_utils.pureport import get_client
+from ansible_collections.pureport.pureport.plugins.module_utils.pureport import get_client
 ```
 
 #### Writing shared Documentation
@@ -69,7 +69,7 @@ DOCUMENTATION = '''
 ...
 
 extends_documentation_fragment:
-    - pureport.pureport_ansible_modules.pureport_my_parameter
+    - pureport.pureport.pureport_my_parameter
 '''
 ```
 
@@ -77,7 +77,7 @@ extends_documentation_fragment:
 I encountered one or two errors while writing documentation.  If you see the following, it's likely because of a formatting error
 with an `options` description field.
 ```bash
-ansible-doc pureport.pureport_ansible_modules.pureport_network_facts
+ansible-doc pureport.pureport.pureport_network_facts
 ERROR! module pureport_network_facts has a documentation error formatting or is missing documentation.
 ```
 

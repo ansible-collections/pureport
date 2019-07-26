@@ -4,8 +4,19 @@ This is an [Ansible Collection](https://docs.ansible.com/ansible/devel/dev_guide
 [roles](https://docs.ansible.com/ansible/2.8/user_guide/playbooks_reuse_roles.html) which can interact with the 
 [Pureport](https://www.pureport.com/) ReST API.
 
-Because this is based on the newer Ansible Collections format, Ansible 2.8+ is required.  Please use version 0.0.5 if you
-are using Anisble < 2.8.
+## Installation
+This collection is distributed via [ansible-galaxy](https://galaxy.ansible.com/) (bundled with Ansible).
+
+```bash
+ansible-galaxy install pureport.pureport
+```
+
+Because this is based on the newer Ansible Collections format, Ansible 2.8+ is required.  Please use version 0.0.5 of
+(pureport.pureport_ansible_modules)[https://galaxy.ansible.com/pureport/pureport_ansible_modules] if you are using Anisble < 2.8.
+
+```bash
+ansible-galaxy install pureport.pureport_ansible_modules
+```
 
 ### Modules
 It provides the following modules you can use in your own roles:
@@ -73,64 +84,57 @@ It also provides the following roles you can use to create connections and their
   - a Pureport Network
   - a Pureport Site IPsec VPN Connection
 
-## Installation
-This collection is distributed via [ansible-galaxy](https://galaxy.ansible.com/) (bundled with Ansible).
-
-```bash
-ansible-galaxy install pureport.pureport_ansible_modules
-```
-
 ## Module Documentation
 You can then get information about each module:
 ```bash
-ansible-doc pureport.pureport_ansible_modules.pureport_access_token_fact
-ansible-doc pureport.pureport_ansible_modules.pureport_location_facts
-ansible-doc pureport.pureport_ansible_modules.pureport_facility_facts
-ansible-doc pureport.pureport_ansible_modules.pureport_option_facts
-ansible-doc pureport.pureport_ansible_modules.pureport_cloud_region_facts
-ansible-doc pureport.pureport_ansible_modules.pureport_cloud_service_facts
-ansible-doc pureport.pureport_ansible_modules.pureport_account_facts
-ansible-doc pureport.pureport_ansible_modules.pureport_supported_connection_facts
-ansible-doc pureport.pureport_ansible_modules.pureport_supported_port_facts
-ansible-doc pureport.pureport_ansible_modules.pureport_port_facts
-ansible-doc pureport.pureport_ansible_modules.pureport_port
-ansible-doc pureport.pureport_ansible_modules.pureport_network_facts
-ansible-doc pureport.pureport_ansible_modules.pureport_network
-ansible-doc pureport.pureport_ansible_modules.pureport_connection_facts
-ansible-doc pureport.pureport_ansible_modules.pureport_aws_direct_connect_connection
-ansible-doc pureport.pureport_ansible_modules.pureport_azure_express_route_connection
-ansible-doc pureport.pureport_ansible_modules.pureport_google_cloud_interconnect_connection
-ansible-doc pureport.pureport_ansible_modules.pureport_port_connection
-ansible-doc pureport.pureport_ansible_modules.pureport_site_ipsec_vpn_connection
+ansible-doc pureport.pureport.pureport_access_token_fact
+ansible-doc pureport.pureport.pureport_location_facts
+ansible-doc pureport.pureport.pureport_facility_facts
+ansible-doc pureport.pureport.pureport_option_facts
+ansible-doc pureport.pureport.pureport_cloud_region_facts
+ansible-doc pureport.pureport.pureport_cloud_service_facts
+ansible-doc pureport.pureport.pureport_account_facts
+ansible-doc pureport.pureport.pureport_supported_connection_facts
+ansible-doc pureport.pureport.pureport_supported_port_facts
+ansible-doc pureport.pureport.pureport_port_facts
+ansible-doc pureport.pureport.pureport_port
+ansible-doc pureport.pureport.pureport_network_facts
+ansible-doc pureport.pureport.pureport_network
+ansible-doc pureport.pureport.pureport_connection_facts
+ansible-doc pureport.pureport.pureport_aws_direct_connect_connection
+ansible-doc pureport.pureport.pureport_azure_express_route_connection
+ansible-doc pureport.pureport.pureport_google_cloud_interconnect_connection
+ansible-doc pureport.pureport.pureport_port_connection
+ansible-doc pureport.pureport.pureport_site_ipsec_vpn_connection
 
-ansible-doc pureport.pureport_ansible_modules.aws_direct_connect_confirm_connection
-ansible-doc pureport.pureport_ansible_modules.pr_48711_aws_direct_connect_virtual_interface
+ansible-doc pureport.pureport.aws_direct_connect_confirm_connection
+ansible-doc pureport.pureport.pr_48711_aws_direct_connect_virtual_interface
 ```
 
 Also dump a snippet of what invoking a module requires:
 ```bash
-ansible-doc pureport.pureport_ansible_modules.pureport_access_token_fact -s
-ansible-doc pureport.pureport_ansible_modules.pureport_facility_facts -s
-ansible-doc pureport.pureport_ansible_modules.pureport_location_facts -s
-ansible-doc pureport.pureport_ansible_modules.pureport_option_facts -s
-ansible-doc pureport.pureport_ansible_modules.pureport_cloud_region_facts -s
-ansible-doc pureport.pureport_ansible_modules.pureport_cloud_service_facts -s
-ansible-doc pureport.pureport_ansible_modules.pureport_account_facts -s
-ansible-doc pureport.pureport_ansible_modules.pureport_supported_connection_facts -s
-ansible-doc pureport.pureport_ansible_modules.pureport_supported_port_facts -s
-ansible-doc pureport.pureport_ansible_modules.pureport_port_facts -s
-ansible-doc pureport.pureport_ansible_modules.pureport_port -s
-ansible-doc pureport.pureport_ansible_modules.pureport_network_facts -s
-ansible-doc pureport.pureport_ansible_modules.pureport_network -s
-ansible-doc pureport.pureport_ansible_modules.pureport_connection_facts -s
-ansible-doc pureport.pureport_ansible_modules.pureport_aws_direct_connect_connection -s
-ansible-doc pureport.pureport_ansible_modules.pureport_azure_express_route_connection -s
-ansible-doc pureport.pureport_ansible_modules.pureport_google_cloud_interconnect_connection -s
-ansible-doc pureport.pureport_ansible_modules.pureport_port_connection -s
-ansible-doc pureport.pureport_ansible_modules.pureport_site_ipsec_vpn_connection -s
+ansible-doc pureport.pureport.pureport_access_token_fact -s
+ansible-doc pureport.pureport.pureport_facility_facts -s
+ansible-doc pureport.pureport.pureport_location_facts -s
+ansible-doc pureport.pureport.pureport_option_facts -s
+ansible-doc pureport.pureport.pureport_cloud_region_facts -s
+ansible-doc pureport.pureport.pureport_cloud_service_facts -s
+ansible-doc pureport.pureport.pureport_account_facts -s
+ansible-doc pureport.pureport.pureport_supported_connection_facts -s
+ansible-doc pureport.pureport.pureport_supported_port_facts -s
+ansible-doc pureport.pureport.pureport_port_facts -s
+ansible-doc pureport.pureport.pureport_port -s
+ansible-doc pureport.pureport.pureport_network_facts -s
+ansible-doc pureport.pureport.pureport_network -s
+ansible-doc pureport.pureport.pureport_connection_facts -s
+ansible-doc pureport.pureport.pureport_aws_direct_connect_connection -s
+ansible-doc pureport.pureport.pureport_azure_express_route_connection -s
+ansible-doc pureport.pureport.pureport_google_cloud_interconnect_connection -s
+ansible-doc pureport.pureport.pureport_port_connection -s
+ansible-doc pureport.pureport.pureport_site_ipsec_vpn_connection -s
 
-ansible-doc pureport.pureport_ansible_modules.aws_direct_connect_confirm_connection -s
-ansible-doc pureport.pureport_ansible_modules.pr_48711_aws_direct_connect_virtual_interface -s
+ansible-doc pureport.pureport.aws_direct_connect_confirm_connection -s
+ansible-doc pureport.pureport.pr_48711_aws_direct_connect_virtual_interface -s
 ```
 
 ### Obtaining and Using Pureport `href`

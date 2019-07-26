@@ -1,6 +1,6 @@
 ## Examples
 
-This directory contains various playbook examples using the roles provided by the pureport.pureport_ansible_modules
+This directory contains various playbook examples using the roles provided by the pureport.pureport
 collection.
 
 - [pureport_aws_direct_connect_private.yml](pureport_aws_direct_connect_private.yml) - Create a single private AWS connection and infrastructure

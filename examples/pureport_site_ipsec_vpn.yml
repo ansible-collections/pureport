@@ -3,7 +3,7 @@
   vars:
     ansible_python_interpreter: "./venv/bin/python"  # Required for virtualenv...
   collections:
-    - pureport.pureport_ansible_modules
+    - pureport.pureport
   tasks:
     - name: Create Pureport Site IPsec VPN Connection
       include_role:

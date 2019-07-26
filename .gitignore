@@ -2,8 +2,10 @@
 *.swp
 *.iml
 *.egg-info/
+.DS_Store
 .tox/
 inventory.ini
 build/
 dist/
+releases/
 __pycache__

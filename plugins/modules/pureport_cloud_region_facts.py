@@ -16,7 +16,7 @@ version_added: "2.8"
 requirements: [ pureport-client ]
 author: Matt Traynham (@mtraynham)
 extends_documentation_fragment:
-    - pureport.pureport_ansible_modules.pureport_client
+    - pureport.pureport.pureport_client
 '''
 
 EXAMPLES = '''
@@ -78,7 +78,7 @@ try:
     from pureport.exception.api import ClientHttpException
 except ImportError:
     ClientHttpException = None
-from ansible_collections.pureport.pureport_ansible_modules.plugins.module_utils.pureport import \
+from ansible_collections.pureport.pureport.plugins.module_utils.pureport import \
     get_client_argument_spec, \
     get_client_mutually_exclusive, \
     get_client

@@ -57,10 +57,10 @@ options:
         type: str
         choices: ['HOURLY', 'MONTHLY', 'ONE_YEAR', 'TWO_YEAR']
 extends_documentation_fragment:
-    - pureport.pureport_ansible_modules.pureport_client
-    - pureport.pureport_ansible_modules.pureport_account
-    - pureport.pureport_ansible_modules.pureport_state
-    - pureport.pureport_ansible_modules.pureport_resolve_existing
+    - pureport.pureport.pureport_client
+    - pureport.pureport.pureport_account
+    - pureport.pureport.pureport_state
+    - pureport.pureport.pureport_resolve_existing
 '''
 
 EXAMPLES = '''
@@ -229,13 +229,13 @@ try:
 except ImportError:
     ClientHttpException = None
     NotFoundException = None
-from ansible_collections.pureport.pureport_ansible_modules.plugins.module_utils.pureport import \
+from ansible_collections.pureport.pureport.plugins.module_utils.pureport import \
     get_client_argument_spec, \
     get_client_mutually_exclusive, \
     get_client, \
     get_account_argument_spec, \
     get_account
-from ansible_collections.pureport.pureport_ansible_modules.plugins.module_utils.pureport_crud import \
+from ansible_collections.pureport.pureport.plugins.module_utils.pureport_crud import \
     get_state_argument_spec, \
     get_resolve_existing_argument_spec, \
     item_crud
