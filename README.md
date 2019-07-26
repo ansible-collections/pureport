@@ -1,14 +1,14 @@
-## Description
+## Pureport Ansible Modules
 This is an [Ansible Collection](https://docs.ansible.com/ansible/devel/dev_guide/collections_tech_preview.html) of various 
 [library modules](https://docs.ansible.com/ansible/2.8/user_guide/modules_intro.html) and 
 [roles](https://docs.ansible.com/ansible/2.8/user_guide/playbooks_reuse_roles.html) which can interact with the 
 [Pureport](https://www.pureport.com/) ReST API.
 
 ## Installation
-This collection is distributed via [ansible-galaxy](https://galaxy.ansible.com/) (bundled with Ansible).
+This collection is distributed via [ansible-galaxy](https://galaxy.ansible.com/).
 
 ```bash
-ansible-galaxy install pureport.pureport
+mazer install pureport.pureport
 ```
 
 Because this is based on the newer Ansible Collections format, Ansible 2.8+ is required.  Please use version 0.0.5 of
@@ -20,6 +20,7 @@ ansible-galaxy install pureport.pureport_ansible_modules
 
 ### Modules
 It provides the following modules you can use in your own roles:
+
 - `pureport_access_token_fact` - Obtain an OAuth access token which can be used as the `api_access_token` param 
   for all other modules in lieu of passing them the `api_key`/`api_secret`.  This allows other modules to skip their own retrieval 
   of the `access_token`, further reducing the number of API calls and execution time. 
@@ -43,6 +44,7 @@ It provides the following modules you can use in your own roles:
 - `pureport_site_ipsec_vpn_connection` - used to create/update/delete a Pureport Site IPSec VPN connection
 
 It also provides two extra AWS modules:
+
 - `aws_direct_connect_confirm_connection` - Pureport creates [Hosted Direct Connections](https://docs.aws.amazon.com/directconnect/latest/UserGuide/accept-hosted-connection.html)
 which need to be confirmed by the customer when created.  This requires a user to go into the AWS Console and "Approve" the connection.  Alternatively,
 this module does that for you using credentials in a similar fashion as other AWS modules and boto3.
@@ -54,6 +56,7 @@ For general information about this module, see the [Ansible docs](https://docs.a
   
 ### Roles
 It also provides the following roles you can use to create connections and their full infrastructure:
+
 - `pureport_aws_direct_connect` - Depending on the peering type (PUBLIC/PRIVATE), this will generate:
   - an AWS VPC (PRIVATE only)
   - an AWS VPC Subnet (PRIVATE only)

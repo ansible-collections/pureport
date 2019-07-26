@@ -4,9 +4,19 @@ galaxy_info:
   description: Create a Pureport Site IPSec VPN Connection
   company: Pureport
   min_ansible_version: 2.8
+  license: "GPLv3"
+  galaxy_tags:
+    - networking
+    - multicloud
+    - cloud
+    - vpn
+    - pureport
+    - web
+    - sdn
+    - bgp
+    - nat
   platforms:
     - name: GenericLinux
       versions:
         - any
-  license: "GPLv3"
 dependencies: []
