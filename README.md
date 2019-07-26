@@ -12,7 +12,7 @@ ansible-galaxy install pureport.pureport
 ```
 
 Because this is based on the newer Ansible Collections format, Ansible 2.8+ is required.  Please use version 0.0.5 of
-(pureport.pureport_ansible_modules)[https://galaxy.ansible.com/pureport/pureport_ansible_modules] if you are using Anisble < 2.8.
+[pureport.pureport_ansible_modules](https://galaxy.ansible.com/pureport/pureport_ansible_modules) if you are using Anisble < 2.8.
 
 ```bash
 ansible-galaxy install pureport.pureport_ansible_modules
