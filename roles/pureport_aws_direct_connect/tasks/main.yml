@@ -36,6 +36,18 @@
   register: aws_vgw
   when: is_public_connection != true
 
+# https://docs.ansible.com/ansible/latest/modules/ec2_vpc_igw_module.html#ec2-vpc-igw-manage-an-aws-vpc-internet-gateway
+- name: Create AWS Internet Gateway
+  ec2_vpc_igw:
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    region: "{{ aws_region }}"
+    vpc_id: "{{ aws_vpc.vpc.id }}"
+    tags:
+      Name: "{{ aws_vpc_name }}-IG"
+  register: aws_internet_gateway
+  when: aws_igw_route is defined
+
 # https://docs.ansible.com/ansible/latest/modules/ec2_vpc_route_table_module.html#ec2-vpc-route-table-module
 - name: Create AWS VPC Route Table
   ec2_vpc_route_table:
@@ -49,6 +61,7 @@
       - "{{ aws_vgw.vgw.id }}"
     subnets:
       - "{{ aws_vpc_subnet.subnet.id }}"
+    routes: "{{ aws_igw_route is defined | ternary([{'dest': aws_igw_route, 'gateway_id': 'igw'}], []) }}"
   register: aws_vpc_route_table
   when: is_public_connection != true
 
