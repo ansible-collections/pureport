@@ -1,0 +1,124 @@
+---
+- hosts: localhost
+  vars:
+    ansible_python_interpreter: "./venv/bin/python"  # Required for virtualenv...
+  collections:
+    - pureport.pureport
+  tasks:
+    - name: Define All Variables
+      set_fact:
+        ssh_public_key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+        aws_region: us-west-2
+        aws_vpc_name: Ansible-VPC
+        aws_vpc_cidr_block: 10.0.0.0/24
+        aws_vpc_subnet_cidr: 10.0.0.0/24
+        aws_igw_route: 0.0.0.0/0
+        aws_vgw_name: Ansible-VGW
+        aws_vpc_route_table_name: Ansible-RouteTable
+        aws_direct_connect_gateway_name: Ansible-Gateway
+        aws_direct_connect_virtual_interface_name: Ansible-VIF
+        aws_key_pair_name: Ansible-KeyPair
+        aws_security_group_name: Ansible-SecurtyGroup
+        aws_security_group_rules:
+          - proto: tcp
+            from_port: 22
+            to_port: 22
+            cidr_ip: 0.0.0.0/0
+          - proto: icmp
+            from_port: 8
+            to_port: 0
+            cidr_ip: 10.0.0.0/8
+          - proto: tcp
+            from_port: 5201
+            to_port: 5201
+            cidr_ip: 10.0.0.0/8
+          - proto: udp
+            from_port: 5201
+            to_port: 5201
+            cidr_ip: 10.0.0.0/8
+        aws_ec2_instance_name: Ansible-EC2-Instance
+        aws_ec2_image_id: ami-0bbe6b35405ecebdb
+        aws_ec2_instance_type: t2.micro
+        aws_ec2_assign_public_ip: true
+        gcp_region: us-west2
+        gcp_zone: us-west2-a
+        gcp_network_name: ansible-network
+        gcp_router_name: ansible-router
+        gcp_interconnect_attachment_name: ansible-interconnect-attachment
+        gcp_vpc_firewall_rules:
+          - name: anisble-gcp-firewall
+            source_ranges:
+              - 10.0.0.0/8
+            allowed:
+              - ip_protocol: icmp
+              - ip_protocol: tcp
+                ports:
+                  - "5201"
+              - ip_protocol: udp
+                ports:
+                  - "5201"
+          - name: ansible-gcp-firewall-ssh
+            allowed:
+              - ip_protocol: tcp
+                ports:
+                  - "22"
+        gcp_disk_name: ansible-disk
+        gcp_disk_size_gb: 10
+        gcp_disk_source_image: 'projects/ubuntu-os-cloud/global/images/ubuntu-1804-bionic-v20190212a'
+        gcp_public_address_name: ansible-address
+        gcp_instance_name: ansible-vm
+        gcp_machine_type: n1-standard-1
+
+    - name: Create AWS Direct Connect Connection (Private)
+      include_role:
+        name: pureport_aws_direct_connect
+      vars:
+        pureport_connection_name: My AWS Private Connection
+        pureport_connection_speed: 50
+        pureport_connection_high_availability: true
+        pureport_connection_location_href: /locations/us-sea
+        pureport_connection_peering_type: PRIVATE
+        pureport_connection_billing_term: HOURLY
+
+    - name: Create AWS EC2 Instance
+      include_role:
+        name: aws_ec2_instance
+      vars:
+        aws_vpc_id: "{{ aws_vpc.vpc.id }}"
+        aws_vpc_subnet_id: "{{ aws_vpc_subnet.subnet.id }}"
+        aws_key_pair_material: "{{ ssh_public_key }}"
+
+    - name: Wait for AWS EC2 Instance
+      wait_for: host={{ aws_ec2_instance.instances[0].public_ip_address }} port=22 delay=10 timeout=60
+
+    - name: Create Google Cloud Interconnect Connection
+      include_role:
+        name: pureport_google_cloud_interconnect
+      vars:
+        pureport_connection_name: My Google Cloud Connection
+        pureport_connection_location_href: /locations/us-sea
+        pureport_connection_speed: 50
+        pureport_connection_high_availability: false
+        pureport_connection_billing_term: HOURLY
+
+    - name: Create Google Cloud VM
+      include_role:
+        name: google_vm_instance
+      vars:
+        gcp_ssh_keys:
+          - "ubuntu:{{ ssh_public_key }}"
+
+    - name: Wait for GCP SSH to come up
+      wait_for: host={{ gcp_address.address }} port=22 delay=10 timeout=60
+
+    - name: Log AWS Public IP Address
+      debug: var=aws_ec2_instance.instances[0].public_ip_address
+
+    - name: Log AWS Private IP Address
+      debug: var=aws_ec2_instance.instances[0].private_ip_address
+
+    - name: Log GCP Public IP address
+      debug: var=gcp_address.address
+
+    - name: Log GCP Private IP address
+      debug: var=gcp_instance.networkInterfaces[0].networkIP
