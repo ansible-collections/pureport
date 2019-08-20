@@ -24,7 +24,7 @@
 
 # https://docs.ansible.com/ansible/devel/modules/gcp_compute_interconnect_attachment_module.html
 - name: Create Google Cloud Interconnect Attachment(s)
-  gcp_compute_interconnect_attachment:
+  pr_60938_gcp_compute_interconnect_attachment:
     auth_kind: serviceaccount
     service_account_file: "{{ gcp_service_account_file }}"
     project: "{{ gcp_project }}"
@@ -33,6 +33,7 @@
     type: PARTNER
     edge_availability_domain: "AVAILABILITY_DOMAIN_{{ idx + 1 }}"
     router: "{{ item }}"
+    admin_enabled: true
   loop: "{{ gcp_routers.results }}"
   loop_control:
     index_var: idx

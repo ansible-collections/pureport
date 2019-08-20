@@ -53,6 +53,11 @@ this module does that for you using credentials in a similar fashion as other AW
 That PR is [here](https://github.com/ansible/ansible/pull/48711).  This module just duplicates that effort here so it can be used.
 For general information about this module, see the [Ansible docs](https://docs.ansible.com/ansible/2.8/modules/aws_direct_connect_virtual_interface_module.html).
   - **NOTE**: This will likely be removed in the future.
+- `pr_60938_gcp_compute_interconnect_attachment` - There is an outstanding PR which adds `admin_enabled` to the Ansible provided
+`gcp_compute_interconnect_attachment`.  This is required to "Pre-Activate" PARTNER type Google Cloud Interconnect Attachments.
+That PR is [here](https://github.com/ansible/ansible/pull/60938) .  This module just duplicates that effort here so it can be used.
+For general information about this module, see the [Ansible docs](https://docs.ansible.com/ansible/latest/modules/gcp_compute_interconnect_attachment_module.html).
+  - **NOTE**: This will likely be removed in the future.
   
 ### Roles
 It also provides the following roles you can use to create connections and their full infrastructure:
@@ -112,6 +117,7 @@ ansible-doc pureport.pureport.pureport_site_ipsec_vpn_connection
 
 ansible-doc pureport.pureport.aws_direct_connect_confirm_connection
 ansible-doc pureport.pureport.pr_48711_aws_direct_connect_virtual_interface
+ansible-doc pureport.pureport.pr_60938_gcp_compute_interconnect_attachment
 ```
 
 Also dump a snippet of what invoking a module requires:
@@ -138,6 +144,7 @@ ansible-doc pureport.pureport.pureport_site_ipsec_vpn_connection -s
 
 ansible-doc pureport.pureport.aws_direct_connect_confirm_connection -s
 ansible-doc pureport.pureport.pr_48711_aws_direct_connect_virtual_interface -s
+ansible-doc pureport.pureport.pr_60938_gcp_compute_interconnect_attachment -s
 ```
 
 ### Obtaining and Using Pureport `href`
