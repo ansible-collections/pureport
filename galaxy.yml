@@ -2,7 +2,7 @@
 namespace: "pureport"
 name: "pureport"
 description: A collection of Ansible Modules & Roles for the Pureport ReST API.
-version: "0.0.7"
+version: "0.0.9"
 readme: "README.md"
 authors:
   - "Matt Traynham <matt.traynham@pureport.com>"
