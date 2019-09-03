@@ -62,14 +62,14 @@ from ansible.module_utils.common.dict_transformations import \
     camel_dict_to_snake_dict, \
     snake_dict_to_camel_dict
 
-from ansible_collections.pureport.pureport.plugins.module_utils.pureport import \
+from ..module_utils.pureport import \
     get_client_argument_spec, \
     get_client_mutually_exclusive, \
     get_network_argument_spec
-from ansible_collections.pureport.pureport.plugins.module_utils.pureport_crud import \
+from ..module_utils.pureport_crud import \
     get_state_argument_spec, \
     get_resolve_existing_argument_spec
-from ansible_collections.pureport.pureport.plugins.module_utils.pureport_connection_crud import \
+from ..module_utils.pureport_connection_crud import \
     get_wait_for_server_argument_spec, \
     get_connection_argument_spec, \
     get_cloud_connection_argument_spec, \
