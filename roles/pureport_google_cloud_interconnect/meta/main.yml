@@ -3,7 +3,7 @@ galaxy_info:
   author: Matt Traynham
   description: Create a Pureport Goole Cloud Interconnect Connection and corresponding GCP infrastructure
   company: Pureport
-  min_ansible_version: 2.8
+  min_ansible_version: 2.9
   galaxy_tags:
     - networking
     - multicloud
