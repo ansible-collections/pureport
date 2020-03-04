@@ -1,22 +1,19 @@
 ## Pureport Ansible Modules
 This is an [Ansible Collection](https://docs.ansible.com/ansible/devel/dev_guide/collections_tech_preview.html) of various 
-[library modules](https://docs.ansible.com/ansible/2.8/user_guide/modules_intro.html) and 
-[roles](https://docs.ansible.com/ansible/2.8/user_guide/playbooks_reuse_roles.html) which can interact with the 
+[library modules](https://docs.ansible.com/ansible/latest/user_guide/modules_intro.html) and 
+[roles](https://docs.ansible.com/ansible/latest/user_guide/playbooks_reuse_roles.html) which can interact with the 
 [Pureport](https://www.pureport.com/) ReST API.
 
 ## Installation
-This collection is distributed via [ansible-galaxy](https://galaxy.ansible.com/).
+This collection is distributed via [ansible-galaxy](https://galaxy.ansible.com/pureport/pureport).
 
-```bash
-mazer install pureport.pureport
-```
+For compatability between Ansible versions, please use the following install methods matching your Ansible version:
 
-Because this is based on the newer Ansible Collections format, Ansible 2.8+ is required.  Please use version 0.0.5 of
-[pureport.pureport_ansible_modules](https://galaxy.ansible.com/pureport/pureport_ansible_modules) if you are using Anisble < 2.8.
-
-```bash
-ansible-galaxy install pureport.pureport_ansible_modules
-```
+| Ansible Version | Pureport Collection Version                                                         | Install Method                                        |
+|-----------------|-------------------------------------------------------------------------------------|-------------------------------------------------------|
+| 2.9+            | [0.0.9+](https://galaxy.ansible.com/pureport/pureport)                              | `ansible-galaxy collection install pureport.pureport` |
+| 2.8             | [0.0.8](https://galaxy.ansible.com/pureport/pureport)                               | `mazer install pureport.pureport`                     |
+| 2.7             | [0.0.5 (Galaxy role)](https://galaxy.ansible.com/pureport/pureport_ansible_modules) | `mazer install pureport.pureport_ansible_modules`     |
 
 ### Modules
 It provides the following modules you can use in your own roles:
