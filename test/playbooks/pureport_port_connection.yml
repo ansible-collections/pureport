@@ -20,7 +20,7 @@
       register: facilities
     - name: Set Facility
       set_fact:
-        facility: "{{ facilities.facilities[0] }}"
+        facility: "{{ facilities.facilities | json_query('[?vendor!=`Pureport`]') | first() }}"
 
     - name: List supported ports
       pureport_supported_port_facts:
