@@ -18,27 +18,27 @@ For compatability between Ansible versions, please use the following install met
 ### Modules
 It provides the following modules you can use in your own roles:
 
-- `pureport_access_token_fact` - Obtain an OAuth access token which can be used as the `api_access_token` param 
-  for all other modules in lieu of passing them the `api_key`/`api_secret`.  This allows other modules to skip their own retrieval 
-  of the `access_token`, further reducing the number of API calls and execution time. 
-- `pureport_location_facts` - used to list a set of locations
-- `pureport_facility_facts` - used to list a set of facilities
-- `pureport_option_facts` - used to list a set of enum options used for creating connections
-- `pureport_cloud_region_facts` - used to list a set of cloud region objects for various connection types
-- `pureport_cloud_service_facts` - used to list a set of cloud service objects for public connections
-- `pureport_account_facts` - used to list available accounts for an API key
-- `pureport_supported_connection_facts` - used to list available supported connections for an account
-- `pureport_supported_port_facts` - used to list available supported ports
-- `pureport_port_facts` - used to list ports for an account
-- `pureport_port` - used to create/update/delete a port
-- `pureport_network_facts` - used to list a set of networks
-- `pureport_network` - used to create/update/delete a network
-- `pureport_connection_facts` - used to list a set of connections
-- `pureport_aws_direct_connect_connection` - used to create/update/delete a Pureport AWS connection
-- `pureport_azure_express_route_connection` - used to create/update/delete a Pureport Azure Express Route connection
-- `pureport_google_cloud_interconnect_connection` - used to create/update/delete a Pureport Google Cloud Interconnect connection
-- `pureport_port_connection` - used to create/update/delete a Pureport Port connection
-- `pureport_site_ipsec_vpn_connection` - used to create/update/delete a Pureport Site IPSec VPN connection
+| Name                                  | Description                                                                                           |
+|---------------------------------------|-------------------------------------------------------------------------------------------------------|
+|`access_token_info`                    | Obtain an OAuth access token which can be used as the `api_access_token` param for all other modules. |  
+|`locations_info`                       | List a set of locations                                                                               |
+|`facilities_info`                      | List a set of facilities                                                                              |
+|`options_info`                         | List a set of enum options used for creating connections                                              |
+|`cloud_regions_info`                   | List a set of cloud region objects for various connection types                                       |
+|`cloud_services_info`                  | List a set of cloud service objects for public connections                                            |
+|`accounts_info`                        | List available accounts for an API key                                                                |
+|`supported_connections_info`           | List available supported connections for an account                                                   |
+|`supported_ports_info`                 | List available supported ports                                                                        |
+|`ports_info`                           | List ports for an account                                                                             |
+|`port`                                 | Create/update/delete a port                                                                           |
+|`networks_info`                        | List a set of networks                                                                                |
+|`network`                              | Create/update/delete a network                                                                        |
+|`connections_info`                     | List a set of connections                                                                             |
+|`aws_direct_connect_connection`        | Create/update/delete a Pureport AWS connection                                                        |
+|`azure_express_route_connection`       | Create/update/delete a Pureport Azure Express Route connection                                        |
+|`google_cloud_interconnect_connection` | Create/update/delete a Pureport Google Cloud Interconnect connection                                  |
+|`port_connection`                      | Create/update/delete a Pureport Port connection                                                       |
+|`site_ipsec_vpn_connection`            | Create/update/delete a Pureport Site IPSec VPN connection                                             |
 
 It also provides two extra AWS modules:
 
@@ -87,25 +87,25 @@ It also provides the following roles you can use to create connections and their
 ## Module Documentation
 You can then get information about each module:
 ```bash
-ansible-doc pureport.pureport.pureport_access_token_fact
-ansible-doc pureport.pureport.pureport_location_facts
-ansible-doc pureport.pureport.pureport_facility_facts
-ansible-doc pureport.pureport.pureport_option_facts
-ansible-doc pureport.pureport.pureport_cloud_region_facts
-ansible-doc pureport.pureport.pureport_cloud_service_facts
-ansible-doc pureport.pureport.pureport_account_facts
-ansible-doc pureport.pureport.pureport_supported_connection_facts
-ansible-doc pureport.pureport.pureport_supported_port_facts
-ansible-doc pureport.pureport.pureport_port_facts
-ansible-doc pureport.pureport.pureport_port
-ansible-doc pureport.pureport.pureport_network_facts
-ansible-doc pureport.pureport.pureport_network
-ansible-doc pureport.pureport.pureport_connection_facts
-ansible-doc pureport.pureport.pureport_aws_direct_connect_connection
-ansible-doc pureport.pureport.pureport_azure_express_route_connection
-ansible-doc pureport.pureport.pureport_google_cloud_interconnect_connection
-ansible-doc pureport.pureport.pureport_port_connection
-ansible-doc pureport.pureport.pureport_site_ipsec_vpn_connection
+ansible-doc pureport.pureport.access_token_info
+ansible-doc pureport.pureport.locations_info
+ansible-doc pureport.pureport.facilities_info
+ansible-doc pureport.pureport.options_info
+ansible-doc pureport.pureport.cloud_regions_info
+ansible-doc pureport.pureport.cloud_services_info
+ansible-doc pureport.pureport.accounts_info
+ansible-doc pureport.pureport.supported_connections_info
+ansible-doc pureport.pureport.supported_ports_info
+ansible-doc pureport.pureport.ports_info
+ansible-doc pureport.pureport.port
+ansible-doc pureport.pureport.networks_info
+ansible-doc pureport.pureport.network
+ansible-doc pureport.pureport.connections_info
+ansible-doc pureport.pureport.aws_direct_connect_connection
+ansible-doc pureport.pureport.azure_express_route_connection
+ansible-doc pureport.pureport.google_cloud_interconnect_connection
+ansible-doc pureport.pureport.port_connection
+ansible-doc pureport.pureport.site_ipsec_vpn_connection
 
 ansible-doc pureport.pureport.aws_direct_connect_confirm_connection
 ansible-doc pureport.pureport.pr_48711_aws_direct_connect_virtual_interface
@@ -113,28 +113,55 @@ ansible-doc pureport.pureport.pr_48711_aws_direct_connect_virtual_interface
 
 Also dump a snippet of what invoking a module requires:
 ```bash
-ansible-doc pureport.pureport.pureport_access_token_fact -s
-ansible-doc pureport.pureport.pureport_facility_facts -s
-ansible-doc pureport.pureport.pureport_location_facts -s
-ansible-doc pureport.pureport.pureport_option_facts -s
-ansible-doc pureport.pureport.pureport_cloud_region_facts -s
-ansible-doc pureport.pureport.pureport_cloud_service_facts -s
-ansible-doc pureport.pureport.pureport_account_facts -s
-ansible-doc pureport.pureport.pureport_supported_connection_facts -s
-ansible-doc pureport.pureport.pureport_supported_port_facts -s
-ansible-doc pureport.pureport.pureport_port_facts -s
-ansible-doc pureport.pureport.pureport_port -s
-ansible-doc pureport.pureport.pureport_network_facts -s
-ansible-doc pureport.pureport.pureport_network -s
-ansible-doc pureport.pureport.pureport_connection_facts -s
-ansible-doc pureport.pureport.pureport_aws_direct_connect_connection -s
-ansible-doc pureport.pureport.pureport_azure_express_route_connection -s
-ansible-doc pureport.pureport.pureport_google_cloud_interconnect_connection -s
-ansible-doc pureport.pureport.pureport_port_connection -s
-ansible-doc pureport.pureport.pureport_site_ipsec_vpn_connection -s
+ansible-doc pureport.pureport.access_token_info -s
+ansible-doc pureport.pureport.facilities_info -s
+ansible-doc pureport.pureport.locations_info -s
+ansible-doc pureport.pureport.options_info -s
+ansible-doc pureport.pureport.cloud_regions_info -s
+ansible-doc pureport.pureport.cloud_services_info -s
+ansible-doc pureport.pureport.accounts_info -s
+ansible-doc pureport.pureport.supported_connections_info -s
+ansible-doc pureport.pureport.supported_ports_info -s
+ansible-doc pureport.pureport.ports_info -s
+ansible-doc pureport.pureport.port -s
+ansible-doc pureport.pureport.networks_info -s
+ansible-doc pureport.pureport.network -s
+ansible-doc pureport.pureport.connections_info -s
+ansible-doc pureport.pureport.aws_direct_connect_connection -s
+ansible-doc pureport.pureport.azure_express_route_connection -s
+ansible-doc pureport.pureport.google_cloud_interconnect_connection -s
+ansible-doc pureport.pureport.port_connection -s
+ansible-doc pureport.pureport.site_ipsec_vpn_connection -s
 
 ansible-doc pureport.pureport.aws_direct_connect_confirm_connection -s
 ansible-doc pureport.pureport.pr_48711_aws_direct_connect_virtual_interface -s
+```
+
+### Obtaining an `api_access_token`
+Pureport's API heavily relies on an OAuth2 authentication schema.  For all the modules listed above, you can
+pass `api_access_key` and `api_secret_key` to each of the modules for authentication.  Alternatively, the more performant
+method so each call does not need to reauthenticate, is to obtain an access token which can be reused throught out a series
+of module invocations.  You can obtain the access token and set it as a fact for use in other modules, like so:
+
+```yaml
+---
+- collections:
+    - pureport.pureport
+  tasks:
+    - name: Retrieve the access token for an api key and secret
+      access_token_info:
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+      register: result
+    - name: Set the access token as a fact
+      set_fact:
+        access_token: "{{ result.access_token }}"
+
+    - name: List accounts
+      accounts_info:
+        api_access_token: "{{ access_token }}"
+      register: result
+    - debug: var=result
 ```
 
 ### Obtaining and Using Pureport `href`
@@ -145,6 +172,35 @@ An `href` is simply the object's resource path within the Pureport ReST API.
 
 A Pureport Account would have an `href` which is its `id` prefixed with `/accounts/`, like `/accounts/ac-XXXXXXXX`.
 Similarly, a Pureport Network would have an `href` which is its `id` prefixed with `/networks/`.
+
+### Ansible 2.9/Pureport 0.0.9 Module Rename
+The 0.0.9 release has renamed all the modules to have shortner names, while using the collection namespace.  For 
+backwards-compatability all existing module names have been simply symlinked to their new module and should work
+as they previously had.
+
+For reference the names have been changed from/to:
+
+| Name                                  | Ansible 2.8/Pureport 0.0.8 Name                |
+|---------------------------------------|------------------------------------------------|
+|`access_token_info`                    |`pureport_access_token_fact`                    |
+|`locations_info`                       |`pureport_location_facts`                       |
+|`facilities_info`                      |`pureport_facility_facts`                       |
+|`options_info`                         |`pureport_option_facts`                         |
+|`cloud_regions_info`                   |`pureport_cloud_region_facts`                   |
+|`cloud_services_info`                  |`pureport_cloud_service_facts`                  |
+|`accounts_info`                        |`pureport_account_facts`                        |
+|`supported_connections_info`           |`pureport_supported_connection_facts`           |
+|`supported_ports_info`                 |`pureport_supported_port_facts`                 |
+|`ports_info`                           |`pureport_port_facts`                           |
+|`port`                                 |`pureport_port`                                 |
+|`networks_info`                        |`pureport_network_facts`                        |
+|`network`                              |`pureport_network`                              |
+|`connections_info`                     |`pureport_connection_facts`                     |
+|`aws_direct_connect_connection`        |`pureport_aws_direct_connect_connection`        |
+|`azure_express_route_connection`       |`pureport_azure_express_route_connection`       |
+|`google_cloud_interconnect_connection` |`pureport_google_cloud_interconnect_connection` |
+|`port_connection`                      |`pureport_port_connection`                      |
+|`site_ipsec_vpn_connection`            |`pureport_site_ipsec_vpn_connection`            |
 
 ## Examples
 There are various examples on how to use these modules in the [examples directory](examples/README.md).
