@@ -1,6 +1,6 @@
 from traceback import format_exc
 try:
-    from pureport.api.client import Client
+    from pureport.api.client import Client, API_URL
     from pureport.exception.api import ClientHttpException
     HAS_PUREPORT_CLIENT = True
 except ImportError:
@@ -15,7 +15,7 @@ def get_client_argument_spec():
     :rtype: dict[str, dict]
     """
     return dict(
-        api_base_url=dict(type='str'),
+        api_base_url=dict(type='str', default=API_URL),
         api_key=dict(type='str'),
         api_secret=dict(type='str', no_log=True),
         api_access_token=dict(type='str', no_log=True)
