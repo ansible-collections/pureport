@@ -5,8 +5,8 @@ try:
 except ImportError:
     ClientHttpException = None
     NotFoundException = None
-from ansible_collections.pureport.pureport.plugins.module_utils.pureport import get_client, get_network
-from ansible_collections.pureport.pureport.plugins.module_utils.pureport_crud import item_crud, deep_compare
+from .pureport import get_client, get_network
+from .pureport_crud import item_crud, deep_compare
 
 
 def get_wait_for_server_argument_spec():
