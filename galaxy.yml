@@ -21,10 +21,10 @@ tags:
   - sdn
   - bgp
   - nat
-repository: "https://www.github.com/pureport/pureport-ansible-modules"
-documentation: "https://github.com/pureport/pureport-ansible-modules/blob/develop/README.md"
+repository: "https://github.com/ansible-collections/pureport"
+documentation: "https://github.com/ansible-collections/pureport/blob/develop/README.md"
 homepage: "https://www.pureport.com/"
-issues: "https://www.github.com/pureport/pureport-ansible-modules/issues"
+issues: "https://github.com/ansible-collections/pureport/issues"
 build_ignore:
   - test
   - examples/group_vars
