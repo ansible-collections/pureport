@@ -24,7 +24,7 @@
 
 # https://docs.ansible.com/ansible/devel/modules/gcp_compute_interconnect_attachment_module.html
 - name: Create Google Cloud Interconnect Attachment(s)
-  pr_60938_gcp_compute_interconnect_attachment:
+  gcp_compute_interconnect_attachment:
     auth_kind: serviceaccount
     service_account_file: "{{ gcp_service_account_file }}"
     project: "{{ gcp_project }}"

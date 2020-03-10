@@ -1,0 +1,36 @@
+---
+- name: Create AWS Key Pair
+  ec2_key:
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    region: "{{ aws_region }}"
+    name: "{{ aws_key_pair_name }}"
+    key_material: "{{ aws_key_pair_material }}"
+  register: aws_key_pair
+
+- name: Create AWS Security Group
+  ec2_group:
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    region: "{{ aws_region }}"
+    name: "{{ aws_security_group_name }}"
+    description: "{{ aws_security_group_name }}"
+    vpc_id: "{{ aws_vpc_id }}"
+    rules: "{{ aws_security_group_rules }}"
+  register: aws_security_group
+
+- name: Create AWS EC2 Instance
+  ec2_instance:
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    region: "{{ aws_region }}"
+    name: "{{ aws_ec2_instance_name }}"
+    image_id: "{{ aws_ec2_image_id }}"
+    security_groups:
+      - "{{ aws_security_group.group_id }}"
+    key_name: "{{ aws_key_pair.key.name }}"
+    vpc_subnet_id: "{{ aws_vpc_subnet_id }}"
+    instance_type: "{{ aws_ec2_instance_type }}"
+    network:
+      assign_public_ip: "{{ aws_ec2_assign_public_ip }}"
+  register: aws_ec2_instance

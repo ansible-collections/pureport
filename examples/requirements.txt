@@ -1,4 +1,4 @@
-ansible[azure]==2.8.2
-boto3==1.9.193
-google-auth==1.6.3
-pureport-client==0.0.7
+ansible[azure]==2.9.6
+boto3==1.12.17
+google-auth==1.11.2
+pureport-client==0.0.8

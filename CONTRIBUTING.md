@@ -19,14 +19,14 @@ tox
 
 ### Writing a Module
 Follow these guidelines for writing/maintaining Modules:
-- Follow the documentation on [writing your own module](https://docs.ansible.com/ansible/2.8/dev_guide/developing_locally.html).
-- Follow the documentation on the [module checklist](https://docs.ansible.com/ansible/2.8/dev_guide/developing_modules_checklist.html).
-- Write good documentation for the module [using this as a guide](https://docs.ansible.com/ansible/2.8/dev_guide/developing_modules_documenting.html).
+- Follow the documentation on [writing your own module](https://docs.ansible.com/ansible/latest/dev_guide/developing_locally.html).
+- Follow the documentation on the [module checklist](https://docs.ansible.com/ansible/latest/dev_guide/developing_modules_checklist.html).
+- Write good documentation for the module [using this as a guide](https://docs.ansible.com/ansible/latest/dev_guide/developing_modules_documenting.html).
 
 All modules should live in the `plugins/modules` package.  All modules should be prefixed with `pureport_`.
 
 #### Writing a shared Module Utility
-[Module utilities](https://docs.ansible.com/ansible/2.8/dev_guide/developing_module_utilities.html) are a great way to share 
+[Module utilities](https://docs.ansible.com/ansible/latest/dev_guide/developing_module_utilities.html) are a great way to share 
 code between modules.  They should be located in the `plugins/module_utils` package.
 
 When importing a `module_util` use the full path to Python module instead of relative paths.
@@ -41,7 +41,7 @@ from ansible_collections.pureport.pureport.plugins.module_utils.pureport import 
 
 #### Writing shared Documentation
 Ansible supports a documentation feature called 
-[`extends_documentation_fragment`](https://docs.ansible.com/ansible/2.8/dev_guide/developing_modules_documenting.html#documentation-fragments), 
+[`extends_documentation_fragment`](https://docs.ansible.com/ansible/latest/dev_guide/developing_modules_documenting.html#documentation-fragments), 
 which basically merges the documentation of a module and a fragment or list of fragments.
 
 A documentation fragment should live in the `plugins/doc_fragments` directory.  The documentation fragment module should be a file 

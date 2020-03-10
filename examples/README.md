@@ -9,7 +9,18 @@ collection.
 - [pureport_azure_express_route_public.yml](pureport_azure_express_route_public.yml) - Create a single public Azure connection and infrastructure
 - [pureport_google_cloud_interconnect.yml](pureport_google_cloud_interconnect.yml) - Create a single Google connection and infrastructure
 - [pureport_site_ipsec_vpn.yml.yml](pureport_site_ipsec_vpn.yml) - Create a Site IPSec VPN connection
-- [main.yml](main.yml) - Runs all examples in a single Pureport network
+- [main.yml](main.yml) - Runs all the above examples in a single Pureport network
+
+### Ansible Meetup Example
+Pureport hosted an Ansible meetup on 8/28/19.  The demo playbook [ansible_meetup.yml](ansible_meetup.yml) ([ansible_meetup_teardown.yml](ansible_meetup_teardown.yml)) and extra 
+roles ([aws_ec2_instance](roles/aws_ec2_instance/tasks/main.yml) and [google_vm_instance](roles/google_vm_instance/tasks/main.yml))
+have been duplicated here for you to run.
+
+The Ansible Meetup example uses the existing roles here to spin up AWS VPC and Google Virtual Network infrastructures, put a single
+VM instance within both of them and provides SSH access publicly and trigger ping calls between the two VMs privately.
+
+The meetup presentation has been copied here to [ansible_meetup.pdf](ansible_meetup.pdf).  If you would like to view the original repository,
+that can be found [here](https://github.com/pureport/pureport-ansible-meetup).
 
 ### Requirements
 There is some configuration required to run these examples.

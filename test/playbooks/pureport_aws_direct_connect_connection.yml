@@ -26,7 +26,7 @@
         location_href: "{{ location_href }}"
         billing_term: HOURLY
         aws_account_id: "{{ aws_account_id }}"
-        aws_region: us-west-2
+        aws_region: "{{ aws_region }}"
         cloud_service_hrefs: "{{ cloud_service_hrefs }}"
       register: result
     - debug: var=result
@@ -158,7 +158,7 @@
         nat_mappings:
           - 192.167.1.1/32
         aws_account_id: "{{ aws_account_id }}"
-        aws_region: us-west-2
+        aws_region: "{{ aws_region }}"
       register: result
     - debug: var=result
     - fail:

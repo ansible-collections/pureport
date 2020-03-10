@@ -11,25 +11,21 @@ export ANSIBLE_MODULE_UTILS=${PUREPORT_ANSIBLE_MODULES_DIR}/module_utils
 export ANSIBLE_DOC_FRAGMENT_PLUGINS=${PUREPORT_ANSIBLE_MODULES_DIR}/plugins/doc_fragments
 ```
 
-### Add a `host-vars/localhost.yml` using the following template:
+### Add a `group-vars/all.yml` using the following template:
 ```yaml
+# Pureport
 api_base_url: ""
 api_key: ""
 api_secret: ""
 
 account_href: /accounts/""
-
 network_href: /networks/""
-
 location_href: /locations/""
-
 cloud_service_hrefs:
   - /cloudServices/""
-```
 
-### Add a `group-vars/all.yml` using the following template:
-```yaml
 aws_account_id: ""
+aws_region: ""
 
 azure_service_key: ""
 

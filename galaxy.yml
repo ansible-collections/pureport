@@ -2,7 +2,7 @@
 namespace: "pureport"
 name: "pureport"
 description: A collection of Ansible Modules & Roles for the Pureport ReST API.
-version: "0.0.7"
+version: "0.0.9"
 readme: "README.md"
 authors:
   - "Matt Traynham <matt.traynham@pureport.com>"
@@ -25,3 +25,6 @@ repository: "https://www.github.com/pureport/pureport-ansible-modules"
 documentation: "https://github.com/pureport/pureport-ansible-modules/blob/develop/README.md"
 homepage: "https://www.pureport.com/"
 issues: "https://www.github.com/pureport/pureport-ansible-modules/issues"
+build_ignore:
+  - test
+  - examples/group_vars
