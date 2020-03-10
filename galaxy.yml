@@ -26,5 +26,5 @@ documentation: "https://github.com/pureport/pureport-ansible-modules/blob/develo
 homepage: "https://www.pureport.com/"
 issues: "https://www.github.com/pureport/pureport-ansible-modules/issues"
 build_ignore:
-- test
-- examples/group_vars
+  - test
+  - examples/group_vars
