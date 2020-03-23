@@ -1,4 +1,5 @@
 from traceback import format_exc
+
 try:
     from pureport.api.client import Client, API_URL
     from pureport.exception.api import ClientHttpException

@@ -229,7 +229,7 @@ try:
 except ImportError:
     ClientHttpException = None
     NotFoundException = None
-from ..module_utils.pureport import \
+from ..module_utils.pureport_client import \
     get_client_argument_spec, \
     get_client_mutually_exclusive, \
     get_client, \

@@ -5,7 +5,7 @@ try:
 except ImportError:
     ClientHttpException = None
     NotFoundException = None
-from .pureport import get_client, get_network
+from .pureport_client import get_client, get_network
 from .pureport_crud import item_crud, deep_compare
 
 

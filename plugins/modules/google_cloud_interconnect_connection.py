@@ -117,7 +117,7 @@ from ansible.module_utils.common.dict_transformations import \
     camel_dict_to_snake_dict, \
     snake_dict_to_camel_dict
 
-from ..module_utils.pureport import \
+from ..module_utils.pureport_client import \
     get_client_argument_spec, \
     get_client_mutually_exclusive, \
     get_network_argument_spec

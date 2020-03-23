@@ -27,16 +27,17 @@ All modules should live in the `plugins/modules` package.  All modules should be
 
 #### Writing a shared Module Utility
 [Module utilities](https://docs.ansible.com/ansible/latest/dev_guide/developing_module_utilities.html) are a great way to share 
-code between modules.  They should be located in the `plugins/module_utils` package.
+code between modules.  They should be located in the `plugins/module_utils` package. 
 
-When importing a `module_util` use the full path to Python module instead of relative paths.
+When importing a `module_util` use the relative path as shown below.
+
 
 ```python
 # like this
-import ansible_collections.pureport.pureport.plugins.module_utils.pureport
+import ..module_utils.pureport_client
 
 # or like this
-from ansible_collections.pureport.pureport.plugins.module_utils.pureport import get_client
+from ..module_utils.pureport_client import get_client
 ```
 
 #### Writing shared Documentation
