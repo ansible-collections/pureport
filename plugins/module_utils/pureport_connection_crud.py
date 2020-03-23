@@ -1,10 +1,16 @@
+# Copyright (c), Pureport, 2020
+# Simplified BSD License (see licenses/simplified_bsd.txt or https://opensource.org/licenses/BSD-2-Clause)
+
+
 from functools import partial
 from traceback import format_exc
+
 try:
     from pureport.exception.api import ClientHttpException, NotFoundException
 except ImportError:
     ClientHttpException = None
     NotFoundException = None
+
 from .pureport_client import get_client, get_network
 from .pureport_crud import item_crud, deep_compare
 
