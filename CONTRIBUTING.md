@@ -69,7 +69,7 @@ DOCUMENTATION = '''
 ...
 
 extends_documentation_fragment:
-    - pureport.pureport.pureport_my_parameter
+    - pureport.fabric.pureport_my_parameter
 '''
 ```
 
@@ -77,7 +77,7 @@ extends_documentation_fragment:
 I encountered one or two errors while writing documentation.  If you see the following, it's likely because of a formatting error
 with an `options` description field.
 ```bash
-ansible-doc pureport.pureport.pureport_network_facts
+ansible-doc pureport.fabric.pureport_network_facts
 ERROR! module pureport_network_facts has a documentation error formatting or is missing documentation.
 ```
 

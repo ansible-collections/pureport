@@ -19,9 +19,9 @@ options:
     account_href:
         required: true
 extends_documentation_fragment:
-    - pureport.pureport.client
-    - pureport.pureport.account
-    - pureport.pureport.account
+    - pureport.fabric.client
+    - pureport.fabric.account
+    - pureport.fabric.account
 '''
 
 EXAMPLES = '''

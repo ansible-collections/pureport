@@ -27,9 +27,9 @@ options:
             - This should be the full 'href' path to the Network ReST object (e.g /networks/abc).
             - One of 'account_href' or 'network_href' should be supplied for this command, but not both.
 extends_documentation_fragment:
-    - pureport.pureport.client
-    - pureport.pureport.account
-    - pureport.pureport.network
+    - pureport.fabric.client
+    - pureport.fabric.account
+    - pureport.fabric.network
 '''
 
 EXAMPLES = '''

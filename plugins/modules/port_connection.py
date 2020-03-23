@@ -39,12 +39,12 @@ options:
         required: false
         type: int
 extends_documentation_fragment:
-    - pureport.pureport.client
-    - pureport.pureport.network
-    - pureport.pureport.state
-    - pureport.pureport.resolve_existing
-    - pureport.pureport.wait_for_server
-    - pureport.pureport.connection_args
+    - pureport.fabric.client
+    - pureport.fabric.network
+    - pureport.fabric.state
+    - pureport.fabric.resolve_existing
+    - pureport.fabric.wait_for_server
+    - pureport.fabric.connection_args
 '''
 
 EXAMPLES = '''

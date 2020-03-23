@@ -5,15 +5,14 @@ This is an [Ansible Collection](https://docs.ansible.com/ansible/devel/dev_guide
 [Pureport](https://www.pureport.com/) ReST API.
 
 ## Installation
-This collection is distributed via [ansible-galaxy](https://galaxy.ansible.com/pureport/pureport).
+This collection is distributed via [ansible-galaxy](https://galaxy.ansible.com/pureport/fabric).
 
 For compatability between Ansible versions, please use the following install methods matching your Ansible version:
 
-| Ansible Version | Pureport Collection Version                                                         | Install Method                                        |
-|-----------------|-------------------------------------------------------------------------------------|-------------------------------------------------------|
-| 2.9+            | [0.0.9+](https://galaxy.ansible.com/pureport/pureport)                              | `ansible-galaxy collection install pureport.pureport` |
-| 2.8             | [0.0.8](https://galaxy.ansible.com/pureport/pureport)                               | `mazer install pureport.pureport`                     |
-| 2.7             | [0.0.5 (Galaxy role)](https://galaxy.ansible.com/pureport/pureport_ansible_modules) | `mazer install pureport.pureport_ansible_modules`     |
+| Ansible Version | Pureport Collection Version                                                         | Install Method                                                  |
+| --------------- | ----------------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| 2.8+            | [0.0.9+](https://galaxy.ansible.com/pureport/pureport)                              | `ansible-galaxy collection install pureport.fabric`             |
+| 2.7             | [0.0.5 (Galaxy role)](https://galaxy.ansible.com/pureport/pureport_ansible_modules) | `ansible-galaxy role install pureport.pureport_ansible_modules` |
 
 ### Modules
 It provides the following modules you can use in your own roles:
@@ -87,54 +86,54 @@ It also provides the following roles you can use to create connections and their
 ## Module Documentation
 You can then get information about each module:
 ```bash
-ansible-doc pureport.pureport.access_token_info
-ansible-doc pureport.pureport.locations_info
-ansible-doc pureport.pureport.facilities_info
-ansible-doc pureport.pureport.options_info
-ansible-doc pureport.pureport.cloud_regions_info
-ansible-doc pureport.pureport.cloud_services_info
-ansible-doc pureport.pureport.accounts_info
-ansible-doc pureport.pureport.supported_connections_info
-ansible-doc pureport.pureport.supported_ports_info
-ansible-doc pureport.pureport.ports_info
-ansible-doc pureport.pureport.port
-ansible-doc pureport.pureport.networks_info
-ansible-doc pureport.pureport.network
-ansible-doc pureport.pureport.connections_info
-ansible-doc pureport.pureport.aws_direct_connect_connection
-ansible-doc pureport.pureport.azure_express_route_connection
-ansible-doc pureport.pureport.google_cloud_interconnect_connection
-ansible-doc pureport.pureport.port_connection
-ansible-doc pureport.pureport.site_ipsec_vpn_connection
+ansible-doc pureport.fabric.access_token_info
+ansible-doc pureport.fabric.locations_info
+ansible-doc pureport.fabric.facilities_info
+ansible-doc pureport.fabric.options_info
+ansible-doc pureport.fabric.cloud_regions_info
+ansible-doc pureport.fabric.cloud_services_info
+ansible-doc pureport.fabric.accounts_info
+ansible-doc pureport.fabric.supported_connections_info
+ansible-doc pureport.fabric.supported_ports_info
+ansible-doc pureport.fabric.ports_info
+ansible-doc pureport.fabric.port
+ansible-doc pureport.fabric.networks_info
+ansible-doc pureport.fabric.network
+ansible-doc pureport.fabric.connections_info
+ansible-doc pureport.fabric.aws_direct_connect_connection
+ansible-doc pureport.fabric.azure_express_route_connection
+ansible-doc pureport.fabric.google_cloud_interconnect_connection
+ansible-doc pureport.fabric.port_connection
+ansible-doc pureport.fabric.site_ipsec_vpn_connection
 
-ansible-doc pureport.pureport.aws_direct_connect_confirm_connection
-ansible-doc pureport.pureport.pr_48711_aws_direct_connect_virtual_interface
+ansible-doc pureport.fabric.aws_direct_connect_confirm_connection
+ansible-doc pureport.fabric.pr_48711_aws_direct_connect_virtual_interface
 ```
 
 Also dump a snippet of what invoking a module requires:
 ```bash
-ansible-doc pureport.pureport.access_token_info -s
-ansible-doc pureport.pureport.facilities_info -s
-ansible-doc pureport.pureport.locations_info -s
-ansible-doc pureport.pureport.options_info -s
-ansible-doc pureport.pureport.cloud_regions_info -s
-ansible-doc pureport.pureport.cloud_services_info -s
-ansible-doc pureport.pureport.accounts_info -s
-ansible-doc pureport.pureport.supported_connections_info -s
-ansible-doc pureport.pureport.supported_ports_info -s
-ansible-doc pureport.pureport.ports_info -s
-ansible-doc pureport.pureport.port -s
-ansible-doc pureport.pureport.networks_info -s
-ansible-doc pureport.pureport.network -s
-ansible-doc pureport.pureport.connections_info -s
-ansible-doc pureport.pureport.aws_direct_connect_connection -s
-ansible-doc pureport.pureport.azure_express_route_connection -s
-ansible-doc pureport.pureport.google_cloud_interconnect_connection -s
-ansible-doc pureport.pureport.port_connection -s
-ansible-doc pureport.pureport.site_ipsec_vpn_connection -s
+ansible-doc pureport.fabric.access_token_info -s
+ansible-doc pureport.fabric.facilities_info -s
+ansible-doc pureport.fabric.locations_info -s
+ansible-doc pureport.fabric.options_info -s
+ansible-doc pureport.fabric.cloud_regions_info -s
+ansible-doc pureport.fabric.cloud_services_info -s
+ansible-doc pureport.fabric.accounts_info -s
+ansible-doc pureport.fabric.supported_connections_info -s
+ansible-doc pureport.fabric.supported_ports_info -s
+ansible-doc pureport.fabric.ports_info -s
+ansible-doc pureport.fabric.port -s
+ansible-doc pureport.fabric.networks_info -s
+ansible-doc pureport.fabric.network -s
+ansible-doc pureport.fabric.connections_info -s
+ansible-doc pureport.fabric.aws_direct_connect_connection -s
+ansible-doc pureport.fabric.azure_express_route_connection -s
+ansible-doc pureport.fabric.google_cloud_interconnect_connection -s
+ansible-doc pureport.fabric.port_connection -s
+ansible-doc pureport.fabric.site_ipsec_vpn_connection -s
 
-ansible-doc pureport.pureport.aws_direct_connect_confirm_connection -s
-ansible-doc pureport.pureport.pr_48711_aws_direct_connect_virtual_interface -s
+ansible-doc pureport.fabric.aws_direct_connect_confirm_connection -s
+ansible-doc pureport.fabric.pr_48711_aws_direct_connect_virtual_interface -s
 ```
 
 ### Obtaining an `api_access_token`
@@ -146,7 +145,7 @@ of module invocations.  You can obtain the access token and set it as a fact for
 ```yaml
 ---
 - collections:
-    - pureport.pureport
+    - pureport.fabric
   tasks:
     - name: Retrieve the access token for an api key and secret
       access_token_info:

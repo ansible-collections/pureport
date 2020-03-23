@@ -26,7 +26,7 @@ options:
                   'IKEV2ESPDHGroup']
         default: []
 extends_documentation_fragment:
-    - pureport.pureport.client
+    - pureport.fabric.client
 '''
 
 EXAMPLES = '''

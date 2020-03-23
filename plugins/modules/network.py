@@ -34,10 +34,10 @@ options:
         required: false
         type: str
 extends_documentation_fragment:
-    - pureport.pureport.client
-    - pureport.pureport.account
-    - pureport.pureport.state
-    - pureport.pureport.resolve_existing
+    - pureport.fabric.client
+    - pureport.fabric.account
+    - pureport.fabric.state
+    - pureport.fabric.resolve_existing
 '''
 
 EXAMPLES = '''

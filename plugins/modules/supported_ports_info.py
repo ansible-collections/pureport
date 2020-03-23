@@ -25,8 +25,8 @@ options:
         required: true
         type: str
 extends_documentation_fragment:
-    - pureport.pureport.client
-    - pureport.pureport.account
+    - pureport.fabric.client
+    - pureport.fabric.account
 '''
 
 EXAMPLES = '''
