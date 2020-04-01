@@ -125,7 +125,8 @@ def main():
     ]
     module = AnsibleModule(
         argument_spec=argument_spec,
-        mutually_exclusive=mutually_exclusive
+        mutually_exclusive=mutually_exclusive,
+        supports_check_mode=True
     )
     find_connections(module)
 

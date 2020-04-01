@@ -141,7 +141,8 @@ def main():
     mutually_exclusive += get_client_mutually_exclusive()
     module = AnsibleModule(
         argument_spec=argument_spec,
-        mutually_exclusive=mutually_exclusive
+        mutually_exclusive=mutually_exclusive,
+        supports_check_mode=True
     )
     find_locations(module)
 
