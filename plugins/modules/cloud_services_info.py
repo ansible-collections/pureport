@@ -1,4 +1,11 @@
 #!/usr/bin/python
+#
+# Copyright: Pureport
+# GNU General Public License v3.0+ (see licenses/gpl-3.0-standalone.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+#
+from __future__ import absolute_import, division, print_function
+__metaclass__ = type
+
 
 ANSIBLE_METADATA = {
     'metadata_version': '1.1',
@@ -113,7 +120,7 @@ try:
     from pureport.exception.api import ClientHttpException
 except ImportError:
     ClientHttpException = None
-from ..module_utils.pureport import \
+from ..module_utils.pureport_client import \
     get_client_argument_spec, \
     get_client_mutually_exclusive, \
     get_client
@@ -139,7 +146,8 @@ def main():
     mutually_exclusive += get_client_mutually_exclusive()
     module = AnsibleModule(
         argument_spec=argument_spec,
-        mutually_exclusive=mutually_exclusive
+        mutually_exclusive=mutually_exclusive,
+        supports_check_mode=True
     )
     find_cloud_services(module)
 

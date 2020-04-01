@@ -1,3 +1,5 @@
+# Copyright (c), Pureport, 2020
+# Simplified BSD License (see licenses/simplified_bsd.txt or https://opensource.org/licenses/BSD-2-Clause)
 
 
 def get_state_argument_spec():

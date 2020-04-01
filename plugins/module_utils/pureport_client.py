@@ -1,4 +1,8 @@
+# Copyright (c), Pureport, 2020
+# Simplified BSD License (see licenses/simplified_bsd.txt or https://opensource.org/licenses/BSD-2-Clause)
+
 from traceback import format_exc
+
 try:
     from pureport.api.client import Client, API_URL
     from pureport.exception.api import ClientHttpException
