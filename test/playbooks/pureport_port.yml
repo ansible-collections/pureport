@@ -94,11 +94,11 @@
         id: "{{ result.id }}"
         name: "{{ result.name }}"
         description: "Foobar"
-        provider: "{{ supported_ports[1].provider }}"
-        speed: "{{ supported_ports[1].speed }}"
-        availability_domain: "{{ supported_ports[1].availability_domains[0] }}"
-        media_type: "{{ supported_ports[1].media_types[0] }}"
-        billing_term: "{{ supported_ports[1].billing_plans[0].term }}"
+        provider: "{{ result.provider }}"
+        speed: "{{ result.speed }}"
+        availability_domain: "{{ result.availability_domain }}"
+        media_type: "{{ result.media_type }}"
+        billing_term: "{{ result.billing_term }}"
       register: result
     - debug: var=result
     - fail:

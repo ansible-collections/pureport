@@ -68,14 +68,16 @@ def get_account_argument_spec(required=False):
     )
 
 
-def get_account(module):
+def get_account_id(module):
     """
     Get the account from the passed in module
     :param ansible.module_utils.basic.AnsibleModule module: the Ansible module
-    :rtype: Account|None
+    :rtype: str|None
     """
     account_href = module.params.get('account_href')
-    return dict(href=account_href) if account_href is not None else None
+    if account_href is not None:
+        return account_href.split('/')[-1]
+    return None
 
 
 def get_network_argument_spec(required=False):
@@ -89,11 +91,13 @@ def get_network_argument_spec(required=False):
     )
 
 
-def get_network(module):
+def get_network_id(module):
     """
     Get the account from the passed in module
     :param ansible.module_utils.basic.AnsibleModule module: the Ansible module
-    :rtype: Network|None
+    :rtype: str|None
     """
     network_href = module.params.get('network_href')
-    return dict(href=network_href) if network_href is not None else None
+    if network_href is not None:
+        return network_href.split('/')[-1]
+    return None

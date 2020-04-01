@@ -151,7 +151,7 @@ def construct_connection(module):
     """
     Construct a Connection from the Ansible module arguments
     :param AnsibleModule module: the Ansible module
-    :rtype: Connection
+    :rtype: pureport.api.client.Connection
     """
     connection = dict((k, module.params.get(k)) for k in (
         'id',

@@ -141,8 +141,8 @@ from ..module_utils.pureport_client import \
 def __format_facility(facility):
     """
     Format a facility for output
-    :param Facility facility: the facility
-    :rtype: Facility
+    :param dict facility: the facility
+    :rtype: pureport.api.client.Facility
     """
     formatted_facility = dict(facility)
     alt_ids = formatted_facility.pop('altIds')

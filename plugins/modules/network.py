@@ -118,7 +118,7 @@ from ..module_utils.pureport_client import \
     get_client_mutually_exclusive, \
     get_client, \
     get_account_argument_spec, \
-    get_account
+    get_account_id
 from ..module_utils.pureport_crud import \
     get_state_argument_spec, \
     get_resolve_existing_argument_spec, \
@@ -129,7 +129,7 @@ def construct_network(module):
     """
     Construct a Network from the Ansible module arguments
     :param AnsibleModule module: the Ansible module
-    :rtype: Network
+    :rtype: pureport.api.client.Network
     """
     return dict((k, module.params.get(k))
                 for k in ('id', 'name', 'description'))
@@ -140,13 +140,13 @@ def retrieve_network(module, client, network):
     Retrieve the Network from the Ansible inferred Network
     :param AnsibleModule module: the Ansible module
     :param pureport.api.client.Client client: the Pureport client
-    :param Network network: the Ansible inferred Network
-    :rtype: Network|None
+    :param pureport.api.client.Network network: the Ansible inferred Network
+    :rtype: pureport.api.client.Network|None
     """
     network_id = network.get('id')
     if network_id is not None:
         try:
-            return client.networks.get_by_id(network_id)
+            return client.networks.get(network_id)
         except NotFoundException:
             return None
         except ClientHttpException as e:
@@ -160,13 +160,13 @@ def resolve_network(module, client, network):
     user provided network
     :param AnsibleModule module: the Ansible module
     :param pureport.api.client.Client client: the Pureport client
-    :param Network network: the Ansible inferred Network
-    :rtype: Network|None
+    :param pureport.api.client.Network network: the Ansible inferred Network
+    :rtype: pureport.api.client.Network|None
     """
-    account = get_account(module)
-    if account is not None:
+    account_id = get_account_id(module)
+    if account_id is not None:
         try:
-            existing_networks = client.accounts.networks(account).list()
+            existing_networks = client.accounts.networks(account_id).list()
             matched_networks = [existing_network for existing_network in existing_networks
                                 if all([existing_network.get(k) == network.get(k)
                                         for k in ['name']])]
@@ -186,9 +186,9 @@ def copy_existing_network_properties(network, existing_network):
     """
     Copy properties from the existing network to the new Ansible defined
     Network.
-    :param Network network:
-    :param Network existing_network:
-    :rtype: Network
+    :param pureport.api.client.Network network:
+    :param pureport.api.client.Network existing_network:
+    :rtype: pureport.api.client.Network
     """
     copied_network = dict()
     copied_network.update(network)
@@ -204,12 +204,12 @@ def create_network(module, client, network):
     Create a new network
     :param AnsibleModule module: the Ansible module
     :param pureport.api.client.Client client: the Pureport client
-    :param Network network: the Ansible inferred Network
-    :rtype: Network
+    :param pureport.api.client.Network network: the Ansible inferred Network
+    :rtype: pureport.api.client.Network
     """
-    account = get_account(module)
+    account_id = get_account_id(module)
     try:
-        return client.accounts.networks(account).create(network)
+        return client.accounts.networks(account_id).create(network)
     except ClientHttpException as e:
         module.fail_json(msg=e.response.text, exception=format_exc())
 
@@ -219,8 +219,8 @@ def update_network(module, client, network):
     Update a network
     :param AnsibleModule module: the Ansible module
     :param pureport.api.client.Client client: the Pureport client
-    :param Network network: the Ansible inferred Network
-    :rtype: Network
+    :param pureport.api.client.Network network: the Ansible inferred Network
+    :rtype: pureport.api.client.Network
     """
     # Copy over href, the client needs it to properly execute the call
     try:
@@ -234,12 +234,11 @@ def delete_network(module, client, network):
     Delete a network
     :param AnsibleModule module: the Ansible module
     :param pureport.api.client.Client client: the Pureport client
-    :param Network network: the Ansible inferred Network
-    :rtype: Network
+    :param pureport.api.client.Network network: the Ansible inferred Network
     """
     # Copy over href, the client needs it to properly execute the call
     try:
-        return client.networks.delete(network)
+        return client.networks.delete(network.get('id'))
     except ClientHttpException as e:
         module.fail_json(msg=e.response.text, exception=format_exc())
 

@@ -79,9 +79,9 @@ from ..module_utils.pureport_client import \
     get_client_mutually_exclusive, \
     get_client, \
     get_account_argument_spec, \
-    get_account, \
+    get_account_id, \
     get_network_argument_spec, \
-    get_network
+    get_network_id
 
 
 def find_connections(module):
@@ -93,17 +93,17 @@ def find_connections(module):
 
     connections = None
     # Retrieve connections from the account
-    if module.params.get('account_href') is not None:
-        account = get_account(module)
+    account_id = get_account_id(module)
+    network_id = get_network_id(module)
+    if account_id is not None:
         try:
-            connections = client.accounts.connections(account).list()
+            connections = client.accounts.connections(account_id).list()
         except ClientHttpException as e:
             module.fail_json(msg=e.response.text, exception=format_exc())
     # Retrieve connections from the network
-    elif module.params.get('network_href') is not None:
-        network = get_network(module)
+    elif network_id is not None:
         try:
-            connections = client.networks.connections(network).list()
+            connections = client.networks.connections(network_id).list()
         except ClientHttpException as e:
             module.fail_json(msg=e.response.text, exception=format_exc())
     else:

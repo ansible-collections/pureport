@@ -209,7 +209,7 @@ from ..module_utils.pureport_client import \
     get_client_mutually_exclusive, \
     get_client, \
     get_account_argument_spec, \
-    get_account
+    get_account_id
 
 
 def find_supported_connections(module):
@@ -218,9 +218,9 @@ def find_supported_connections(module):
     :param AnsibleModule module: the ansible module
     """
     client = get_client(module)
-    account = get_account(module)
+    account_id = get_account_id(module)
     try:
-        supported_connections = client.accounts.supported_connections(account).list()
+        supported_connections = client.accounts.supported_connections(account_id).list()
         module.exit_json(supported_connections=[camel_dict_to_snake_dict(supported_connection)
                                                 for supported_connection in supported_connections])
     except ClientHttpException as e:

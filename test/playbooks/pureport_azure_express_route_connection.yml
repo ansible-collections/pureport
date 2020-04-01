@@ -220,7 +220,7 @@
         wait_for_server: true
         id: "{{ result.id }}"
         name: "{{ result.name }}"
-        speed: 50
+        speed: 200
         high_availability: "{{ result.high_availability }}"
         peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"

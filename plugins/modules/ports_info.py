@@ -173,7 +173,7 @@ from ..module_utils.pureport_client import \
     get_client_mutually_exclusive, \
     get_client, \
     get_account_argument_spec, \
-    get_account
+    get_account_id
 
 
 def find_ports(module):
@@ -182,9 +182,9 @@ def find_ports(module):
     :param AnsibleModule module: the ansible module
     """
     client = get_client(module)
-    account = get_account(module)
+    account_id = get_account_id(module)
     try:
-        ports = client.accounts.ports(account).list()
+        ports = client.accounts.ports(account_id).list()
         module.exit_json(ports=[camel_dict_to_snake_dict(port) for port in ports])
     except ClientHttpException as e:
         module.fail_json(msg=e.response.text, exception=format_exc())
