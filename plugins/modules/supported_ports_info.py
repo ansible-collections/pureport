@@ -151,7 +151,7 @@ from ..module_utils.pureport_client import \
     get_client_mutually_exclusive, \
     get_client, \
     get_account_argument_spec, \
-    get_account
+    get_account_id
 
 
 def find_supported_ports(module):
@@ -160,11 +160,11 @@ def find_supported_ports(module):
     :param AnsibleModule module: the ansible module
     """
     client = get_client(module)
-    account = get_account(module)
+    account_id = get_account_id(module)
     try:
         supported_ports = client.accounts \
-            .supported_ports(account) \
-            .list({'id': module.params.get('facility_href').split('/')[-1]})
+            .supported_ports(account_id) \
+            .list(module.params.get('facility_href').split('/')[-1])
         module.exit_json(supported_ports=[camel_dict_to_snake_dict(supported_port)
                                           for supported_port in supported_ports])
     except ClientHttpException as e:

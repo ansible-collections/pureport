@@ -77,6 +77,7 @@ def get_access_token(module):
     """
     Get the access token
     :param AnsibleModule module: the ansible module
+    :rtype: str
     """
     if not HAS_PUREPORT_CLIENT:
         module.fail_json(msg='pureport-client required for this module')

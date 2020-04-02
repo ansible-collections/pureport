@@ -89,7 +89,7 @@ from ..module_utils.pureport_client import \
     get_client_mutually_exclusive, \
     get_client, \
     get_account_argument_spec, \
-    get_account
+    get_account_id
 
 
 def find_networks(module):
@@ -98,9 +98,9 @@ def find_networks(module):
     :param AnsibleModule module: the ansible module
     """
     client = get_client(module)
-    account = get_account(module)
+    account_id = get_account_id(module)
     try:
-        networks = client.accounts.networks(account).list()
+        networks = client.accounts.networks(account_id).list()
         module.exit_json(networks=[camel_dict_to_snake_dict(network) for network in networks])
     except ClientHttpException as e:
         module.fail_json(msg=e.response.text, exception=format_exc())
