@@ -7,12 +7,14 @@ This is an [Ansible Collection](https://docs.ansible.com/ansible/devel/dev_guide
 ## Installation
 This collection is distributed via [ansible-galaxy](https://galaxy.ansible.com/pureport/fabric).
 
-For compatability between Ansible versions, please use the following install methods matching your Ansible version:
+For compatibility between Ansible versions and the Python [pureport-client](https://pypi.org/project/pureport-client/) required dependency,
+please use the following install methods matching your Ansible version:
 
-| Ansible Version | Pureport Collection Version                                                         | Install Method                                                  |
-| --------------- | ----------------------------------------------------------------------------------- | --------------------------------------------------------------- |
-| 2.8+            | [0.0.9+](https://galaxy.ansible.com/pureport/pureport)                              | `ansible-galaxy collection install pureport.fabric`             |
-| 2.7             | [0.0.5 (Galaxy role)](https://galaxy.ansible.com/pureport/pureport_ansible_modules) | `ansible-galaxy role install pureport.pureport_ansible_modules` |
+| Pureport Collection Version                                                         | Ansible Version | [Pureport Client Version](https://pypi.org/project/pureport-client/) | Install Method                                                  |
+| ----------------------------------------------------------------------------------- | --------------- | -------------------------------------------------------------------- | --------------------------------------------------------------- |
+| [0.10.0+](https://galaxy.ansible.com/pureport/fabric)                               | 2.8+            | 1.0.0+                                                               | `ansible-galaxy collection install pureport.fabric`             |
+| [0.0.9](https://galaxy.ansible.com/pureport/pureport)                               | 2.8+            | 0.0.8                                                                | `ansible-galaxy collection install pureport.pureport`           |
+| [0.0.5 (Galaxy role)](https://galaxy.ansible.com/pureport/pureport_ansible_modules) | 2.7             | 0.0.8                                                                | `ansible-galaxy role install pureport.pureport_ansible_modules` |
 
 ### Modules
 It provides the following modules you can use in your own roles:
