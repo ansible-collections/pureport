@@ -1,7 +1,7 @@
 ---
 - hosts: localhost
   collections:
-    - pureport.pureport
+    - pureport.fabric
   tasks:
     - name: Retrieve the access token for an api key and secret
       pureport_access_token_fact:

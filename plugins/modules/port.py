@@ -1,4 +1,11 @@
 #!/usr/bin/python
+#
+# Copyright: Pureport
+# GNU General Public License v3.0+ (see licenses/gpl-3.0-standalone.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+#
+from __future__ import absolute_import, division, print_function
+__metaclass__ = type
+
 
 ANSIBLE_METADATA = {
     'metadata_version': '1.1',
@@ -57,10 +64,10 @@ options:
         type: str
         choices: ['HOURLY', 'MONTHLY', 'ONE_YEAR', 'TWO_YEAR']
 extends_documentation_fragment:
-    - pureport.pureport.client
-    - pureport.pureport.account
-    - pureport.pureport.state
-    - pureport.pureport.resolve_existing
+    - pureport.fabric.client
+    - pureport.fabric.account
+    - pureport.fabric.state
+    - pureport.fabric.resolve_existing
 '''
 
 EXAMPLES = '''
@@ -229,12 +236,12 @@ try:
 except ImportError:
     ClientHttpException = None
     NotFoundException = None
-from ..module_utils.pureport import \
+from ..module_utils.pureport_client import \
     get_client_argument_spec, \
     get_client_mutually_exclusive, \
     get_client, \
     get_account_argument_spec, \
-    get_account
+    get_account_id
 from ..module_utils.pureport_crud import \
     get_state_argument_spec, \
     get_resolve_existing_argument_spec, \
@@ -271,7 +278,7 @@ def retrieve_port(module, client, port):
     port_id = port.get('id')
     if port_id is not None:
         try:
-            return client.ports.get_by_id(port_id)
+            return client.ports.get(port_id)
         except NotFoundException:
             return None
         except ClientHttpException as e:
@@ -288,10 +295,10 @@ def resolve_port(module, client, port):
     :param Port port: the Ansible inferred Port
     :rtype: Port|None
     """
-    account = get_account(module)
-    if account is not None:
+    account_id = get_account_id(module)
+    if account_id is not None:
         try:
-            existing_ports = client.accounts.ports(account).list()
+            existing_ports = client.accounts.ports(account_id).list()
             matched_ports = [existing_port for existing_port in existing_ports
                              if all([existing_port.get(k) == port.get(k)
                                      for k in ['name']])]
@@ -332,9 +339,9 @@ def create_port(module, client, port):
     :param Port port: the Ansible inferred Port
     :rtype: Port
     """
-    account = get_account(module)
+    account_id = get_account_id(module)
     try:
-        return client.accounts.ports(account).create(port)
+        return client.accounts.ports(account_id).create(port)
     except ClientHttpException as e:
         module.fail_json(msg=e.response.text, exception=format_exc())
 
@@ -362,7 +369,7 @@ def delete_port(module, client, port):
     :rtype: Port
     """
     try:
-        return client.ports.delete(port)
+        return client.ports.delete(port.get('id'))
     except ClientHttpException as e:
         module.fail_json(msg=e.response.text, exception=format_exc())
 

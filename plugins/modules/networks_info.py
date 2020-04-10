@@ -1,4 +1,11 @@
 #!/usr/bin/python
+#
+# Copyright: Pureport
+# GNU General Public License v3.0+ (see licenses/gpl-3.0-standalone.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+#
+from __future__ import absolute_import, division, print_function
+__metaclass__ = type
+
 
 ANSIBLE_METADATA = {
     'metadata_version': '1.1',
@@ -19,8 +26,8 @@ options:
     account_href:
         required: true
 extends_documentation_fragment:
-    - pureport.pureport.client
-    - pureport.pureport.account
+    - pureport.fabric.client
+    - pureport.fabric.account
 '''
 
 EXAMPLES = '''
@@ -77,12 +84,12 @@ try:
     from pureport.exception.api import ClientHttpException
 except ImportError:
     ClientHttpException = None
-from ..module_utils.pureport import \
+from ..module_utils.pureport_client import \
     get_client_argument_spec, \
     get_client_mutually_exclusive, \
     get_client, \
     get_account_argument_spec, \
-    get_account
+    get_account_id
 
 
 def find_networks(module):
@@ -91,9 +98,9 @@ def find_networks(module):
     :param AnsibleModule module: the ansible module
     """
     client = get_client(module)
-    account = get_account(module)
+    account_id = get_account_id(module)
     try:
-        networks = client.accounts.networks(account).list()
+        networks = client.accounts.networks(account_id).list()
         module.exit_json(networks=[camel_dict_to_snake_dict(network) for network in networks])
     except ClientHttpException as e:
         module.fail_json(msg=e.response.text, exception=format_exc())
@@ -107,7 +114,8 @@ def main():
     mutually_exclusive += get_client_mutually_exclusive()
     module = AnsibleModule(
         argument_spec=argument_spec,
-        mutually_exclusive=mutually_exclusive
+        mutually_exclusive=mutually_exclusive,
+        supports_check_mode=True
     )
     find_networks(module)
 

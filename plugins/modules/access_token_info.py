@@ -1,4 +1,11 @@
 #!/usr/bin/python
+#
+# Copyright: Pureport
+# GNU General Public License v3.0+ (see licenses/gpl-3.0-standalone.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+#
+from __future__ import absolute_import, division, print_function
+__metaclass__ = type
+
 
 ANSIBLE_METADATA = {
     'metadata_version': '1.1',
@@ -70,6 +77,7 @@ def get_access_token(module):
     """
     Get the access token
     :param AnsibleModule module: the ansible module
+    :rtype: str
     """
     if not HAS_PUREPORT_CLIENT:
         module.fail_json(msg='pureport-client required for this module')

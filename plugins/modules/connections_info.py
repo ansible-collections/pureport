@@ -1,4 +1,11 @@
 #!/usr/bin/python
+#
+# Copyright: Pureport
+# GNU General Public License v3.0+ (see licenses/gpl-3.0-standalone.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+#
+from __future__ import absolute_import, division, print_function
+__metaclass__ = type
+
 
 ANSIBLE_METADATA = {
     'metadata_version': '1.1',
@@ -27,9 +34,9 @@ options:
             - This should be the full 'href' path to the Network ReST object (e.g /networks/abc).
             - One of 'account_href' or 'network_href' should be supplied for this command, but not both.
 extends_documentation_fragment:
-    - pureport.pureport.client
-    - pureport.pureport.account
-    - pureport.pureport.network
+    - pureport.fabric.client
+    - pureport.fabric.account
+    - pureport.fabric.network
 '''
 
 EXAMPLES = '''
@@ -67,14 +74,14 @@ try:
     from pureport.exception.api import ClientHttpException
 except ImportError:
     ClientHttpException = None
-from ..module_utils.pureport import \
+from ..module_utils.pureport_client import \
     get_client_argument_spec, \
     get_client_mutually_exclusive, \
     get_client, \
     get_account_argument_spec, \
-    get_account, \
+    get_account_id, \
     get_network_argument_spec, \
-    get_network
+    get_network_id
 
 
 def find_connections(module):
@@ -86,17 +93,17 @@ def find_connections(module):
 
     connections = None
     # Retrieve connections from the account
-    if module.params.get('account_href') is not None:
-        account = get_account(module)
+    account_id = get_account_id(module)
+    network_id = get_network_id(module)
+    if account_id is not None:
         try:
-            connections = client.accounts.connections(account).list()
+            connections = client.accounts.connections(account_id).list()
         except ClientHttpException as e:
             module.fail_json(msg=e.response.text, exception=format_exc())
     # Retrieve connections from the network
-    elif module.params.get('network_href') is not None:
-        network = get_network(module)
+    elif network_id is not None:
         try:
-            connections = client.networks.connections(network).list()
+            connections = client.networks.connections(network_id).list()
         except ClientHttpException as e:
             module.fail_json(msg=e.response.text, exception=format_exc())
     else:
@@ -118,7 +125,8 @@ def main():
     ]
     module = AnsibleModule(
         argument_spec=argument_spec,
-        mutually_exclusive=mutually_exclusive
+        mutually_exclusive=mutually_exclusive,
+        supports_check_mode=True
     )
     find_connections(module)
 

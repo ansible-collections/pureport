@@ -1,4 +1,11 @@
 #!/usr/bin/python
+#
+# Copyright: Pureport
+# GNU General Public License v3.0+ (see licenses/gpl-3.0-standalone.txt or https://www.gnu.org/licenses/gpl-3.0.txt)
+#
+from __future__ import absolute_import, division, print_function
+__metaclass__ = type
+
 
 ANSIBLE_METADATA = {
     'metadata_version': '1.1',
@@ -36,13 +43,13 @@ options:
         type: list
         default: []
 extends_documentation_fragment:
-    - pureport.pureport.client
-    - pureport.pureport.network
-    - pureport.pureport.state
-    - pureport.pureport.resolve_existing
-    - pureport.pureport.wait_for_server
-    - pureport.pureport.connection_args
-    - pureport.pureport.peering_connection_args
+    - pureport.fabric.client
+    - pureport.fabric.network
+    - pureport.fabric.state
+    - pureport.fabric.resolve_existing
+    - pureport.fabric.wait_for_server
+    - pureport.fabric.connection_args
+    - pureport.fabric.peering_connection_args
 '''
 
 EXAMPLES = '''
@@ -145,7 +152,7 @@ from ansible.module_utils.common.dict_transformations import \
     camel_dict_to_snake_dict, \
     snake_dict_to_camel_dict
 
-from ..module_utils.pureport import \
+from ..module_utils.pureport_client import \
     get_client_argument_spec, \
     get_client_mutually_exclusive, \
     get_network_argument_spec
@@ -164,7 +171,7 @@ def construct_connection(module):
     """
     Construct a Connection from the Ansible module arguments
     :param AnsibleModule module: the Ansible module
-    :rtype: Connection
+    :rtype: pureport.api.client.Connection
     """
     connection = dict((k, module.params.get(k)) for k in (
         'id',

@@ -27,16 +27,17 @@ All modules should live in the `plugins/modules` package.  All modules should be
 
 #### Writing a shared Module Utility
 [Module utilities](https://docs.ansible.com/ansible/latest/dev_guide/developing_module_utilities.html) are a great way to share 
-code between modules.  They should be located in the `plugins/module_utils` package.
+code between modules.  They should be located in the `plugins/module_utils` package. 
 
-When importing a `module_util` use the full path to Python module instead of relative paths.
+When importing a `module_util` use the relative path as shown below.
+
 
 ```python
 # like this
-import ansible_collections.pureport.pureport.plugins.module_utils.pureport
+import ..module_utils.pureport_client
 
 # or like this
-from ansible_collections.pureport.pureport.plugins.module_utils.pureport import get_client
+from ..module_utils.pureport_client import get_client
 ```
 
 #### Writing shared Documentation
@@ -69,7 +70,7 @@ DOCUMENTATION = '''
 ...
 
 extends_documentation_fragment:
-    - pureport.pureport.pureport_my_parameter
+    - pureport.fabric.pureport_my_parameter
 '''
 ```
 
@@ -77,7 +78,7 @@ extends_documentation_fragment:
 I encountered one or two errors while writing documentation.  If you see the following, it's likely because of a formatting error
 with an `options` description field.
 ```bash
-ansible-doc pureport.pureport.pureport_network_facts
+ansible-doc pureport.fabric.pureport_network_facts
 ERROR! module pureport_network_facts has a documentation error formatting or is missing documentation.
 ```
 

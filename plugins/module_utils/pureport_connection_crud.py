@@ -1,11 +1,17 @@
+# Copyright (c), Pureport, 2020
+# Simplified BSD License (see licenses/simplified_bsd.txt or https://opensource.org/licenses/BSD-2-Clause)
+
+
 from functools import partial
 from traceback import format_exc
+
 try:
     from pureport.exception.api import ClientHttpException, NotFoundException
 except ImportError:
     ClientHttpException = None
     NotFoundException = None
-from .pureport import get_client, get_network
+
+from .pureport_client import get_client, get_network_id
 from .pureport_crud import item_crud, deep_compare
 
 
@@ -63,13 +69,13 @@ def __retrieve_connection(module, client, connection):
     Retrieve the Connection from the Ansible inferred Connection
     :param ansible.module_utils.basic.AnsibleModule module: the Ansible module
     :param pureport.api.client.Client client: the Pureport client
-    :param Connection connection: the Ansible inferred Connection
-    :rtype: Connection|None
+    :param pureport.api.client.Connection connection: the Ansible inferred Connection
+    :rtype: pureport.api.client.Connection |None
     """
     connection_id = connection.get('id')
     if connection_id is not None:
         try:
-            return client.connections.get_by_id(connection_id)
+            return client.connections.get(connection_id)
         except NotFoundException:
             return None
         except ClientHttpException as e:
@@ -83,13 +89,13 @@ def __resolve_connection(module, client, connection):
     user provided connection
     :param ansible.module_utils.basic.AnsibleModule module: the Ansible module
     :param pureport.api.client.Client client: the Pureport client
-    :param Connection connection: the Ansible inferred Connection
-    :rtype: Connection|None
+    :param pureport.api.client.Connection connection: the Ansible inferred Connection
+    :rtype: pureport.api.client.Connection|None
     """
-    network = get_network(module)
-    if network is not None:
+    network_id = get_network_id(module)
+    if network_id is not None:
         try:
-            existing_connections = client.networks.connections(network).list()
+            existing_connections = client.networks.connections(network_id).list()
             matched_connections = [existing_connection for existing_connection in existing_connections
                                    if all([existing_connection.get(k) == connection.get(k)
                                            for k in ['name', 'type']])]
@@ -109,9 +115,9 @@ def __copy_existing_connection_properties(connection, existing_connection):
     """
     Copy properties from the existing connection to the new Ansible defined
     Connection, notably the network and the href.
-    :param Connection connection:
-    :param Connection existing_connection:
-    :rtype: Connection
+    :param pureport.api.client.Connection connection:
+    :param pureport.api.client.Connection existing_connection:
+    :rtype: pureport.api.client.Connection
     """
     copied_connection = dict()
     copied_connection.update(connection)
@@ -129,12 +135,12 @@ def __create_connection(module, client, wait_for_server, connection):
     :param ansible.module_utils.basic.AnsibleModule module: the Ansible module
     :param pureport.api.client.Client client: the Pureport client
     :param bool wait_for_server: should the client wait for the server to finish
-    :param Connection connection: the Ansible inferred Connection
-    :rtype: Connection
+    :param pureport.api.client.Connection connection: the Ansible inferred Connection
+    :rtype: pureport.api.client.Connection
     """
-    network = get_network(module)
+    network_id = get_network_id(module)
     try:
-        return client.networks.connections(network).create(connection, wait_until_active=wait_for_server)
+        return client.networks.connections(network_id).create(connection, wait_until_active=wait_for_server)
     except ClientHttpException as e:
         module.fail_json(msg=e.response.text, exception=format_exc())
 
@@ -145,8 +151,8 @@ def __update_connection(module, client, wait_for_server, connection):
     :param ansible.module_utils.basic.AnsibleModule module: the Ansible module
     :param pureport.api.client.Client client: the Pureport client
     :param bool wait_for_server: should the client wait for the server to finish
-    :param Connection connection: the Ansible inferred Connection
-    :rtype: Connection
+    :param pureport.api.client.Connection connection: the Ansible inferred Connection
+    :rtype: pureport.api.client.Connection
     """
     try:
         return client.connections.update(connection, wait_until_active=wait_for_server)
@@ -160,11 +166,10 @@ def __delete_connection(module, client, wait_for_server, connection):
     :param ansible.module_utils.basic.AnsibleModule module: the Ansible module
     :param pureport.api.client.Client client: the Pureport client
     :param bool wait_for_server: should the client wait for the server to finish
-    :param Connection connection: the Ansible inferred Connection
-    :rtype: Connection
+    :param pureport.api.client.Connection connection: the Ansible inferred Connection
     """
     try:
-        return client.connections.delete(connection, wait_until_deleted=wait_for_server)
+        return client.connections.delete(connection.get('id'), wait_until_deleted=wait_for_server)
     except ClientHttpException as e:
         module.fail_json(msg=e.response.text, exception=format_exc())
 
