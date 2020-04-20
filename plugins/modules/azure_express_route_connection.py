@@ -23,8 +23,6 @@ version_added: "2.8"
 requirements: [ pureport-client ]
 author: Matt Traynham (@mtraynham)
 options:
-    network_href:
-        required: true
     service_key:
         description:
             - The Azure Express Route service key.
@@ -133,15 +131,18 @@ from ansible.module_utils.common.dict_transformations import \
     snake_dict_to_camel_dict
 
 from ..module_utils.pureport_client import \
+    get_object_link, \
     get_client_argument_spec, \
     get_client_mutually_exclusive, \
-    get_network_argument_spec
+    get_network_argument_spec, \
+    get_network_mutually_exclusive
 from ..module_utils.pureport_crud import \
     get_state_argument_spec, \
     get_resolve_existing_argument_spec
 from ..module_utils.pureport_connection_crud import \
     get_wait_for_server_argument_spec, \
     get_connection_argument_spec, \
+    get_connection_required_one_of, \
     get_cloud_connection_argument_spec, \
     get_peering_connection_argument_spec, \
     connection_crud
@@ -166,7 +167,7 @@ def construct_connection(module):
     connection.update(dict(
         type='AZURE_EXPRESS_ROUTE',
         peering=dict(type=module.params.get('peering_type')),
-        location=dict(href=module.params.get('location_href')),
+        location=get_object_link(module, '/locations', 'location_id', 'location_href'),
         nat=dict(
             enabled=module.params.get('nat_enabled'),
             mappings=[dict(native_cidr=nat_mapping)
@@ -180,7 +181,7 @@ def construct_connection(module):
 def main():
     argument_spec = dict()
     argument_spec.update(get_client_argument_spec())
-    argument_spec.update(get_network_argument_spec(True))
+    argument_spec.update(get_network_argument_spec())
     argument_spec.update(get_state_argument_spec())
     argument_spec.update(get_resolve_existing_argument_spec())
     argument_spec.update(get_wait_for_server_argument_spec())
@@ -194,9 +195,13 @@ def main():
     )
     mutually_exclusive = []
     mutually_exclusive += get_client_mutually_exclusive()
+    required_one_of = []
+    required_one_of += get_network_mutually_exclusive()
+    required_one_of += get_connection_required_one_of()
     module = AnsibleModule(
         argument_spec=argument_spec,
-        mutually_exclusive=mutually_exclusive
+        mutually_exclusive=mutually_exclusive,
+        required_one_of=required_one_of
     )
     # Using partials to fill in the method params
     (

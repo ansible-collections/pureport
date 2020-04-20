@@ -23,16 +23,28 @@ version_added: "2.8"
 requirements: [ pureport-client ]
 author: Matt Traynham (@mtraynham)
 options:
-    network_href:
-        required: true
+    primary_port_id:
+        description:
+            - The primary port id.
+            - Only one of 'primary_port_id' or 'primary_port_href' can be supplied for this command.
+        required: false
+        type: str
     primary_port_href:
         description:
             - The primary port href.
-        required: true
+            - Only one of 'primary_port_id' or 'primary_port_href' can be supplied for this command.
+        required: false
+        type: str
+    secondary_port_id:
+        description:
+            - The secondary port id (required if high_availability is True).
+            - Only one of 'secondary_port_id' or 'secondary_port_href' can be supplied for this command.
+        required: false
         type: str
     secondary_port_href:
         description:
             - The secondary port href (required if high_availability is True).
+            - Only one of 'secondary_port_id' or 'secondary_port_href' can be supplied for this command.
         required: false
         type: str
     primary_customer_vlan:
@@ -70,15 +82,18 @@ from ansible.module_utils.common.dict_transformations import \
     snake_dict_to_camel_dict
 
 from ..module_utils.pureport_client import \
+    get_object_link, \
     get_client_argument_spec, \
     get_client_mutually_exclusive, \
-    get_network_argument_spec
+    get_network_argument_spec, \
+    get_network_mutually_exclusive
 from ..module_utils.pureport_crud import \
     get_state_argument_spec, \
     get_resolve_existing_argument_spec
 from ..module_utils.pureport_connection_crud import \
     get_wait_for_server_argument_spec, \
     get_connection_argument_spec, \
+    get_connection_required_one_of, \
     get_cloud_connection_argument_spec, \
     connection_crud
 
@@ -103,17 +118,18 @@ def construct_connection(module):
     ))
     connection.update(dict(
         type='PORT',
-        location=dict(href=module.params.get('location_href')),
-        primary_port=dict(href=module.params.get('primary_port_href')),
+        location=get_object_link(module, '/locations', 'location_id', 'location_href'),
+        primary_port=get_object_link(module, '/ports', 'primary_port_id', 'primary_port_href'),
         nat=dict(
             enabled=module.params.get('nat_enabled'),
             mappings=[dict(native_cidr=nat_mapping)
                       for nat_mapping in module.params.get('nat_mappings')]
         )
     ))
-    if module.params.get('secondary_port_href') is not None:
+    secondary_port = get_object_link(module, '/ports', 'secondary_port_id', 'secondary_port_href')
+    if secondary_port is not None:
         connection.update(dict(
-            secondary_port=dict(href=module.params.get('secondary_port_href')),
+            secondary_port=secondary_port,
         ))
     connection = snake_dict_to_camel_dict(connection)
     # Correct naming
@@ -126,7 +142,7 @@ def construct_connection(module):
 def main():
     argument_spec = dict()
     argument_spec.update(get_client_argument_spec())
-    argument_spec.update(get_network_argument_spec(True))
+    argument_spec.update(get_network_argument_spec())
     argument_spec.update(get_state_argument_spec())
     argument_spec.update(get_resolve_existing_argument_spec())
     argument_spec.update(get_wait_for_server_argument_spec())
@@ -134,7 +150,9 @@ def main():
     argument_spec.update(get_cloud_connection_argument_spec())
     argument_spec.update(
         dict(
-            primary_port_href=dict(type='str', required=True),
+            primary_port_id=dict(type='str'),
+            primary_port_href=dict(type='str'),
+            secondary_port_id=dict(type='str'),
             secondary_port_href=dict(type='str'),
             primary_customer_vlan=dict(type='int', required=True),
             secondary_customer_vlan=dict(type='int')
@@ -142,9 +160,19 @@ def main():
     )
     mutually_exclusive = []
     mutually_exclusive += get_client_mutually_exclusive()
+    mutually_exclusive += [
+        ['secondary_port_id', 'secondary_port_href']
+    ]
+    required_one_of = []
+    required_one_of += get_network_mutually_exclusive()
+    required_one_of += get_connection_required_one_of()
+    required_one_of += [
+        ['primary_port_id', 'primary_port_href']
+    ]
     module = AnsibleModule(
         argument_spec=argument_spec,
-        mutually_exclusive=mutually_exclusive
+        mutually_exclusive=mutually_exclusive,
+        required_one_of=required_one_of
     )
     # Using partials to fill in the method params
     (

@@ -23,8 +23,6 @@ version_added: "2.8"
 requirements: [ pureport-client ]
 author: Matt Traynham (@mtraynham)
 options:
-    account_href:
-        required: true
     id:
         description:
             - The id of the existing network
@@ -118,6 +116,7 @@ from ..module_utils.pureport_client import \
     get_client_mutually_exclusive, \
     get_client, \
     get_account_argument_spec, \
+    get_account_mutually_exclusive, \
     get_account_id
 from ..module_utils.pureport_crud import \
     get_state_argument_spec, \
@@ -246,7 +245,7 @@ def delete_network(module, client, network):
 def main():
     argument_spec = dict()
     argument_spec.update(get_client_argument_spec())
-    argument_spec.update(get_account_argument_spec(True))
+    argument_spec.update(get_account_argument_spec())
     argument_spec.update(get_state_argument_spec())
     argument_spec.update(get_resolve_existing_argument_spec())
     argument_spec.update(
@@ -258,9 +257,12 @@ def main():
     )
     mutually_exclusive = []
     mutually_exclusive += get_client_mutually_exclusive()
+    required_one_of = []
+    required_one_of += get_account_mutually_exclusive()
     module = AnsibleModule(
         argument_spec=argument_spec,
         mutually_exclusive=mutually_exclusive,
+        required_one_of=required_one_of,
         supports_check_mode=True
     )
     client = get_client(module)
