@@ -97,7 +97,7 @@ options:
     ike_encryption:
         description:
             - The IKE Encryption algorithm
-        required: true
+        required: false
         type: str
     ike_integrity:
         description:
@@ -117,12 +117,12 @@ options:
     ike_dh_group:
         description:
             - The IKE Diffie-Hellman group
-        required: true
+        required: false
         type: str
     esp_encryption:
         description:
             - The ESP Encryption algorithm
-        required: true
+        required: false
         type: str
     esp_integrity:
         description:
@@ -133,7 +133,7 @@ options:
     esp_dh_group:
         description:
             - The ESP Diffie-Hellman algorithm
-        required: true
+        required: false
         type: str
     primary_key:
         description:
@@ -373,6 +373,33 @@ from ..module_utils.pureport_connection_crud import \
     get_connection_required_one_of, \
     connection_crud
 
+__IKE_V1_IKE_ENCRYPTION_ALGORITHMS = [
+    'AES_128',
+    'AES_192',
+    'AES_256'
+]
+__IKE_V1_IKE_INTEGRITY_ALGORITHMS = [
+    'MD5_HMAC',
+    'SHA1_HMAC',
+    'SHA256_HMAC',
+    'SHA384_HMAC',
+    'SHA512_HMAC'
+]
+__NO_INTEGRITY_ALGORITHMS = [
+    'AES_128_GCM_64',
+    'AES_192_GCM_64',
+    'AES_256_GCM_64',
+    'AES_128_GCM_96',
+    'AES_192_GCM_96',
+    'AES_256_GCM_96',
+    'AES_128_GCM_128',
+    'AES_192_GCM_128',
+    'AES_256_GCM_128',
+    'AES_128_GMAC',
+    'AES_192_GMAC',
+    'AES_256_GMAC'
+]
+
 
 def construct_connection(module):
     """
@@ -418,6 +445,30 @@ def construct_connection(module):
             )
         )
     ])
+
+    if 'ikeV1' in connection:
+        if connection['ikeV1']['ike']['encryption'] not in __IKE_V1_IKE_ENCRYPTION_ALGORITHMS:
+            module.fail_json(msg='For IKE V1, \'ike_encryption\' must '
+                                 'be one of %s' % __IKE_V1_IKE_ENCRYPTION_ALGORITHMS)
+        if connection['ikeV1']['ike']['integrity'] is None:
+            connection['ikeV1']['ike']['integrity'] = 'SHA256_HMAC'
+        elif connection['ikeV1']['ike']['integrity'] not in __IKE_V1_IKE_INTEGRITY_ALGORITHMS:
+            module.fail_json(msg='For IKE V1, \'ike_integrity\' must '
+                                 'be one of %s' % __IKE_V1_IKE_INTEGRITY_ALGORITHMS)
+        if connection['ikeV1']['esp']['encryption'] in __NO_INTEGRITY_ALGORITHMS:
+            del connection['ikeV1']['esp']['integrity']
+    elif 'ikeV2' in connection:
+        if connection['ikeV2']['ike']['encryption'] in __NO_INTEGRITY_ALGORITHMS:
+            if connection['ikeV2']['ike']['integrity'] is not None:
+                del connection['ikeV2']['ike']['integrity']
+            if connection['ikeV2']['ike']['prf'] is None:
+                connection['ikeV2']['ike']['prf'] = 'SHA_256'
+        else:
+            if connection['ikeV2']['ike']['integrity'] is None:
+                connection['ikeV2']['ike']['integrity'] = 'SHA256_HMAC'
+            if connection['ikeV2']['ike']['prf'] is not None:
+                del connection['ikeV2']['ike']['prf']
+
     connection.update(dict(
         type='SITE_IPSEC_VPN',
         authType='PSK',
@@ -434,7 +485,8 @@ def construct_connection(module):
         primaryCustomerRouterIP=connection.pop('primaryCustomerRouterIp'),
         secondaryCustomerRouterIP=connection.pop('secondaryCustomerRouterIp'),
         customerASN=connection.pop('customerAsn'),
-        enableBGPPassword=connection.pop('enableBgpPassword')
+        enableBGPPassword=connection.pop('enableBgpPassword'),
+        tags=module.params.get('tags')
     ))
     return connection
 
@@ -461,14 +513,130 @@ def main():
                 default='ROUTE_BASED_BGP'
             ),
             physical_address=dict(type='dict'),
-            ike_version=dict(type='str', choices=['V1', 'V2'], default='V2'),
-            ike_encryption=dict(type='str', required=True),
-            ike_integrity=dict(type='str'),
-            ike_prf=dict(type='str'),
-            ike_dh_group=dict(type='str', required=True),
-            esp_encryption=dict(type='str', required=True),
-            esp_integrity=dict(type='str'),
-            esp_dh_group=dict(type='str', required=True),
+            ike_version=dict(
+                type='str',
+                choices=[
+                    'V1',
+                    'V2'
+                ],
+                default='V2'
+            ),
+            ike_encryption=dict(
+                type='str',
+                choices=[
+                    'NULL',
+                    'AES_128',
+                    'AES_192',
+                    'AES_256',
+                    'AES_128_CTR',
+                    'AES_192_CTR',
+                    'AES_256_CTR',
+                    'AES_128_GCM_64',
+                    'AES_192_GCM_64',
+                    'AES_256_GCM_64',
+                    'AES_128_GCM_96',
+                    'AES_192_GCM_96',
+                    'AES_256_GCM_96',
+                    'AES_128_GCM_128',
+                    'AES_192_GCM_128',
+                    'AES_256_GCM_128'
+                ],
+                default='AES_128'
+            ),
+            ike_integrity=dict(
+                type='str',
+                choices=[
+                    'MD5_HMAC',
+                    'SHA1_HMAC',
+                    'SHA256_HMAC',
+                    'SHA384_HMAC',
+                    'SHA512_HMAC',
+                    'AES_XCBC'
+                ]
+            ),
+            ike_prf=dict(
+                type='str',
+                choices=[
+                    'MD5',
+                    'SHA_1',
+                    'AES_XCBC',
+                    'SHA_256',
+                    'SHA_384',
+                    'SHA_512'
+                ]
+            ),
+            ike_dh_group=dict(
+                type='str',
+                choices=[
+                    'MODP_1024',
+                    'MODP_1536',
+                    'MODP_2048',
+                    'MODP_3072',
+                    'MODP_4096',
+                    'MODP_6144',
+                    'MODP_8192',
+                    'ECP_192',
+                    'ECP_224',
+                    'ECP_256',
+                    'ECP_384',
+                    'ECP_521'
+                ],
+                default='MODP_2048'
+            ),
+            esp_encryption=dict(
+                type='str',
+                choices=[
+                    'NULL',
+                    'AES_128',
+                    'AES_192',
+                    'AES_256',
+                    'AES_128_CTR',
+                    'AES_192_CTR',
+                    'AES_256_CTR',
+                    'AES_128_GCM_64',
+                    'AES_192_GCM_64',
+                    'AES_256_GCM_64',
+                    'AES_128_GCM_96',
+                    'AES_192_GCM_96',
+                    'AES_256_GCM_96',
+                    'AES_128_GCM_128',
+                    'AES_192_GCM_128',
+                    'AES_256_GCM_128',
+                    'AES_128_GMAC',
+                    'AES_192_GMAC',
+                    'AES_256_GMAC'
+                ],
+                default='AES_128'
+            ),
+            esp_integrity=dict(
+                type='str',
+                choices=[
+                    'MD5_HMAC',
+                    'SHA1_HMAC',
+                    'SHA256_HMAC',
+                    'SHA384_HMAC',
+                    'SHA512_HMAC',
+                    'AES_XCBC'
+                ]
+            ),
+            esp_dh_group=dict(
+                type='str',
+                choices=[
+                    'MODP_1024',
+                    'MODP_1536',
+                    'MODP_2048',
+                    'MODP_3072',
+                    'MODP_4096',
+                    'MODP_6144',
+                    'MODP_8192',
+                    'ECP_192',
+                    'ECP_224',
+                    'ECP_256',
+                    'ECP_384',
+                    'ECP_521'
+                ],
+                default='MODP_2048'
+            ),
             primary_key=dict(type='str'),
             secondary_key=dict(type='str'),
             traffic_selectors=dict(type='list', default=[]),
