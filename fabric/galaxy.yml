@@ -13,7 +13,7 @@ name: fabric
 version: 0.13.0
 
 # The path to the Markdown (.md) readme file. This path is relative to the root of the collection
-readme: README.md
+readme: fabric/README.md
 
 # A list of the collection's content authors. Can be just the name or in the format 'Full Name <email> (url)
 # @nicks:irc/im.site#channel'
@@ -62,7 +62,7 @@ dependencies: {}
 repository: https://github.com/ansible-collections/pureport
 
 # The URL to any online docs
-documentation: https://github.com/ansible-collections/pureport/blob/develop/README.md
+documentation: https://github.com/ansible-collections/pureport/blob/develop/fabric/README.md
 
 # The URL to the homepage of the collection/project
 homepage: https://www.pureport.com/
