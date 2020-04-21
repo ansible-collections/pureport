@@ -23,8 +23,6 @@ version_added: "2.8"
 requirements: [ pureport-client ]
 author: Matt Traynham (@mtraynham)
 options:
-    account_href:
-        required: true
     id:
         description:
             - The id of the existing port
@@ -38,6 +36,19 @@ options:
     description:
         description:
             - A description for the port
+        required: false
+        type: str
+    facility_id:
+        description:
+            - The Pureport Facility id.
+            - Only one of 'facility_id' or 'facility_href' can be supplied for this command.
+        required: false
+        type: str
+    facility_href:
+        description:
+            - The Pureport Facility href.
+            - This should be the full 'href' path to the Facility ReST object (e.g /facilities/abc).
+            - Only one of 'facility_id' or 'facility_href' can be supplied for this command.
         required: false
         type: str
     speed:
@@ -240,7 +251,9 @@ from ..module_utils.pureport_client import \
     get_client_argument_spec, \
     get_client_mutually_exclusive, \
     get_client, \
+    get_object_link, \
     get_account_argument_spec, \
+    get_account_mutually_exclusive, \
     get_account_id
 from ..module_utils.pureport_crud import \
     get_state_argument_spec, \
@@ -260,8 +273,8 @@ def construct_port(module):
                                'provider', 'speed', 'media_type',
                                'availability_domain', 'billing_term')))
     port.update(dict(
-        account=dict(href=module.params.get('account_href')),
-        facility=dict(href=module.params.get('facility_href')),
+        account=get_object_link(module, '/accounts', 'account_id', 'account_href'),
+        facility=get_object_link(module, '/facilities', 'facility_id', 'facility_href'),
     ))
     port = snake_dict_to_camel_dict(port)
     return port
@@ -377,15 +390,16 @@ def delete_port(module, client, port):
 def main():
     argument_spec = dict()
     argument_spec.update(get_client_argument_spec())
-    argument_spec.update(get_account_argument_spec(True))
+    argument_spec.update(get_account_argument_spec())
     argument_spec.update(get_state_argument_spec())
     argument_spec.update(get_resolve_existing_argument_spec())
     argument_spec.update(
         dict(
-            facility_href=dict(type='str', required=True),
             id=dict(type='str'),
             name=dict(type='str', required=True),
             description=dict(type='str'),
+            facility_id=dict(type='str'),
+            facility_href=dict(type='str'),
             provider=dict(type='str', required=True),
             speed=dict(type='int', required=True, choices=[1000, 10000, 40000]),
             media_type=dict(type='str', required=True),
@@ -395,9 +409,15 @@ def main():
     )
     mutually_exclusive = []
     mutually_exclusive += get_client_mutually_exclusive()
+    required_one_of = []
+    required_one_of += get_account_mutually_exclusive()
+    required_one_of += [
+        ['facility_id', 'facility_href']
+    ]
     module = AnsibleModule(
         argument_spec=argument_spec,
         mutually_exclusive=mutually_exclusive,
+        required_one_of=required_one_of,
         supports_check_mode=True
     )
     client = get_client(module)

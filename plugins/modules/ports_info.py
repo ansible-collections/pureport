@@ -173,6 +173,7 @@ from ..module_utils.pureport_client import \
     get_client_mutually_exclusive, \
     get_client, \
     get_account_argument_spec, \
+    get_account_mutually_exclusive, \
     get_account_id
 
 
@@ -196,6 +197,7 @@ def main():
     argument_spec.update(get_account_argument_spec())
     mutually_exclusive = []
     mutually_exclusive += get_client_mutually_exclusive()
+    mutually_exclusive += get_account_mutually_exclusive()
     module = AnsibleModule(
         argument_spec=argument_spec,
         mutually_exclusive=mutually_exclusive,

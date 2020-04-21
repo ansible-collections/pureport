@@ -36,14 +36,26 @@ def get_connection_argument_spec():
         description=dict(type='str'),
         speed=dict(type='int', required=True, choices=[50, 100, 200, 300, 400, 500, 1000, 1000]),
         high_availability=dict(type='bool'),
-        location_href=dict(type='str', required=True),
-        billing_term=dict(type='str', required=True, choices=['HOURLY']),
+        location_id=dict(type='str'),
+        location_href=dict(type='str'),
+        billing_term=dict(type='str', choices=['HOURLY', 'MONTHLY', 'ONE_YEAR', 'TWO_YEAR'], default='HOURLY'),
         cloud_services=dict(type='list'),
         customer_asn=dict(type='int'),
         customer_networks=dict(type='list', default=[]),
         nat_enabled=dict(type='bool', default=False),
-        nat_mappings=dict(type='list', default=[])
+        nat_mappings=dict(type='list', default=[]),
+        tags=dict(type='dict')
     )
+
+
+def get_connection_required_one_of():
+    """
+    Return the connection required one of array
+    :rtype: list[list[str]]
+    """
+    return [
+        ['location_id', 'location_href']
+    ]
 
 
 def get_cloud_connection_argument_spec():

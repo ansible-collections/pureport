@@ -23,16 +23,24 @@ version_added: "2.8"
 requirements: [ pureport-client ]
 author: Matt Traynham (@mtraynham)
 options:
+    account_id:
+        description:
+            - The Pureport Account object's id field.
+            - Only one of 'account_id', 'account_href', 'network_id' or 'network_href' should be supplied for this command.
     account_href:
         description:
-            - The Pureport Account object.
+            - The Pureport Account object's href field.
             - This should be the full 'href' path to the Account ReST object (e.g /accounts/abc).
-            - One of 'account_href' or 'network_href' should be supplied for this command, but not both.
+            - Only one of 'account_id', 'account_href', 'network_id' or 'network_href' should be supplied for this command.
+    network_id:
+        description:
+            - The Pureport Network object's id field.
+            - Only one of 'account_id', 'account_href', 'network_id' or 'network_href' should be supplied for this command.
     network_href:
         description:
-            - The Pureport Network object.
+            - The Pureport Network object's href field.
             - This should be the full 'href' path to the Network ReST object (e.g /networks/abc).
-            - One of 'account_href' or 'network_href' should be supplied for this command, but not both.
+            - Only one of 'account_id', 'account_href', 'network_id' or 'network_href' should be supplied for this command.
 extends_documentation_fragment:
     - pureport.fabric.client
     - pureport.fabric.account
@@ -68,6 +76,7 @@ connections:
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.common.dict_transformations import camel_dict_to_snake_dict
+from itertools import chain
 from traceback import format_exc
 
 try:
@@ -79,8 +88,10 @@ from ..module_utils.pureport_client import \
     get_client_mutually_exclusive, \
     get_client, \
     get_account_argument_spec, \
+    get_account_mutually_exclusive, \
     get_account_id, \
     get_network_argument_spec, \
+    get_network_mutually_exclusive, \
     get_network_id
 
 
@@ -120,8 +131,9 @@ def main():
     argument_spec.update(get_network_argument_spec())
     mutually_exclusive = []
     mutually_exclusive += get_client_mutually_exclusive()
-    mutually_exclusive += [
-        ['account_href', 'network_href']
+    required_one_of = []
+    required_one_of += [
+        list(chain.from_iterable(get_account_mutually_exclusive() + get_network_mutually_exclusive()))
     ]
     module = AnsibleModule(
         argument_spec=argument_spec,

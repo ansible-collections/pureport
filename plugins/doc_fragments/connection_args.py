@@ -27,18 +27,27 @@ options:
             - If the connection should be high available (2 gateways).
         required: false
         type: bool
+    location_id:
+        description:
+            - The Pureport location id to connect to.
+            - This should be the full 'href' path to the Location ReST object (e.g /locations/abc).
+            - Only one of 'location_id' or 'location_href' can be supplied for this command.
+        required: false
+        type: str
     location_href:
         description:
             - The Pureport location to connect to.
             - This should be the full 'href' path to the Location ReST object (e.g /locations/abc).
-        required: true
-        type: dict
+            - Only one of 'location_id' or 'location_href' can be supplied for this command.
+        required: false
+        type: str
     billing_term:
         description:
             - The billing term for the connection.
-        required: true
+        required: false
         type: str
-        choices: ['HOURLY']
+        choices: ['HOURLY', 'MONTHLY', 'ONE_YEAR', 'TWO_YEAR']
+        default: 'HOURLY'
     customer_asn:
         description:
             - A customer Public/Private ASN for the connection.
@@ -70,4 +79,10 @@ options:
             - This should likely reference the customer_networks supplied on the connection.
         required: false
         type: list
+    tags:
+        description:
+            - A map of tags to use for the connection.
+            - This should be a mapping of string to string pairs with no duplicate keys.
+        required: false
+        type: dict
     '''

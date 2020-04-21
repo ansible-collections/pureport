@@ -23,13 +23,18 @@ version_added: "2.8"
 requirements: [ pureport-client ]
 author: Matt Traynham (@mtraynham)
 options:
-    account_href:
-        required: true
+    facility_id:
+        description:
+            - The Pureport Facility id.
+            - Only one of 'facility_id' or 'facility_href' can be supplied for this command.
+        required: false
+        type: str
     facility_href:
         description:
-            - The Pureport Facility object.
+            - The Pureport Facility href.
             - This should be the full 'href' path to the Facility ReST object (e.g /facilities/abc).
-        required: true
+            - Only one of 'facility_id' or 'facility_href' can be supplied for this command.
+        required: false
         type: str
 extends_documentation_fragment:
     - pureport.fabric.client
@@ -150,7 +155,9 @@ from ..module_utils.pureport_client import \
     get_client_argument_spec, \
     get_client_mutually_exclusive, \
     get_client, \
+    get_object_id, \
     get_account_argument_spec, \
+    get_account_mutually_exclusive, \
     get_account_id
 
 
@@ -161,10 +168,11 @@ def find_supported_ports(module):
     """
     client = get_client(module)
     account_id = get_account_id(module)
+    facility_id = get_object_id(module, 'facility_id', 'facility_href')
     try:
         supported_ports = client.accounts \
             .supported_ports(account_id) \
-            .list(module.params.get('facility_href').split('/')[-1])
+            .list(facility_id)
         module.exit_json(supported_ports=[camel_dict_to_snake_dict(supported_port)
                                           for supported_port in supported_ports])
     except ClientHttpException as e:
@@ -174,15 +182,22 @@ def find_supported_ports(module):
 def main():
     argument_spec = dict()
     argument_spec.update(get_client_argument_spec())
-    argument_spec.update(get_account_argument_spec(True))
+    argument_spec.update(get_account_argument_spec())
     argument_spec.update(dict(
-        facility_href=dict(type='str', required=True)
+        facility_id=dict(type='str'),
+        facility_href=dict(type='str')
     ))
     mutually_exclusive = []
     mutually_exclusive += get_client_mutually_exclusive()
+    required_one_of = []
+    required_one_of += get_account_mutually_exclusive()
+    required_one_of += [
+        ['facility_id', 'facility_href']
+    ]
     module = AnsibleModule(
         argument_spec=argument_spec,
         mutually_exclusive=mutually_exclusive,
+        required_one_of=required_one_of,
         supports_check_mode=True
     )
     find_supported_ports(module)
