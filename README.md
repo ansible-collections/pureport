@@ -20,7 +20,7 @@ It provides the following modules you can use in your own roles:
 
 | Name                                  | Description                                                                                           |
 |---------------------------------------|-------------------------------------------------------------------------------------------------------|
-|`access_token_info`                    | Obtain an OAuth access token which can be used as the `api_access_token` param for all other modules. |  
+|`access_token_info`                    | Obtain an OAuth access token which can be used as the `api_access_token` param for all other modules. |
 |`locations_info`                       | List a set of locations                                                                               |
 |`facilities_info`                      | List a set of facilities                                                                              |
 |`options_info`                         | List a set of enum options used for creating connections                                              |
@@ -170,5 +170,3 @@ For reference the names have been changed from/to:
 |`port_connection`                      |`pureport_port_connection`                      |
 |`site_ipsec_vpn_connection`            |`pureport_site_ipsec_vpn_connection`            |
 
-## Examples
-There are various examples on how to use these modules in the [examples directory](examples/README.md).
