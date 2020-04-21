@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name='pureport-ansible-modules',
-    version='0.12.0',
+    version='0.13.0',
     author='Pureport',
     author_email='noreply@pureport.com',
     license='GPLv3',
