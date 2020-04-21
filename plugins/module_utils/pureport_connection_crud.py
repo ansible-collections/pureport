@@ -38,7 +38,7 @@ def get_connection_argument_spec():
         high_availability=dict(type='bool'),
         location_id=dict(type='str'),
         location_href=dict(type='str'),
-        billing_term=dict(type='str', required=True, choices=['HOURLY']),
+        billing_term=dict(type='str', choices=['HOURLY', 'MONTHLY', 'ONE_YEAR', 'TWO_YEAR'], default='HOURLY'),
         cloud_services=dict(type='list'),
         customer_asn=dict(type='int'),
         customer_networks=dict(type='list', default=[]),

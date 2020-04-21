@@ -44,9 +44,10 @@ options:
     billing_term:
         description:
             - The billing term for the connection.
-        required: true
+        required: false
         type: str
-        choices: ['HOURLY']
+        choices: ['HOURLY', 'MONTHLY', 'ONE_YEAR', 'TWO_YEAR']
+        default: 'HOURLY'
     customer_asn:
         description:
             - A customer Public/Private ASN for the connection.
