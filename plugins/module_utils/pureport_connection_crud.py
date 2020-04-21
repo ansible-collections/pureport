@@ -43,7 +43,8 @@ def get_connection_argument_spec():
         customer_asn=dict(type='int'),
         customer_networks=dict(type='list', default=[]),
         nat_enabled=dict(type='bool', default=False),
-        nat_mappings=dict(type='list', default=[])
+        nat_mappings=dict(type='list', default=[]),
+        tags=dict(type='dict')
     )
 
 

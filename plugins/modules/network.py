@@ -38,6 +38,12 @@ options:
             - A description for the network
         required: false
         type: str
+    tags:
+        description:
+            - A map of tags to use for the connection.
+            - This should be a mapping of string to string pairs with no duplicate keys.
+        required: false
+        type: dict
 extends_documentation_fragment:
     - pureport.fabric.client
     - pureport.fabric.account
@@ -131,7 +137,7 @@ def construct_network(module):
     :rtype: pureport.api.client.Network
     """
     return dict((k, module.params.get(k))
-                for k in ('id', 'name', 'description'))
+                for k in ('id', 'name', 'description', 'tags'))
 
 
 def retrieve_network(module, client, network):
@@ -252,7 +258,8 @@ def main():
         dict(
             id=dict(type='str'),
             name=dict(type='str', required=True),
-            description=dict(type='str')
+            description=dict(type='str'),
+            tags=dict(type='dict')
         )
     )
     mutually_exclusive = []

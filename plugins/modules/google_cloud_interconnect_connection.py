@@ -166,6 +166,9 @@ def construct_connection(module):
         )
     ))
     connection = snake_dict_to_camel_dict(connection)
+    connection.update(dict(
+        tags=module.params.get('tags')
+    ))
     return connection
 
 

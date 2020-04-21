@@ -79,4 +79,10 @@ options:
             - This should likely reference the customer_networks supplied on the connection.
         required: false
         type: list
+    tags:
+        description:
+            - A map of tags to use for the connection.
+            - This should be a mapping of string to string pairs with no duplicate keys.
+        required: false
+        type: dict
     '''

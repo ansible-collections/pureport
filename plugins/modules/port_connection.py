@@ -134,7 +134,8 @@ def construct_connection(module):
     connection = snake_dict_to_camel_dict(connection)
     # Correct naming
     connection.update(dict(
-        customerASN=connection.pop('customerAsn')
+        customerASN=connection.pop('customerAsn'),
+        tags=module.params.get('tags')
     ))
     return connection
 

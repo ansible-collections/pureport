@@ -434,7 +434,8 @@ def construct_connection(module):
         primaryCustomerRouterIP=connection.pop('primaryCustomerRouterIp'),
         secondaryCustomerRouterIP=connection.pop('secondaryCustomerRouterIp'),
         customerASN=connection.pop('customerAsn'),
-        enableBGPPassword=connection.pop('enableBgpPassword')
+        enableBGPPassword=connection.pop('enableBgpPassword'),
+        tags=module.params.get('tags')
     ))
     return connection
 
