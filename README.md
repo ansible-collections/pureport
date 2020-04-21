@@ -1,7 +1,6 @@
 ## Pureport Ansible Modules
 This is an [Ansible Collection](https://docs.ansible.com/ansible/devel/dev_guide/collections_tech_preview.html) of various 
-[library modules](https://docs.ansible.com/ansible/latest/user_guide/modules_intro.html) and 
-[roles](https://docs.ansible.com/ansible/latest/user_guide/playbooks_reuse_roles.html) which can interact with the 
+[library modules](https://docs.ansible.com/ansible/latest/user_guide/modules_intro.html) which can interact with the
 [Pureport](https://www.pureport.com/) ReST API.
 
 ## Installation
@@ -52,38 +51,6 @@ That PR is [here](https://github.com/ansible/ansible/pull/48711).  This module j
 For general information about this module, see the [Ansible docs](https://docs.ansible.com/ansible/2.8/modules/aws_direct_connect_virtual_interface_module.html).
   - **NOTE**: This will likely be removed in the future.
   
-### Roles
-It also provides the following roles you can use to create connections and their full infrastructure:
-
-- `pureport_aws_direct_connect` - Depending on the peering type (PUBLIC/PRIVATE), this will generate:
-  - an AWS VPC (PRIVATE only)
-  - an AWS VPC Subnet (PRIVATE only)
-  - an AWS Virtual Private Gateway (PRIVATE only)
-  - an AWS VPC Route Table (with VGW route propagation; PRIVATE only)
-  - an AWS Direct Connect Gateway
-  - a Pureport Network
-  - a Pureport AWS Direct Connect Connection
-  - an AWS Direct Connect Virtual Interface(s) (VIF)
-- `pureport_azure_express_route` - Depending on the peering type (PUBLIC/PRIVATE), this will generate:
-  - an Azure Virtual Network (with 2 subnets; PRIVATE only)
-  - an Azure Public IP Address (PRIVATE only)
-  - an Azure Virtual Network Gateway (PRIVATE only)
-  - an Azure Express Route Circuit
-  - an Azure Virtual Network Gateway to Express Route Connection (PRIVATE only)
-  - an Azure Route Filter (PUBLIC only)
-  - a Pureport Network
-  - a Pureport Azure Express Route Connection
-  - Private Express Route Peering (PRIVATE only)
-  - Microsoft Express Route Peering (PUBLIC only)
-- `pureport_google_cloud_interconnect`
-  - a GCP Network
-  - a GCP Router(s)
-  - a GCP Interconnect Attachment(s)
-  - a Pureport Network
-  - a Pureport Google Cloud Interconnect Connection
-- `pureport_site_ipsec_vpn`
-  - a Pureport Network
-  - a Pureport Site IPsec VPN Connection
 
 ## Module Documentation
 You can then get information about each module:
