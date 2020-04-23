@@ -40,18 +40,6 @@ It provides the following modules you can use in your own roles:
 |`port_connection`                      | Create/update/delete a Pureport Port connection                                                       |
 |`site_ipsec_vpn_connection`            | Create/update/delete a Pureport Site IPSec VPN connection                                             |
 
-It also provides two extra AWS modules:
-
-- `aws_direct_connect_confirm_connection` - Pureport creates [Hosted Direct Connections](https://docs.aws.amazon.com/directconnect/latest/UserGuide/accept-hosted-connection.html)
-which need to be confirmed by the customer when created.  This requires a user to go into the AWS Console and "Approve" the connection.  Alternatively,
-this module does that for you using credentials in a similar fashion as other AWS modules and boto3.
-- `pr_48711_aws_direct_connect_virtual_interface` - There is an outstanding PR which adds `direct_connect_id` to the Ansible provided 
-`aws_direct_connect_virtual_interface` module.  This is required to create Virtual Interfaces with Direct Connect Gateways. 
-That PR is [here](https://github.com/ansible/ansible/pull/48711).  This module just duplicates that effort here so it can be used.
-For general information about this module, see the [Ansible docs](https://docs.ansible.com/ansible/2.8/modules/aws_direct_connect_virtual_interface_module.html).
-  - **NOTE**: This will likely be removed in the future.
-  
-
 ## Module Documentation
 You can then get information about each module:
 ```bash
@@ -74,9 +62,6 @@ ansible-doc pureport.fabric.azure_express_route_connection
 ansible-doc pureport.fabric.google_cloud_interconnect_connection
 ansible-doc pureport.fabric.port_connection
 ansible-doc pureport.fabric.site_ipsec_vpn_connection
-
-ansible-doc pureport.fabric.aws_direct_connect_confirm_connection
-ansible-doc pureport.fabric.pr_48711_aws_direct_connect_virtual_interface
 ```
 
 Also dump a snippet of what invoking a module requires:
@@ -100,9 +85,6 @@ ansible-doc pureport.fabric.azure_express_route_connection -s
 ansible-doc pureport.fabric.google_cloud_interconnect_connection -s
 ansible-doc pureport.fabric.port_connection -s
 ansible-doc pureport.fabric.site_ipsec_vpn_connection -s
-
-ansible-doc pureport.fabric.aws_direct_connect_confirm_connection -s
-ansible-doc pureport.fabric.pr_48711_aws_direct_connect_virtual_interface -s
 ```
 
 ### Obtaining an `api_access_token`
