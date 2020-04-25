@@ -58,12 +58,12 @@ EXAMPLES = '''
     api_key: XXXXXXXXXXXXX
     api_secret: XXXXXXXXXXXXXXXXX
     network_href: /networks/network-XXXXXXXXXXXXXXXXXXXXXX
-    name: {{ result.name }}
+    name: "{{ result.name }}"
     speed: 100
-    high_availability: {{ result.high_availability }}
-    location_href: {{ result.location.href }}
-    billing_term: {{ result.billing_term }}
-    service_key: {{ result.service_key }}
+    high_availability: "{{ result.high_availability }}"
+    location_href: "{{ result.location.href }}"
+    billing_term: "{{ result.billing_term }}"
+    service_key: "{{ result.service_key }}"
     wait_for_server: true  # Wait for the server to finish updating the connection
   register: result  # Registers the connection as the result
 
@@ -73,12 +73,12 @@ EXAMPLES = '''
     api_secret: XXXXXXXXXXXXXXXXX
     network_href: /networks/network-XXXXXXXXXXXXXXXXXXXXXX
     state: absent
-    name: {{ result.name }}
-    speed: {{ result.speed }}
-    high_availability: {{ result.high_availability }}
-    location_href: {{ result.location.href }}
-    billing_term: {{ result.billing_term }}
-    service_key: {{ result.service_key }}
+    name: "{{ result.name }}"
+    speed: "{{ result.speed }}"
+    high_availability: "{{ result.high_availability }}"
+    location_href: "{{ result.location.href }}"
+    billing_term: "{{ result.billing_term }}"
+    service_key: "{{ result.service_key }}"
     wait_for_server: true  # Wait for the server to finish deleting the connection
 
 - name: Create a PRIVATE Azure Express Route connection with all properties configured
@@ -121,7 +121,8 @@ EXAMPLES = '''
 RETURN = '''
 connection:
     description: the created, updated, or deleted connection
-    type: Connection
+    type: dict
+    returned: always
 '''
 
 from functools import partial

@@ -1,6 +1,8 @@
 # Copyright (c), Pureport, 2020
 # Simplified BSD License (see licenses/simplified_bsd.txt or https://opensource.org/licenses/BSD-2-Clause)
 
+from __future__ import absolute_import, division, print_function
+__metaclass__ = type
 
 from functools import partial
 from traceback import format_exc
@@ -39,7 +41,6 @@ def get_connection_argument_spec():
         location_id=dict(type='str'),
         location_href=dict(type='str'),
         billing_term=dict(type='str', choices=['HOURLY', 'MONTHLY', 'ONE_YEAR', 'TWO_YEAR'], default='HOURLY'),
-        cloud_services=dict(type='list'),
         customer_asn=dict(type='int'),
         customer_networks=dict(type='list', default=[]),
         nat_enabled=dict(type='bool', default=False),

@@ -1,3 +1,10 @@
+# Copyright (c), Pureport, 2020
+# Simplified BSD License (see licenses/simplified_bsd.txt or https://opensource.org/licenses/BSD-2-Clause)
+
+from __future__ import absolute_import, division, print_function
+__metaclass__ = type
+
+
 class ModuleDocFragment(object):
     DOCUMENTATION = r'''
 options:
@@ -52,7 +59,7 @@ options:
         description:
             - A customer Public/Private ASN for the connection.
         required: false
-        type: long
+        type: int
     customer_networks:
         description:
             - A list of Connection Customer Networks (e.g dict(address=str, name=str)).

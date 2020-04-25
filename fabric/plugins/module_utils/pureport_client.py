@@ -1,6 +1,9 @@
 # Copyright (c), Pureport, 2020
 # Simplified BSD License (see licenses/simplified_bsd.txt or https://opensource.org/licenses/BSD-2-Clause)
 
+from __future__ import absolute_import, division, print_function
+__metaclass__ = type
+
 from traceback import format_exc
 
 try:
@@ -9,6 +12,7 @@ try:
     HAS_PUREPORT_CLIENT = True
 except ImportError:
     HAS_PUREPORT_CLIENT = False
+    API_URL = None
     Client = None
     ClientHttpException = None
 

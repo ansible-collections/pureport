@@ -71,7 +71,8 @@ EXAMPLES = '''
 RETURN = '''
 connections:
     description: a list of Connection (dict) objects
-    type: list[Connection]
+    type: list
+    returned: always
 '''
 
 from ansible.module_utils.basic import AnsibleModule
