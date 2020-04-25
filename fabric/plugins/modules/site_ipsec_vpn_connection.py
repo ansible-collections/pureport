@@ -81,12 +81,12 @@ options:
                         description:
                             - The latitude
                         required: false
-                        type: double
+                        type: float
                     longitude:
                         description:
                             - The logitude
                         required: false
-                        type: double
+                        type: float
     ike_version:
         description:
             - The IKE version of the VPN connection.
@@ -99,6 +99,10 @@ options:
             - The IKE Encryption algorithm
         required: false
         type: str
+        choices: ['NULL', 'AES_128', 'AES_192', 'AES_256', 'AES_128_CTR', 'AES_192_CTR',
+                  'AES_256_CTR', 'AES_128_GCM_64', 'AES_192_GCM_64', 'AES_256_GCM_64', 'AES_128_GCM_96',
+                  'AES_192_GCM_96', 'AES_256_GCM_96', 'AES_128_GCM_128', 'AES_192_GCM_128', 'AES_256_GCM_128']
+        default: 'AES_128'
     ike_integrity:
         description:
             - The IKE Integrity algorithm
@@ -106,6 +110,7 @@ options:
             - this may or may not be required.
         required: false
         type: str
+        choices: ['MD5_HMAC', 'SHA1_HMAC', 'SHA256_HMAC', 'SHA384_HMAC', 'SHA512_HMAC', 'AES_XCBC']
     ike_prf:
         description:
             - The IKE Pseudo-random Function
@@ -114,27 +119,40 @@ options:
             - and 'ike_prf' are mutually exclusive.
         required: false
         type: str
+        choices: ['MD5', 'SHA_1', 'AES_XCBC', 'SHA_256', 'SHA_384', 'SHA_512']
     ike_dh_group:
         description:
             - The IKE Diffie-Hellman group
         required: false
         type: str
+        choices: ['MODP_1024', 'MODP_1536', 'MODP_2048', 'MODP_3072', 'MODP_4096', 'MODP_6144',
+                  'MODP_8192', 'ECP_192', 'ECP_224', 'ECP_256', 'ECP_384', 'ECP_521']
+        default: 'MODP_2048'
     esp_encryption:
         description:
             - The ESP Encryption algorithm
         required: false
         type: str
+        choices: ['NULL', 'AES_128', 'AES_192', 'AES_256', 'AES_128_CTR', 'AES_192_CTR', 'AES_256_CTR',
+                  'AES_128_GCM_64', 'AES_192_GCM_64', 'AES_256_GCM_64', 'AES_128_GCM_96', 'AES_192_GCM_96',
+                  'AES_256_GCM_96', 'AES_128_GCM_128', 'AES_192_GCM_128', 'AES_256_GCM_128', 'AES_128_GMAC',
+                  'AES_192_GMAC', 'AES_256_GMAC']
+        default: 'AES_128'
     esp_integrity:
         description:
             - The ESP Integrity algorithm
             - Depending on the ESP Encryption algorithm, this may or may not be required.
         required: false
         type: str
+        choices: ['MD5_HMAC', 'SHA1_HMAC', 'SHA256_HMAC', 'SHA384_HMAC', 'SHA512_HMAC', 'AES_XCBC']
     esp_dh_group:
         description:
             - The ESP Diffie-Hellman algorithm
         required: false
         type: str
+        choices: ['MODP_1024', 'MODP_1536', 'MODP_2048', 'MODP_3072', 'MODP_4096', 'MODP_6144',
+                  'MODP_8192', 'ECP_192', 'ECP_224', 'ECP_256', 'ECP_384', 'ECP_521']
+        default: 'MODP_2048'
     primary_key:
         description:
             - The IPSec pre-shared key for the secondary gateway.
@@ -207,22 +225,22 @@ EXAMPLES = '''
     api_key: XXXXXXXXXXXXX
     api_secret: XXXXXXXXXXXXXXXXX
     network_href: /networks/network-XXXXXXXXXXXXXXXXXXXXXX
-    name: {{ result.name }}
+    name: "{{ result.name }}"
     speed: 100
-    high_availability: {{ result.high_availability }}
-    location_href: {{ result.location.href }}
-    billing_term: {{ result.billing_term }}
-    primary_customer_router_ip: {{ result.primary_customer_router_ip }}
-    secondary_customer_router_ip: {{ result.secondary_customer_router_ip }}
-    routing_type: {{ result.routing_type }}
-    customer_asn: {{ result.customer_asn }}
-    ike_version: {{ result.ike_version }}
-    ike_encryption: {{ result.ike_v2.ike.encryption }}
-    ike_integrity: {{ result.ike_v2.ike.integrity }}
-    ike_dh_group: {{ result.ike_v2.ike.dh_group }}
-    esp_encryption: {{ result.ike_v2.esp.encryption }}
-    esp_integrity: {{ result.ike_v2.esp.integrity }}
-    esp_dh_group: {{ result.ike_v2.esp.dh_group }}
+    high_availability: "{{ result.high_availability }}"
+    location_href: "{{ result.location.href }}"
+    billing_term: "{{ result.billing_term }}"
+    primary_customer_router_ip: "{{ result.primary_customer_router_ip }}"
+    secondary_customer_router_ip: "{{ result.secondary_customer_router_ip }}"
+    routing_type: "{{ result.routing_type }}"
+    customer_asn: "{{ result.customer_asn }}"
+    ike_version: "{{ result.ike_version }}"
+    ike_encryption: "{{ result.ike_v2.ike.encryption }}"
+    ike_integrity: "{{ result.ike_v2.ike.integrity }}"
+    ike_dh_group: "{{ result.ike_v2.ike.dh_group }}"
+    esp_encryption: "{{ result.ike_v2.esp.encryption }}"
+    esp_integrity: "{{ result.ike_v2.esp.integrity }}"
+    esp_dh_group: "{{ result.ike_v2.esp.dh_group }}"
     wait_for_server: true  # Wait for the server to finish updating the connection
   register: result  # Registers the connection as the result
 
@@ -232,22 +250,22 @@ EXAMPLES = '''
     api_secret: XXXXXXXXXXXXXXXXX
     network_href: /networks/network-XXXXXXXXXXXXXXXXXXXXXX
     state: absent
-    name: {{ result.name }}
-    speed: {{ result.speed }}
-    high_availability: {{ result.high_availability }}
-    location_href: {{ result.location.href }}
-    billing_term: {{ result.billing_term }}
-    primary_customer_router_ip: {{ result.primary_customer_router_ip }}
-    secondary_customer_router_ip: {{ result.secondary_customer_router_ip }}
-    routing_type: {{ result.routing_type }}
-    customer_asn: {{ result.customer_asn }}
-    ike_version: {{ result.ike_version }}
-    ike_encryption: {{ result.ike_v2.ike.encryption }}
-    ike_integrity: {{ result.ike_v2.ike.integrity }}
-    ike_dh_group: {{ result.ike_v2.ike.dh_group }}
-    esp_encryption: {{ result.ike_v2.esp.encryption }}
-    esp_integrity: {{ result.ike_v2.esp.integrity }}
-    esp_dh_group: {{ result.ike_v2.esp.dh_group }}
+    name: "{{ result.name }}"
+    speed: "{{ result.speed }}"
+    high_availability: "{{ result.high_availability }}"
+    location_href: "{{ result.location.href }}"
+    billing_term: "{{ result.billing_term }}"
+    primary_customer_router_ip: "{{ result.primary_customer_router_ip }}"
+    secondary_customer_router_ip: "{{ result.secondary_customer_router_ip }}"
+    routing_type: "{{ result.routing_type }}"
+    customer_asn: "{{ result.customer_asn }}"
+    ike_version: "{{ result.ike_version }}"
+    ike_encryption: "{{ result.ike_v2.ike.encryption }}"
+    ike_integrity: "{{ result.ike_v2.ike.integrity }}"
+    ike_dh_group: "{{ result.ike_v2.ike.dh_group }}"
+    esp_encryption: "{{ result.ike_v2.esp.encryption }}"
+    esp_integrity: "{{ result.ike_v2.esp.integrity }}"
+    esp_dh_group: "{{ result.ike_v2.esp.dh_group }}"
     wait_for_server: true  # Wait for the server to finish deleting the connection
 
 - name: Create a ROUTE_BASED_BGP Site IPSec VPN connection with all properties configured
@@ -273,7 +291,6 @@ EXAMPLES = '''
     esp_dh_group: MODP_2048
     # Optional properties start here
     description: My Ansible managed Site IPSec VPN connection
-    routing_type: ROUTE_BASED_BGP
     enable_bgp_password: true # Enable a BGP password for each gateway
     customer_networks:
       - address: a.b.c.d/x  # A valid CIDR address
@@ -349,7 +366,8 @@ EXAMPLES = '''
 RETURN = '''
 connection:
     description: the created, updated, or deleted connection
-    type: Connection
+    type: dict
+    returned: always
 '''
 
 from functools import partial

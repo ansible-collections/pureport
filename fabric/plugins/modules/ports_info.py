@@ -49,6 +49,7 @@ RETURN = '''
 ports:
     description: a list of Port (dict) objects
     type: complex
+    returned: success
     contains:
         id:
             description:

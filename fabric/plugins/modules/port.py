@@ -51,6 +51,11 @@ options:
             - Only one of 'facility_id' or 'facility_href' can be supplied for this command.
         required: false
         type: str
+    provider:
+        description:
+            - The port provider
+        required: true
+        type: str
     speed:
         description:
             - A speed for the port
@@ -101,12 +106,12 @@ EXAMPLES = '''
     api_secret: XXXXXXXXXXXXXXXXX
     account_href: /accounts/ac-XXXXXXXXXXXXXXXXXXXXXX
     facility_href: /facilities/fac-XXXXXXXXXXXXXXXXXXXXXX
-    id: {{ result.id }}
+    id: "{{ result.id }}"
     name: My Ansible Port 2
-    speed: {{ result.speed }}
-    media_type: {{ result.media_type }}
-    availability_domain: {{ result.availability_domain }}
-    billing_term: {{ result.billing_term}}
+    speed: "{{ result.speed }}"
+    media_type: "{{ result.media_type }}"
+    availability_domain: "{{ result.availability_domain }}"
+    billing_term: "{{ result.billing_term}}"
   register: result  # Registers network as the result
 
 - name: Delete the newly created port using the 'absent' state
@@ -116,12 +121,12 @@ EXAMPLES = '''
     account_href: /accounts/ac-XXXXXXXXXXXXXXXXXXXXXX
     facility_href: /facilities/fac-XXXXXXXXXXXXXXXXXXXXXX
     state: absent
-    id: {{ result.id }}
-    name: {{ result.name }}
-    speed: {{ result.speed }}
-    media_type: {{ result.media_type }}
-    availability_domain: {{ result.availability_domain }}
-    billing_term: {{ result.billing_term}}
+    id: "{{ result.id }}"
+    name: "{{ result.name }}"
+    speed: "{{ result.speed }}"
+    media_type: "{{ result.media_type }}"
+    availability_domain: "{{ result.availability_domain }}"
+    billing_term: "{{ result.billing_term}}"
 '''
 
 RETURN = '''

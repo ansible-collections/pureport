@@ -65,7 +65,7 @@ EXAMPLES = '''
     api_key: XXXXXXXXXXXXX
     api_secret: XXXXXXXXXXXXXXXXX
     account_href: /accounts/ac-XXXXXXXXXXXXXXXXXXXXXX
-    id: {{ result.id }}
+    id: "{{ result.id }}"
     name: My Updated Ansible Account
     description: My updated ansible account description
   register: result  # Registers network as the result
@@ -76,8 +76,8 @@ EXAMPLES = '''
     api_secret: XXXXXXXXXXXXXXXXX
     account_href: /accounts/ac-XXXXXXXXXXXXXXXXXXXXXX
     state: absent
-    id: {{ result.id }}
-    name: {{ result.name }}
+    id: "{{ result.id }}"
+    name: "{{ result.name }}"
 '''
 
 RETURN = '''

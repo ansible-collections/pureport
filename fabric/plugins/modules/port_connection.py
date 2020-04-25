@@ -72,7 +72,8 @@ EXAMPLES = '''
 RETURN = '''
 connection:
     description: the created, updated, or deleted connection
-    type: Connection
+    type: dict
+    returned: always
 '''
 
 from functools import partial

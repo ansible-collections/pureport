@@ -59,7 +59,7 @@ options:
         description:
             - A customer Public/Private ASN for the connection.
         required: false
-        type: long
+        type: int
     customer_networks:
         description:
             - A list of Connection Customer Networks (e.g dict(address=str, name=str)).
