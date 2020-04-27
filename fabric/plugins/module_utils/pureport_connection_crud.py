@@ -42,9 +42,9 @@ def get_connection_argument_spec():
         location_href=dict(type='str'),
         billing_term=dict(type='str', choices=['HOURLY', 'MONTHLY', 'ONE_YEAR', 'TWO_YEAR'], default='HOURLY'),
         customer_asn=dict(type='int'),
-        customer_networks=dict(type='list', default=[]),
+        customer_networks=dict(type='list', default=[], elements='dict'),
         nat_enabled=dict(type='bool', default=False),
-        nat_mappings=dict(type='list', default=[]),
+        nat_mappings=dict(type='list', default=[], elements='str'),
         tags=dict(type='dict')
     )
 

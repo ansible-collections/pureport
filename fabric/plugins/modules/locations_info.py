@@ -73,13 +73,13 @@ locations:
                     description:
                         - The location's latitude.
                     returned: success
-                    type: double
+                    type: float
                     sample: 47.6062
                 longitude:
                     description:
                         - The location's longitude.
                     returned: success
-                    type: double
+                    type: float
                     sample: -122.3321
         location_links:
             description:

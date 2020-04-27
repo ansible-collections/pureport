@@ -169,6 +169,7 @@ options:
         required: false
         type: list
         default: []
+        elements: dict
         suboptions:
             customer_side:
                 description:
@@ -657,7 +658,7 @@ def main():
             ),
             primary_key=dict(type='str'),
             secondary_key=dict(type='str'),
-            traffic_selectors=dict(type='list', default=[]),
+            traffic_selectors=dict(type='list', default=[], elements='dict'),
             enable_bgp_password=dict(type='bool')
         )
     )
