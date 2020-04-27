@@ -1,1 +1,0 @@
-cloud_services_info.py

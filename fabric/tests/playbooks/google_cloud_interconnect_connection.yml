@@ -4,7 +4,7 @@
     - pureport.fabric
   tasks:
     - name: Retrieve the access token for an api key and secret
-      pureport_access_token_fact:
+      access_token_info:
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
@@ -13,19 +13,17 @@
       set_fact:
         access_token: "{{ result.access_token }}"
 
-    - name: Test create Private Azure Express Route connection
-      pureport_azure_express_route_connection:
+    - name: Test create Non-HA GCI connection
+      google_cloud_interconnect_connection:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         wait_for_server: true
-        name: "Test Azure Express Route"
+        name: "Test Google Cloud Interconnect"
         speed: 50
-        high_availability: true
         location_href: "{{ location_href }}"
-        peering_type: PRIVATE
         billing_term: HOURLY
-        service_key: "{{ azure_service_key }}"
+        primary_pairing_key: "{{ gci_primary_pairing_key }}"
         customer_networks:
           - address: 192.167.1.1/32
             name: My Custom Address
@@ -34,8 +32,8 @@
     - fail:
       when: result.changed != true
 
-    - name: Test update Private Azure Express Route connection (no changes)
-      pureport_azure_express_route_connection:
+    - name: Test update Non-HA GCI connection (no changes)
+      google_cloud_interconnect_connection:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
@@ -44,18 +42,17 @@
         name: "{{ result.name }}"
         speed: "{{ result.speed }}"
         high_availability: "{{ result.high_availability }}"
-        peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
         billing_term: "{{ result.billing_term }}"
-        service_key: "{{ azure_service_key }}"
+        primary_pairing_key: "{{ gci_primary_pairing_key }}"
         customer_networks: "{{ result.customer_networks }}"
       register: result
     - debug: var=result
     - fail:
       when: result.changed == true
 
-    - name: Test update Private Azure Express Route connection (no id, no changes)
-      pureport_azure_express_route_connection:
+    - name: Test update Non-HA GCI connection (no id, no changes)
+      google_cloud_interconnect_connection:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
@@ -63,18 +60,17 @@
         name: "{{ result.name }}"
         speed: "{{ result.speed }}"
         high_availability: "{{ result.high_availability }}"
-        peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
         billing_term: "{{ result.billing_term }}"
-        service_key: "{{ azure_service_key }}"
+        primary_pairing_key: "{{ gci_primary_pairing_key }}"
         customer_networks: "{{ result.customer_networks }}"
       register: result
     - debug: var=result
     - fail:
       when: result.changed == true
 
-    - name: Test update Private Azure Express Route connection (changes)
-      pureport_azure_express_route_connection:
+    - name: Test update Non-HA GCI connection (changes)
+      google_cloud_interconnect_connection:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
@@ -83,10 +79,9 @@
         name: "{{ result.name }}"
         speed: "{{ result.speed }}"
         high_availability: "{{ result.high_availability }}"
-        peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
         billing_term: "{{ result.billing_term }}"
-        service_key: "{{ azure_service_key }}"
+        primary_pairing_key: "{{ gci_primary_pairing_key }}"
         customer_networks:
           - address: 192.167.1.2/32
             name: My Custom Address
@@ -95,28 +90,27 @@
     - fail:
       when: result.changed != true
 
-    - name: Test update Private Azure Express Route connection (no id, changes)
-      pureport_azure_express_route_connection:
+    - name: Test update Non-HA GCI connection (no id, changes)
+      google_cloud_interconnect_connection:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         wait_for_server: true
-        id: "{{ result.id }}"
         name: "{{ result.name }}"
-        speed: 100
+        description: Test123
+        speed: "{{ result.speed }}"
         high_availability: "{{ result.high_availability }}"
-        peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
         billing_term: "{{ result.billing_term }}"
-        service_key: "{{ azure_service_key }}"
+        primary_pairing_key: "{{ gci_primary_pairing_key }}"
         customer_networks: "{{ result.customer_networks }}"
       register: result
     - debug: var=result
     - fail:
       when: result.changed != true
 
-    - name: Test delete Private Azure Express Route connection (no id)
-      pureport_azure_express_route_connection:
+    - name: Test delete Non-HA GCI connection (no id)
+      google_cloud_interconnect_connection:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
@@ -125,18 +119,17 @@
         name: "{{ result.name }}"
         speed: "{{ result.speed }}"
         high_availability: "{{ result.high_availability }}"
-        peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
         billing_term: "{{ result.billing_term }}"
-        service_key: "{{ azure_service_key }}"
+        primary_pairing_key: "{{ gci_primary_pairing_key }}"
         customer_networks: "{{ result.customer_networks }}"
       register: result
     - debug: var=result
     - fail:
       when: result.changed != true
 
-    - name: Test create Public Azure Express Route connection
-      pureport_azure_express_route_connection:
+    - name: Test create HA GCI connection
+      google_cloud_interconnect_connection:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
@@ -145,16 +138,19 @@
         speed: 50
         high_availability: true
         location_href: "{{ location_href }}"
-        peering_type: PRIVATE
         billing_term: HOURLY
-        service_key: "{{ azure_service_key }}"
+        primary_pairing_key: "{{ gci_primary_pairing_key }}"
+        secondary_pairing_key: "{{ gci_secondary_pairing_key }}"
+        customer_networks:
+          - address: 192.167.1.1/32
+            name: My Custom Address
       register: result
     - debug: var=result
     - fail:
       when: result.changed != true
 
-    - name: Test update Public Azure Express Route connection (no changes)
-      pureport_azure_express_route_connection:
+    - name: Test update Non-HA GCI connection (no changes)
+      google_cloud_interconnect_connection:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
@@ -163,18 +159,18 @@
         name: "{{ result.name }}"
         speed: "{{ result.speed }}"
         high_availability: "{{ result.high_availability }}"
-        peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
         billing_term: "{{ result.billing_term }}"
-        service_key: "{{ azure_service_key }}"
+        primary_pairing_key: "{{ gci_primary_pairing_key }}"
+        secondary_pairing_key: "{{ gci_secondary_pairing_key }}"
         customer_networks: "{{ result.customer_networks }}"
       register: result
     - debug: var=result
     - fail:
       when: result.changed == true
 
-    - name: Test update Public Azure Express Route connection (no id, no changes)
-      pureport_azure_express_route_connection:
+    - name: Test update Non-HA GCI connection (no id, no changes)
+      google_cloud_interconnect_connection:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
@@ -182,58 +178,60 @@
         name: "{{ result.name }}"
         speed: "{{ result.speed }}"
         high_availability: "{{ result.high_availability }}"
-        peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
         billing_term: "{{ result.billing_term }}"
-        service_key: "{{ azure_service_key }}"
+        primary_pairing_key: "{{ gci_primary_pairing_key }}"
+        secondary_pairing_key: "{{ gci_secondary_pairing_key }}"
         customer_networks: "{{ result.customer_networks }}"
       register: result
     - debug: var=result
     - fail:
       when: result.changed == true
 
-    - name: Test update Public Azure Express Route connection (changes)
-      pureport_azure_express_route_connection:
+    - name: Test update Non-HA GCI connection (changes)
+      google_cloud_interconnect_connection:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         wait_for_server: true
         id: "{{ result.id }}"
         name: "{{ result.name }}"
-        speed: 100
+        speed: "{{ result.speed }}"
         high_availability: "{{ result.high_availability }}"
-        peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
         billing_term: "{{ result.billing_term }}"
-        service_key: "{{ azure_service_key }}"
-        customer_networks: "{{ result.customer_networks }}"
+        primary_pairing_key: "{{ gci_primary_pairing_key }}"
+        secondary_pairing_key: "{{ gci_secondary_pairing_key }}"
+        customer_networks:
+          - address: 192.167.1.2/32
+            name: My Custom Address
       register: result
     - debug: var=result
     - fail:
       when: result.changed != true
 
-    - name: Test update Public Azure Express Route connection (no id, changes)
-      pureport_azure_express_route_connection:
+    - name: Test update Non-HA GCI connection (no id, changes)
+      google_cloud_interconnect_connection:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
         wait_for_server: true
-        id: "{{ result.id }}"
         name: "{{ result.name }}"
-        speed: 200
+        description: Test123
+        speed: "{{ result.speed }}"
         high_availability: "{{ result.high_availability }}"
-        peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
         billing_term: "{{ result.billing_term }}"
-        service_key: "{{ azure_service_key }}"
+        primary_pairing_key: "{{ gci_primary_pairing_key }}"
+        secondary_pairing_key: "{{ gci_secondary_pairing_key }}"
         customer_networks: "{{ result.customer_networks }}"
       register: result
     - debug: var=result
     - fail:
       when: result.changed != true
 
-    - name: Test delete Public Azure Express Route connection
-      pureport_azure_express_route_connection:
+    - name: Test delete Non-HA GCI connection
+      google_cloud_interconnect_connection:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
@@ -243,10 +241,10 @@
         name: "{{ result.name }}"
         speed: "{{ result.speed }}"
         high_availability: "{{ result.high_availability }}"
-        peering_type: "{{ result.peering.type }}"
         location_href: "{{ location_href }}"
         billing_term: "{{ result.billing_term }}"
-        service_key: "{{ azure_service_key }}"
+        primary_pairing_key: "{{ gci_primary_pairing_key }}"
+        secondary_pairing_key: "{{ gci_secondary_pairing_key }}"
         customer_networks: "{{ result.customer_networks }}"
       register: result
     - debug: var=result
