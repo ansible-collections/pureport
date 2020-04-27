@@ -4,7 +4,7 @@
     - pureport.fabric
   tasks:
     - name: Retrieve the access token for an api key and secret
-      pureport_access_token_fact:
+      access_token_info:
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
@@ -14,7 +14,7 @@
         access_token: "{{ result.access_token }}"
 
     - name: Test create Site IPSec VPN connection (ikeV1)
-      pureport_site_ipsec_vpn_connection:
+      site_ipsec_vpn_connection:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
@@ -46,7 +46,7 @@
       when: result.changed != true
 
     - name: Test update Site IPSec VPN connection (ikeV1) (no changes)
-      pureport_site_ipsec_vpn_connection:
+      site_ipsec_vpn_connection:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
@@ -76,7 +76,7 @@
       when: result.changed == true
 
     - name: Test update Site IPSec VPN connection (ikeV1) (no id, no changes)
-      pureport_site_ipsec_vpn_connection:
+      site_ipsec_vpn_connection:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
@@ -105,7 +105,7 @@
       when: result.changed == true
 
     - name: Test update Site IPSec VPN connection (ikeV1) (changes)
-      pureport_site_ipsec_vpn_connection:
+      site_ipsec_vpn_connection:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
@@ -135,7 +135,7 @@
       when: result.changed != true
 
     - name: Test update Site IPSec VPN connection (ikeV1) (no id, changes)
-      pureport_site_ipsec_vpn_connection:
+      site_ipsec_vpn_connection:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
@@ -164,7 +164,7 @@
       when: result.changed != true
 
     - name: Test delete Site IPSec VPN connection (no id, ikeV1)
-      pureport_site_ipsec_vpn_connection:
+      site_ipsec_vpn_connection:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
@@ -194,7 +194,7 @@
       when: result.changed != true
 
     - name: Test create Site IPSec VPN connection (ikeV2)
-      pureport_site_ipsec_vpn_connection:
+      site_ipsec_vpn_connection:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
@@ -226,7 +226,7 @@
       when: result.changed != true
 
     - name: Test update Site IPSec VPN connection (ikeV2) (no changes)
-      pureport_site_ipsec_vpn_connection:
+      site_ipsec_vpn_connection:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
@@ -256,7 +256,7 @@
       when: result.changed == true
 
     - name: Test update Site IPSec VPN connection (ikeV2) (no id, no changes)
-      pureport_site_ipsec_vpn_connection:
+      site_ipsec_vpn_connection:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
@@ -285,7 +285,7 @@
       when: result.changed == true
 
     - name: Test update Site IPSec VPN connection (ikeV2) (changes)
-      pureport_site_ipsec_vpn_connection:
+      site_ipsec_vpn_connection:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
@@ -315,7 +315,7 @@
       when: result.changed != true
 
     - name: Test update Site IPSec VPN connection (ikeV2) (no id, changes)
-      pureport_site_ipsec_vpn_connection:
+      site_ipsec_vpn_connection:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"
@@ -344,7 +344,7 @@
       when: result.changed != true
 
     - name: Test delete Site IPSec VPN connection (ikeV2)
-      pureport_site_ipsec_vpn_connection:
+      site_ipsec_vpn_connection:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         network_href: "{{ network_href }}"

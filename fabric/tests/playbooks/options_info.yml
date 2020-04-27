@@ -4,7 +4,7 @@
     - pureport.fabric
   tasks:
     - name: Retrieve the access token for an api key and secret
-      pureport_access_token_fact:
+      access_token_info:
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
@@ -13,21 +13,19 @@
       set_fact:
         access_token: "{{ result.access_token }}"
 
-    - name: Test works with an account href
-      pureport_network_facts:
+    - name: List options
+      options_info:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
-        account_href: "{{ account_href }}"
       register: result
     - debug: var=result
 
-    - name: Test that a filter works for the networks
-      pureport_network_facts:
+    - name: List options for a specific type
+      options_info:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
-        account_href: "{{ account_href }}"
+        types:
+          - IKEV1IKEEncryption
+          - IKEV2IKEPRF
       register: result
-    - name: Display all network ids
-      debug:
-        var: item
-      loop: "{{ result.networks | json_query('[*].id') }}"
+    - debug: var=result

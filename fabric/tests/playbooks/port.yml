@@ -4,7 +4,7 @@
     - pureport.fabric
   tasks:
     - name: Retrieve the access token for an api key and secret
-      pureport_access_token_fact:
+      access_token_info:
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
@@ -14,7 +14,7 @@
         access_token: "{{ result.access_token }}"
 
     - name: List facilities
-      pureport_facility_facts:
+      facilities_info:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
       register: facilities
@@ -23,7 +23,7 @@
         facility: "{{ facilities.facilities | json_query('[?vendor!=`Pureport`]') | first() }}"
 
     - name: List supported ports
-      pureport_supported_port_facts:
+      supported_ports_info:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         account_href: "{{ account_href }}"
@@ -34,7 +34,7 @@
         supported_ports: "{{ supported_ports.supported_ports }}"
 
     - name: Test create Port
-      pureport_port:
+      pureport.fabric.port:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         account_href: "{{ account_href }}"
@@ -51,7 +51,7 @@
       when: result.changed != true
 
     - name: Test update port (no changes)
-      pureport_port:
+      pureport.fabric.port:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         account_href: "{{ result.account.href }}"
@@ -69,7 +69,7 @@
       when: result.changed == true
 
     - name: Test update port (no id, no changes)
-      pureport_port:
+      pureport.fabric.port:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         account_href: "{{ result.account.href }}"
@@ -86,7 +86,7 @@
       when: result.changed == true
 
     - name: Test update port (changes)
-      pureport_port:
+      pureport.fabric.port:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         account_href: "{{ result.account.href }}"
@@ -105,7 +105,7 @@
       when: result.changed != true
 
     - name: Test update port (no id, changes)
-      pureport_port:
+      pureport.fabric.port:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         account_href: "{{ result.account.href }}"
@@ -123,7 +123,7 @@
       when: result.changed != true
 
     - name: Test delete port (no id)
-      pureport_port:
+      pureport.fabric.port:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         state: 'absent'

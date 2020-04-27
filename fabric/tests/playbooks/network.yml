@@ -4,7 +4,7 @@
     - pureport.fabric
   tasks:
     - name: Retrieve the access token for an api key and secret
-      pureport_access_token_fact:
+      access_token_info:
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
@@ -14,7 +14,7 @@
         access_token: "{{ result.access_token }}"
 
     - name: Test create network (without id)
-      pureport_network:
+      network:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         account_href: "{{ account_href }}"
@@ -25,7 +25,7 @@
       when: result.changed != true
 
     - name: Test update network (no changes)
-      pureport_network:
+      network:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         account_href: "{{ account_href }}"
@@ -37,7 +37,7 @@
       when: result.changed == true
 
     - name: Test update network (no id; no changes)
-      pureport_network:
+      network:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         account_href: "{{ account_href }}"
@@ -48,7 +48,7 @@
       when: result.changed == true
 
     - name: Test update network
-      pureport_network:
+      network:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         account_href: "{{ account_href }}"
@@ -61,7 +61,7 @@
       when: result.changed != true
 
     - name: Test update network (no id; changes)
-      pureport_network:
+      network:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         account_href: "{{ account_href }}"
@@ -73,7 +73,7 @@
       when: result.changed != true
 
     - name: Test update network (remove property)
-      pureport_network:
+      network:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         account_href: "{{ account_href }}"
@@ -85,7 +85,7 @@
       when: result.changed != true
 
     - name: Test update network (bad name)
-      pureport_network:
+      network:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
         account_href: "{{ account_href }}"
@@ -96,7 +96,7 @@
     - debug: var=result
 
     - name: Test delete network
-      pureport_network:
+      network:
         state: absent
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"

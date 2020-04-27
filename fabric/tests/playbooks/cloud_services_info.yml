@@ -4,7 +4,7 @@
     - pureport.fabric
   tasks:
     - name: Retrieve the access token for an api key and secret
-      pureport_access_token_fact:
+      access_token_info:
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
@@ -13,8 +13,8 @@
       set_fact:
         access_token: "{{ result.access_token }}"
 
-    - name: List locations
-      pureport_location_facts:
+    - name: List cloud services
+      cloud_services_info:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
       register: result

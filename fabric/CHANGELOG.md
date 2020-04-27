@@ -2,11 +2,35 @@
 1.0.0 / 2020-04-27
 ==================
 
+  * Removes all older `pureport_*` modules in favor of the newer module names.
+     * **Note**: See the table below for a migration reference.
   * Moves test/ directory to tests/
   * Correcting imports for ansible sanity tests
   * Add scripts for testing the collection
   * Removes 3rd party modules
   * Move the fabric collection into its own subdirectory
+
+| Pureport 1.X Name                     | Pureport 0.X Name                              |
+|---------------------------------------|------------------------------------------------|
+|`access_token_info`                    |`pureport_access_token_fact`                    |
+|`locations_info`                       |`pureport_location_facts`                       |
+|`facilities_info`                      |`pureport_facility_facts`                       |
+|`options_info`                         |`pureport_option_facts`                         |
+|`cloud_regions_info`                   |`pureport_cloud_region_facts`                   |
+|`cloud_services_info`                  |`pureport_cloud_service_facts`                  |
+|`accounts_info`                        |`pureport_account_facts`                        |
+|`supported_connections_info`           |`pureport_supported_connection_facts`           |
+|`supported_ports_info`                 |`pureport_supported_port_facts`                 |
+|`ports_info`                           |`pureport_port_facts`                           |
+|`port`                                 |`pureport_port`                                 |
+|`networks_info`                        |`pureport_network_facts`                        |
+|`network`                              |`pureport_network`                              |
+|`connections_info`                     |`pureport_connection_facts`                     |
+|`aws_direct_connect_connection`        |`pureport_aws_direct_connect_connection`        |
+|`azure_express_route_connection`       |`pureport_azure_express_route_connection`       |
+|`google_cloud_interconnect_connection` |`pureport_google_cloud_interconnect_connection` |
+|`port_connection`                      |`pureport_port_connection`                      |
+|`site_ipsec_vpn_connection`            |`pureport_site_ipsec_vpn_connection`            |
 
 0.12.0 / 2020-04-21
 ===================

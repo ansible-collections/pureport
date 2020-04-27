@@ -4,7 +4,7 @@
     - pureport.fabric
   tasks:
     - name: Retrieve the access token for an api key and secret
-      pureport_access_token_fact:
+      access_token_info:
         api_base_url: "{{ api_base_url }}"
         api_key: "{{ api_key }}"
         api_secret: "{{ api_secret }}"
@@ -13,19 +13,9 @@
       set_fact:
         access_token: "{{ result.access_token }}"
 
-    - name: List options
-      pureport_option_facts:
+    - name: List facilities
+      facilities_info:
         api_base_url: "{{ api_base_url }}"
         api_access_token: "{{ access_token }}"
-      register: result
-    - debug: var=result
-
-    - name: List options for a specific type
-      pureport_option_facts:
-        api_base_url: "{{ api_base_url }}"
-        api_access_token: "{{ access_token }}"
-        types:
-          - IKEV1IKEEncryption
-          - IKEV2IKEPRF
       register: result
     - debug: var=result

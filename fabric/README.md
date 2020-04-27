@@ -122,33 +122,3 @@ An `href` is simply the object's resource path within the Pureport ReST API.
 
 A Pureport Account would have an `href` which is its `id` prefixed with `/accounts/`, like `/accounts/ac-XXXXXXXX`.
 Similarly, a Pureport Network would have an `href` which is its `id` prefixed with `/networks/`.
-
-### Ansible 2.9/Pureport 0.0.9 Module Rename
-The 0.0.9 release has renamed all the modules to have shortner names, while using the collection namespace.  For 
-backwards-compatability all existing module names have been simply symlinked to their new module and should work
-as they previously had.
-
-For reference the names have been changed from/to:
-
-| Name                                  | Ansible 2.8/Pureport 0.0.8 Name                |
-|---------------------------------------|------------------------------------------------|
-|`access_token_info`                    |`pureport_access_token_fact`                    |
-|`locations_info`                       |`pureport_location_facts`                       |
-|`facilities_info`                      |`pureport_facility_facts`                       |
-|`options_info`                         |`pureport_option_facts`                         |
-|`cloud_regions_info`                   |`pureport_cloud_region_facts`                   |
-|`cloud_services_info`                  |`pureport_cloud_service_facts`                  |
-|`accounts_info`                        |`pureport_account_facts`                        |
-|`supported_connections_info`           |`pureport_supported_connection_facts`           |
-|`supported_ports_info`                 |`pureport_supported_port_facts`                 |
-|`ports_info`                           |`pureport_port_facts`                           |
-|`port`                                 |`pureport_port`                                 |
-|`networks_info`                        |`pureport_network_facts`                        |
-|`network`                              |`pureport_network`                              |
-|`connections_info`                     |`pureport_connection_facts`                     |
-|`aws_direct_connect_connection`        |`pureport_aws_direct_connect_connection`        |
-|`azure_express_route_connection`       |`pureport_azure_express_route_connection`       |
-|`google_cloud_interconnect_connection` |`pureport_google_cloud_interconnect_connection` |
-|`port_connection`                      |`pureport_port_connection`                      |
-|`site_ipsec_vpn_connection`            |`pureport_site_ipsec_vpn_connection`            |
-

@@ -1,1 +1,0 @@
-locations_info.py
