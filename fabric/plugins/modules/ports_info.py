@@ -22,9 +22,6 @@ description:
 version_added: "2.8"
 requirements: [ pureport-client ]
 author: Matt Traynham (@mtraynham)
-options:
-    account_href:
-        required: true
 extends_documentation_fragment:
     - pureport.fabric.client
     - pureport.fabric.account
@@ -198,10 +195,12 @@ def main():
     argument_spec.update(get_account_argument_spec())
     mutually_exclusive = []
     mutually_exclusive += get_client_mutually_exclusive()
-    mutually_exclusive += get_account_mutually_exclusive()
+    required_one_of = []
+    required_one_of += get_account_mutually_exclusive()
     module = AnsibleModule(
         argument_spec=argument_spec,
         mutually_exclusive=mutually_exclusive,
+        required_one_of=required_one_of,
         supports_check_mode=True
     )
     find_ports(module)

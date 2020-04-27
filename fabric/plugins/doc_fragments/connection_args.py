@@ -66,6 +66,7 @@ options:
         required: false
         type: list
         default: []
+        elements: dict
         suboptions:
             address:
                 description:
@@ -86,6 +87,7 @@ options:
             - This should likely reference the customer_networks supplied on the connection.
         required: false
         type: list
+        elements: str
     tags:
         description:
             - A map of tags to use for the connection.

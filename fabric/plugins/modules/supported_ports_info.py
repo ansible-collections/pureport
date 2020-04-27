@@ -98,6 +98,7 @@ supported_ports:
                 - The list of available media types for the specified port.
             returned: success
             type: list
+            elements: str
             sample: ["LX", "LR4"]
         availability_domains:
             description:

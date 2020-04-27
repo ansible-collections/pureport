@@ -84,44 +84,44 @@ facilities:
                 street:
                     description:
                         - The street address
-                    required: false
+                    returned: success
                     type: str
                 city:
                     description:
                         - The city
-                    required: false
+                    returned: success
                     type: str
                 state:
                     description:
                         - The state
-                    required: false
+                    returned: success
                     type: str
                 postal_code:
                     description:
                         - The postal code
-                    required: false
+                    returned: success
                     type: str
                 country:
                     description:
                         - The country
-                    required: false
+                    returned: success
                     type: str
                 geo_coordinates:
                     description:
                         - A dict representing the geo coordinates of a facility
-                    required: false
+                    returned: success
                     type: complex
                     contains:
                         latitude:
                             description:
                                 - The latitude
-                            required: false
-                            type: double
+                            returned: success
+                            type: float
                         longitude:
                             description:
                                 - The longitude
-                            required: false
-                            type: double
+                            returned: success
+                            type: float
 '''
 
 from ansible.module_utils.basic import AnsibleModule

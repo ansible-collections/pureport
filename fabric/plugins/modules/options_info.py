@@ -32,6 +32,7 @@ options:
                   'IKEV2IKEIntegrity', 'IKEV2IKEDHGroup', 'IKEV2ESPEncryption', 'IKEV2ESPIntegrity',
                   'IKEV2ESPDHGroup']
         default: []
+        elements: str
 extends_documentation_fragment:
     - pureport.fabric.client
 '''
@@ -149,7 +150,8 @@ def main():
                 'IKEV2ESPEncryption',
                 'IKEV2ESPIntegrity',
                 'IKEV2ESPDHGroup'
-            ]
+            ],
+            elements='str'
         )
     ))
     mutually_exclusive = []

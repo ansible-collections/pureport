@@ -39,6 +39,7 @@ options:
             - Only one of 'cloud_service_ids' or 'cloud_service_hrefs' can be supplied for this command.
         required: false
         type: list
+        elements: str
         default: []
     cloud_service_hrefs:
         description:
@@ -47,6 +48,7 @@ options:
             - Only one of 'cloud_service_ids' or 'cloud_service_hrefs' can be supplied for this command.
         required: false
         type: list
+        elements: str
         default: []
 extends_documentation_fragment:
     - pureport.fabric.client
@@ -232,8 +234,8 @@ def main():
         dict(
             aws_account_id=dict(type='str', required=True),
             aws_region=dict(type='str', required=True),
-            cloud_service_ids=dict(type='list', default=[]),
-            cloud_service_hrefs=dict(type='list', default=[])
+            cloud_service_ids=dict(type='list', default=[], elements='str'),
+            cloud_service_hrefs=dict(type='list', default=[], elements='str')
         )
     )
     mutually_exclusive = []
