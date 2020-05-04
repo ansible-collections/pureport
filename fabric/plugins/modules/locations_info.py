@@ -121,19 +121,6 @@ from ..module_utils.pureport_client import \
     get_client
 
 
-def find_locations(module):
-    """
-    List locations
-    :param AnsibleModule module: the ansible module
-    """
-    client = get_client(module)
-    try:
-        locations = client.locations.list()
-        module.exit_json(locations=[camel_dict_to_snake_dict(location) for location in locations])
-    except ClientHttpException as e:
-        module.fail_json(msg=e.response.text, exception=format_exc())
-
-
 def main():
     argument_spec = dict()
     argument_spec.update(get_client_argument_spec())
@@ -144,7 +131,12 @@ def main():
         mutually_exclusive=mutually_exclusive,
         supports_check_mode=True
     )
-    find_locations(module)
+    try:
+        client = get_client(module)
+        locations = client.locations.list()
+        module.exit_json(locations=[camel_dict_to_snake_dict(location) for location in locations])
+    except ClientHttpException as e:
+        module.fail_json(msg=e.response.text, exception=format_exc())
 
 
 if __name__ == '__main__':

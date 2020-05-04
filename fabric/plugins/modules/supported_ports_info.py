@@ -162,24 +162,6 @@ from ..module_utils.pureport_client import \
     get_account_id
 
 
-def find_supported_ports(module):
-    """
-    List supported ports
-    :param AnsibleModule module: the ansible module
-    """
-    client = get_client(module)
-    account_id = get_account_id(module)
-    facility_id = get_object_id(module, 'facility_id', 'facility_href')
-    try:
-        supported_ports = client.accounts \
-            .supported_ports(account_id) \
-            .list(facility_id)
-        module.exit_json(supported_ports=[camel_dict_to_snake_dict(supported_port)
-                                          for supported_port in supported_ports])
-    except ClientHttpException as e:
-        module.fail_json(msg=e.response.text, exception=format_exc())
-
-
 def main():
     argument_spec = dict()
     argument_spec.update(get_client_argument_spec())
@@ -201,7 +183,15 @@ def main():
         required_one_of=required_one_of,
         supports_check_mode=True
     )
-    find_supported_ports(module)
+    try:
+        client = get_client(module)
+        supported_ports = client.accounts \
+            .supported_ports(get_account_id(module)) \
+            .list(get_object_id(module, 'facility_id', 'facility_href'))
+        module.exit_json(supported_ports=[camel_dict_to_snake_dict(supported_port)
+                                          for supported_port in supported_ports])
+    except ClientHttpException as e:
+        module.fail_json(msg=e.response.text, exception=format_exc())
 
 
 if __name__ == '__main__':

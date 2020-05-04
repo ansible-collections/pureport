@@ -285,10 +285,9 @@ def construct_port(module):
     return port
 
 
-def retrieve_port(module, client, port):
+def retrieve_port(client, port):
     """
     Retrieve the Port from the Ansible inferred Port
-    :param AnsibleModule module: the Ansible module
     :param pureport.api.client.Client client: the Pureport client
     :param Port port: the Ansible inferred Port
     :rtype: Port|None
@@ -299,8 +298,6 @@ def retrieve_port(module, client, port):
             return client.ports.get(port_id)
         except NotFoundException:
             return None
-        except ClientHttpException as e:
-            module.fail_json(msg=e.response.text, exception=format_exc())
     return None
 
 
@@ -315,20 +312,17 @@ def resolve_port(module, client, port):
     """
     account_id = get_account_id(module)
     if account_id is not None:
-        try:
-            existing_ports = client.accounts.ports(account_id).list()
-            matched_ports = [existing_port for existing_port in existing_ports
-                             if all([existing_port.get(k) == port.get(k)
-                                     for k in ['name']])]
-            if len(matched_ports) == 1:
-                return matched_ports[0]
-            elif len(matched_ports) > 1:
-                module.fail_json(msg="Resolved more than one existing port.  Please provide an 'id' "
-                                     "if you are attempting to update/delete an existing port.  "
-                                     "Otherwise, use a more distinct name or set "
-                                     "'resolve_existing' to false.")
-        except ClientHttpException as e:
-            module.fail_json(msg=e.response.text, exception=format_exc())
+        existing_ports = client.accounts.ports(account_id).list()
+        matched_ports = [existing_port for existing_port in existing_ports
+                         if all([existing_port.get(k) == port.get(k)
+                                 for k in ['name']])]
+        if len(matched_ports) == 1:
+            return matched_ports[0]
+        elif len(matched_ports) > 1:
+            module.fail_json(msg="Resolved more than one existing port.  Please provide an 'id' "
+                                 "if you are attempting to update/delete an existing port.  "
+                                 "Otherwise, use a more distinct name or set "
+                                 "'resolve_existing' to false.")
     return None
 
 
@@ -347,49 +341,6 @@ def copy_existing_port_properties(port, existing_port):
         href=existing_port.get('href')
     ))
     return copied_port
-
-
-def create_port(module, client, port):
-    """
-    Create a new port
-    :param AnsibleModule module: the Ansible module
-    :param pureport.api.client.Client client: the Pureport client
-    :param Port port: the Ansible inferred Port
-    :rtype: Port
-    """
-    account_id = get_account_id(module)
-    try:
-        return client.accounts.ports(account_id).create(port)
-    except ClientHttpException as e:
-        module.fail_json(msg=e.response.text, exception=format_exc())
-
-
-def update_port(module, client, port):
-    """
-    Update a port
-    :param AnsibleModule module: the Ansible module
-    :param pureport.api.client.Client client: the Pureport client
-    :param Port port: the Ansible inferred Port
-    :rtype: Port
-    """
-    try:
-        return client.ports.update(port)
-    except ClientHttpException as e:
-        module.fail_json(msg=e.response.text, exception=format_exc())
-
-
-def delete_port(module, client, port):
-    """
-    Delete a port
-    :param AnsibleModule module: the Ansible module
-    :param pureport.api.client.Client client: the Pureport client
-    :param Port port: the Ansible inferred Port
-    :rtype: Port
-    """
-    try:
-        return client.ports.delete(port.get('id'))
-    except ClientHttpException as e:
-        module.fail_json(msg=e.response.text, exception=format_exc())
 
 
 def main():
@@ -425,27 +376,30 @@ def main():
         required_one_of=required_one_of,
         supports_check_mode=True
     )
-    client = get_client(module)
     # Using partials to fill in the method params
-    (
-        changed,
-        changed_port,
-        argument_port,
-        existing_port
-    ) = item_crud(
-        module,
-        partial(construct_port, module),
-        partial(retrieve_port, module, client),
-        partial(resolve_port, module, client),
-        partial(create_port, module, client),
-        partial(update_port, module, client),
-        partial(delete_port, module, client),
-        copy_existing_item_properties_fn=copy_existing_port_properties
-    )
-    module.exit_json(
-        changed=changed,
-        **camel_dict_to_snake_dict(changed_port)
-    )
+    try:
+        client = get_client(module)
+        (
+            changed,
+            changed_port,
+            argument_port,
+            existing_port
+        ) = item_crud(
+            module,
+            partial(construct_port, module),
+            partial(retrieve_port, client),
+            partial(resolve_port, module, client),
+            lambda port: client.accounts.ports(get_account_id(module)).create(port),
+            client.ports.update,
+            lambda port: client.ports.delete(port.get('id')),
+            copy_existing_item_properties_fn=copy_existing_port_properties
+        )
+        module.exit_json(
+            changed=changed,
+            **camel_dict_to_snake_dict(changed_port)
+        )
+    except ClientHttpException as e:
+        module.fail_json(msg=e.response.text, exception=format_exc())
 
 
 if __name__ == '__main__':

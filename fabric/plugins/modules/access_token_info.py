@@ -73,21 +73,6 @@ except ImportError:
     ClientHttpException = None
 
 
-def get_access_token(module):
-    """
-    Get the access token
-    :param AnsibleModule module: the ansible module
-    :rtype: str
-    """
-    if not HAS_PUREPORT_CLIENT:
-        module.fail_json(msg='pureport-client required for this module')
-    client = Client(module.params.get('api_base_url'))
-    try:
-        return client.login(module.params.get('api_key'), module.params.get('api_secret'))
-    except ClientHttpException as e:
-        module.fail_json(msg=e.response.text, exception=format_exc())
-
-
 def main():
     argument_spec = dict(
         api_base_url=dict(type='str'),
@@ -99,7 +84,13 @@ def main():
         argument_spec=argument_spec,
         mutually_exclusive=mutually_exclusive
     )
-    module.exit_json(access_token=get_access_token(module))
+    if not HAS_PUREPORT_CLIENT:
+        module.fail_json(msg='pureport-client required for this module')
+    client = Client(module.params.get('api_base_url'))
+    try:
+        module.exit_json(access_token=client.login(module.params.get('api_key'), module.params.get('api_secret')))
+    except ClientHttpException as e:
+        module.fail_json(msg=e.response.text, exception=format_exc())
 
 
 if __name__ == '__main__':

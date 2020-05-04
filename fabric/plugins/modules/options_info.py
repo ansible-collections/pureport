@@ -116,19 +116,6 @@ from ..module_utils.pureport_client import \
     get_client
 
 
-def find_options(module):
-    """
-    List options
-    :param AnsibleModule module: the ansible module
-    """
-    client = get_client(module)
-    try:
-        options = client.options.list(module.params.get('types'))
-        module.exit_json(options=options)
-    except ClientHttpException as e:
-        module.fail_json(msg=e.response.text, exception=format_exc())
-
-
 def main():
     argument_spec = dict()
     argument_spec.update(get_client_argument_spec())
@@ -161,7 +148,12 @@ def main():
         mutually_exclusive=mutually_exclusive,
         supports_check_mode=True
     )
-    find_options(module)
+    try:
+        client = get_client(module)
+        options = client.options.list(module.params.get('types'))
+        module.exit_json(options=options)
+    except ClientHttpException as e:
+        module.fail_json(msg=e.response.text, exception=format_exc())
 
 
 if __name__ == '__main__':

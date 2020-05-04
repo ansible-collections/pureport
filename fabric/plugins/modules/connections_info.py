@@ -96,35 +96,6 @@ from ..module_utils.pureport_client import \
     get_network_id
 
 
-def find_connections(module):
-    """
-    List connections
-    :param AnsibleModule module: the ansible module
-    """
-    client = get_client(module)
-
-    connections = None
-    # Retrieve connections from the account
-    account_id = get_account_id(module)
-    network_id = get_network_id(module)
-    if account_id is not None:
-        try:
-            connections = client.accounts.connections(account_id).list()
-        except ClientHttpException as e:
-            module.fail_json(msg=e.response.text, exception=format_exc())
-    # Retrieve connections from the network
-    elif network_id is not None:
-        try:
-            connections = client.networks.connections(network_id).list()
-        except ClientHttpException as e:
-            module.fail_json(msg=e.response.text, exception=format_exc())
-    else:
-        module.fail_json(msg='One of account_href or network_href '
-                             'arguments should be provided.')
-
-    module.exit_json(connections=[camel_dict_to_snake_dict(connection) for connection in connections])
-
-
 def main():
     argument_spec = dict()
     argument_spec.update(get_client_argument_spec())
@@ -141,7 +112,20 @@ def main():
         mutually_exclusive=mutually_exclusive,
         supports_check_mode=True
     )
-    find_connections(module)
+    try:
+        connections = None
+        account_id = get_account_id(module)
+        network_id = get_network_id(module)
+        client = get_client(module)
+        # Retrieve connections from the account
+        if account_id is not None:
+            connections = client.accounts.connections(account_id).list()
+        # Retrieve connections from the network
+        elif network_id is not None:
+            connections = client.networks.connections(network_id).list()
+        module.exit_json(connections=[camel_dict_to_snake_dict(connection) for connection in connections])
+    except ClientHttpException as e:
+        module.fail_json(msg=e.response.text, exception=format_exc())
 
 
 if __name__ == '__main__':

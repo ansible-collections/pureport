@@ -5,7 +5,6 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 from functools import partial
-from traceback import format_exc
 
 try:
     from pureport.exception.api import ClientHttpException, NotFoundException
@@ -77,10 +76,9 @@ def get_peering_connection_argument_spec():
     )
 
 
-def __retrieve_connection(module, client, connection):
+def __retrieve_connection(client, connection):
     """
     Retrieve the Connection from the Ansible inferred Connection
-    :param ansible.module_utils.basic.AnsibleModule module: the Ansible module
     :param pureport.api.client.Client client: the Pureport client
     :param pureport.api.client.Connection connection: the Ansible inferred Connection
     :rtype: pureport.api.client.Connection |None
@@ -91,8 +89,6 @@ def __retrieve_connection(module, client, connection):
             return client.connections.get(connection_id)
         except NotFoundException:
             return None
-        except ClientHttpException as e:
-            module.fail_json(msg=e.response.text, exception=format_exc())
     return None
 
 
@@ -107,20 +103,17 @@ def __resolve_connection(module, client, connection):
     """
     network_id = get_network_id(module)
     if network_id is not None:
-        try:
-            existing_connections = client.networks.connections(network_id).list()
-            matched_connections = [existing_connection for existing_connection in existing_connections
-                                   if all([existing_connection.get(k) == connection.get(k)
-                                           for k in ['name', 'type']])]
-            if len(matched_connections) == 1:
-                return matched_connections[0]
-            elif len(matched_connections) > 1:
-                module.fail_json(msg="Resolved more than one existing connection.  Please provide an 'id' "
-                                     "if you are attempting to update/delete an existing connection.  "
-                                     "Otherwise, use a more distinct name & type or set "
-                                     "'resolve_existing' to false.")
-        except ClientHttpException as e:
-            module.fail_json(msg=e.response.text, exception=format_exc())
+        existing_connections = client.networks.connections(network_id).list()
+        matched_connections = [existing_connection for existing_connection in existing_connections
+                               if all([existing_connection.get(k) == connection.get(k)
+                                       for k in ['name', 'type']])]
+        if len(matched_connections) == 1:
+            return matched_connections[0]
+        elif len(matched_connections) > 1:
+            module.fail_json(msg="Resolved more than one existing connection.  Please provide an 'id' "
+                                 "if you are attempting to update/delete an existing connection.  "
+                                 "Otherwise, use a more distinct name & type or set "
+                                 "'resolve_existing' to false.")
     return None
 
 
@@ -142,51 +135,6 @@ def __copy_existing_connection_properties(connection, existing_connection):
     return copied_connection
 
 
-def __create_connection(module, client, wait_for_server, connection):
-    """
-    Create a new connection
-    :param ansible.module_utils.basic.AnsibleModule module: the Ansible module
-    :param pureport.api.client.Client client: the Pureport client
-    :param bool wait_for_server: should the client wait for the server to finish
-    :param pureport.api.client.Connection connection: the Ansible inferred Connection
-    :rtype: pureport.api.client.Connection
-    """
-    network_id = get_network_id(module)
-    try:
-        return client.networks.connections(network_id).create(connection, wait_until_active=wait_for_server)
-    except ClientHttpException as e:
-        module.fail_json(msg=e.response.text, exception=format_exc())
-
-
-def __update_connection(module, client, wait_for_server, connection):
-    """
-    Update a Connection
-    :param ansible.module_utils.basic.AnsibleModule module: the Ansible module
-    :param pureport.api.client.Client client: the Pureport client
-    :param bool wait_for_server: should the client wait for the server to finish
-    :param pureport.api.client.Connection connection: the Ansible inferred Connection
-    :rtype: pureport.api.client.Connection
-    """
-    try:
-        return client.connections.update(connection, wait_until_active=wait_for_server)
-    except ClientHttpException as e:
-        module.fail_json(msg=e.response.text, exception=format_exc())
-
-
-def __delete_connection(module, client, wait_for_server, connection):
-    """
-    Delete a connection
-    :param ansible.module_utils.basic.AnsibleModule module: the Ansible module
-    :param pureport.api.client.Client client: the Pureport client
-    :param bool wait_for_server: should the client wait for the server to finish
-    :param pureport.api.client.Connection connection: the Ansible inferred Connection
-    """
-    try:
-        return client.connections.delete(connection.get('id'), wait_until_deleted=wait_for_server)
-    except ClientHttpException as e:
-        module.fail_json(msg=e.response.text, exception=format_exc())
-
-
 def connection_crud(module,
                     construct_item_fn,
                     compare_item_fn=deep_compare):
@@ -204,11 +152,13 @@ def connection_crud(module,
     return item_crud(
         module,
         construct_item_fn,
-        partial(__retrieve_connection, module, client),
+        partial(__retrieve_connection, client),
         partial(__resolve_connection, module, client),
-        partial(__create_connection, module, client, wait_for_server),
-        partial(__update_connection, module, client, wait_for_server),
-        partial(__delete_connection, module, client, wait_for_server),
+        lambda connection: client.networks
+                                 .connections(get_network_id(module))
+                                 .create(connection, wait_until_active=wait_for_server),
+        lambda connection: client.connections.update(connection, wait_until_active=wait_for_server),
+        lambda connection: client.connections.delete(connection.get('id'), wait_until_deleted=wait_for_server),
         compare_item_fn=compare_item_fn,
         copy_existing_item_properties_fn=__copy_existing_connection_properties
     )

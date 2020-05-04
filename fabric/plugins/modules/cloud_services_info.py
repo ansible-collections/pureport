@@ -126,19 +126,6 @@ from ..module_utils.pureport_client import \
     get_client
 
 
-def find_cloud_services(module):
-    """
-    List cloud services
-    :param AnsibleModule module: the ansible module
-    """
-    client = get_client(module)
-    try:
-        cloud_services = client.cloud_services.list()
-        module.exit_json(cloud_services=[camel_dict_to_snake_dict(cloud_service) for cloud_service in cloud_services])
-    except ClientHttpException as e:
-        module.fail_json(msg=e.response.text, exception=format_exc())
-
-
 def main():
     argument_spec = dict()
     argument_spec.update(get_client_argument_spec())
@@ -149,7 +136,12 @@ def main():
         mutually_exclusive=mutually_exclusive,
         supports_check_mode=True
     )
-    find_cloud_services(module)
+    try:
+        client = get_client(module)
+        cloud_services = client.cloud_services.list()
+        module.exit_json(cloud_services=[camel_dict_to_snake_dict(cloud_service) for cloud_service in cloud_services])
+    except ClientHttpException as e:
+        module.fail_json(msg=e.response.text, exception=format_exc())
 
 
 if __name__ == '__main__':

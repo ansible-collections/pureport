@@ -4,17 +4,13 @@
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
-from traceback import format_exc
-
 try:
     from pureport.api.client import Client, API_URL
-    from pureport.exception.api import ClientHttpException
     HAS_PUREPORT_CLIENT = True
 except ImportError:
     HAS_PUREPORT_CLIENT = False
     API_URL = None
     Client = None
-    ClientHttpException = None
 
 
 def get_client_argument_spec():
@@ -50,14 +46,11 @@ def get_client(module):
     if not HAS_PUREPORT_CLIENT:
         module.fail_json(msg='pureport-client required for this module')
     client = Client(module.params.get('api_base_url'))
-    try:
-        client.login(
-            key=module.params.get('api_key'),
-            secret=module.params.get('api_secret'),
-            access_token=module.params.get('api_access_token')
-        )
-    except ClientHttpException as e:
-        module.fail_json(msg=e.response.text, exception=format_exc())
+    client.login(
+        key=module.params.get('api_key'),
+        secret=module.params.get('api_secret'),
+        access_token=module.params.get('api_access_token')
+    )
     return client
 
 
