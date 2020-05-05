@@ -140,10 +140,9 @@ def construct_network(module):
                 for k in ('id', 'name', 'description', 'tags'))
 
 
-def retrieve_network(module, client, network):
+def retrieve_network(client, network):
     """
     Retrieve the Network from the Ansible inferred Network
-    :param AnsibleModule module: the Ansible module
     :param pureport.api.client.Client client: the Pureport client
     :param pureport.api.client.Network network: the Ansible inferred Network
     :rtype: pureport.api.client.Network|None
@@ -154,8 +153,6 @@ def retrieve_network(module, client, network):
             return client.networks.get(network_id)
         except NotFoundException:
             return None
-        except ClientHttpException as e:
-            module.fail_json(msg=e.response.text, exception=format_exc())
     return None
 
 
@@ -170,20 +167,17 @@ def resolve_network(module, client, network):
     """
     account_id = get_account_id(module)
     if account_id is not None:
-        try:
-            existing_networks = client.accounts.networks(account_id).list()
-            matched_networks = [existing_network for existing_network in existing_networks
-                                if all([existing_network.get(k) == network.get(k)
-                                        for k in ['name']])]
-            if len(matched_networks) == 1:
-                return matched_networks[0]
-            elif len(matched_networks) > 1:
-                module.fail_json(msg="Resolved more than one existing network.  Please provide an 'id' "
-                                     "if you are attempting to update/delete an existing network.  "
-                                     "Otherwise, use a more distinct name or set "
-                                     "'resolve_existing' to false.")
-        except ClientHttpException as e:
-            module.fail_json(msg=e.response.text, exception=format_exc())
+        existing_networks = client.accounts.networks(account_id).list()
+        matched_networks = [existing_network for existing_network in existing_networks
+                            if all([existing_network.get(k) == network.get(k)
+                                    for k in ['name']])]
+        if len(matched_networks) == 1:
+            return matched_networks[0]
+        elif len(matched_networks) > 1:
+            module.fail_json(msg="Resolved more than one existing network.  Please provide an 'id' "
+                                 "if you are attempting to update/delete an existing network.  "
+                                 "Otherwise, use a more distinct name or set "
+                                 "'resolve_existing' to false.")
     return None
 
 
@@ -202,50 +196,6 @@ def copy_existing_network_properties(network, existing_network):
         href=existing_network.get('href')
     ))
     return copied_network
-
-
-def create_network(module, client, network):
-    """
-    Create a new network
-    :param AnsibleModule module: the Ansible module
-    :param pureport.api.client.Client client: the Pureport client
-    :param pureport.api.client.Network network: the Ansible inferred Network
-    :rtype: pureport.api.client.Network
-    """
-    account_id = get_account_id(module)
-    try:
-        return client.accounts.networks(account_id).create(network)
-    except ClientHttpException as e:
-        module.fail_json(msg=e.response.text, exception=format_exc())
-
-
-def update_network(module, client, network):
-    """
-    Update a network
-    :param AnsibleModule module: the Ansible module
-    :param pureport.api.client.Client client: the Pureport client
-    :param pureport.api.client.Network network: the Ansible inferred Network
-    :rtype: pureport.api.client.Network
-    """
-    # Copy over href, the client needs it to properly execute the call
-    try:
-        return client.networks.update(network)
-    except ClientHttpException as e:
-        module.fail_json(msg=e.response.text, exception=format_exc())
-
-
-def delete_network(module, client, network):
-    """
-    Delete a network
-    :param AnsibleModule module: the Ansible module
-    :param pureport.api.client.Client client: the Pureport client
-    :param pureport.api.client.Network network: the Ansible inferred Network
-    """
-    # Copy over href, the client needs it to properly execute the call
-    try:
-        return client.networks.delete(network.get('id'))
-    except ClientHttpException as e:
-        module.fail_json(msg=e.response.text, exception=format_exc())
 
 
 def main():
@@ -272,27 +222,30 @@ def main():
         required_one_of=required_one_of,
         supports_check_mode=True
     )
-    client = get_client(module)
     # Using partials to fill in the method params
-    (
-        changed,
-        changed_network,
-        argument_network,
-        existing_network
-    ) = item_crud(
-        module,
-        partial(construct_network, module),
-        partial(retrieve_network, module, client),
-        partial(resolve_network, module, client),
-        partial(create_network, module, client),
-        partial(update_network, module, client),
-        partial(delete_network, module, client),
-        copy_existing_item_properties_fn=copy_existing_network_properties
-    )
-    module.exit_json(
-        changed=changed,
-        **camel_dict_to_snake_dict(changed_network)
-    )
+    try:
+        client = get_client(module)
+        (
+            changed,
+            changed_network,
+            argument_network,
+            existing_network
+        ) = item_crud(
+            module,
+            partial(construct_network, module),
+            partial(retrieve_network, client),
+            partial(resolve_network, module, client),
+            lambda network: client.accounts.networks(get_account_id(module)).create(network),
+            client.networks.update,
+            lambda network: client.networks.delete(network.get('id')),
+            copy_existing_item_properties_fn=copy_existing_network_properties
+        )
+        module.exit_json(
+            changed=changed,
+            **camel_dict_to_snake_dict(changed_network)
+        )
+    except ClientHttpException as e:
+        module.fail_json(msg=e.response.text, exception=format_exc())
 
 
 if __name__ == '__main__':

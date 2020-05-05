@@ -81,6 +81,11 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.common.dict_transformations import \
     camel_dict_to_snake_dict, \
     snake_dict_to_camel_dict
+from traceback import format_exc
+try:
+    from pureport.exception.api import ClientHttpException
+except ImportError:
+    ClientHttpException = None
 
 from ..module_utils.pureport_client import \
     get_object_link, \
@@ -177,19 +182,22 @@ def main():
         required_one_of=required_one_of
     )
     # Using partials to fill in the method params
-    (
-        changed,
-        changed_connection,
-        argument_connection,
-        existing_connection
-    ) = connection_crud(
-        module,
-        partial(construct_connection, module)
-    )
-    module.exit_json(
-        changed=changed,
-        **camel_dict_to_snake_dict(changed_connection)
-    )
+    try:
+        (
+            changed,
+            changed_connection,
+            argument_connection,
+            existing_connection
+        ) = connection_crud(
+            module,
+            partial(construct_connection, module)
+        )
+        module.exit_json(
+            changed=changed,
+            **camel_dict_to_snake_dict(changed_connection)
+        )
+    except ClientHttpException as e:
+        module.fail_json(msg=e.response.text, exception=format_exc())
 
 
 if __name__ == '__main__':

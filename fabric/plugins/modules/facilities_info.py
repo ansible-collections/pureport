@@ -151,20 +151,6 @@ def __format_facility(facility):
     return formatted_facility
 
 
-def find_facilities(module):
-    """
-    List facilities
-    :param AnsibleModule module: the ansible module
-    """
-    client = get_client(module)
-    try:
-        facilities = client.facilities.list()
-
-        module.exit_json(facilities=[__format_facility(facility) for facility in facilities])
-    except ClientHttpException as e:
-        module.fail_json(msg=e.response.text, exception=format_exc())
-
-
 def main():
     argument_spec = dict()
     argument_spec.update(get_client_argument_spec())
@@ -175,7 +161,12 @@ def main():
         mutually_exclusive=mutually_exclusive,
         supports_check_mode=True
     )
-    find_facilities(module)
+    try:
+        client = get_client(module)
+        facilities = client.facilities.list()
+        module.exit_json(facilities=[__format_facility(facility) for facility in facilities])
+    except ClientHttpException as e:
+        module.fail_json(msg=e.response.text, exception=format_exc())
 
 
 if __name__ == '__main__':

@@ -91,19 +91,6 @@ from ..module_utils.pureport_client import \
     get_client
 
 
-def find_cloud_regions(module):
-    """
-    List cloud regions
-    :param AnsibleModule module: the ansible module
-    """
-    client = get_client(module)
-    try:
-        cloud_regions = client.cloud_regions.list()
-        module.exit_json(cloud_regions=[camel_dict_to_snake_dict(cloud_region) for cloud_region in cloud_regions])
-    except ClientHttpException as e:
-        module.fail_json(msg=e.response.text, exception=format_exc())
-
-
 def main():
     argument_spec = dict()
     argument_spec.update(get_client_argument_spec())
@@ -114,7 +101,12 @@ def main():
         mutually_exclusive=mutually_exclusive,
         supports_check_mode=True
     )
-    find_cloud_regions(module)
+    try:
+        client = get_client(module)
+        cloud_regions = client.cloud_regions.list()
+        module.exit_json(cloud_regions=[camel_dict_to_snake_dict(cloud_region) for cloud_region in cloud_regions])
+    except ClientHttpException as e:
+        module.fail_json(msg=e.response.text, exception=format_exc())
 
 
 if __name__ == '__main__':

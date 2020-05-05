@@ -175,20 +175,6 @@ from ..module_utils.pureport_client import \
     get_account_id
 
 
-def find_ports(module):
-    """
-    List ports
-    :param AnsibleModule module: the ansible module
-    """
-    client = get_client(module)
-    account_id = get_account_id(module)
-    try:
-        ports = client.accounts.ports(account_id).list()
-        module.exit_json(ports=[camel_dict_to_snake_dict(port) for port in ports])
-    except ClientHttpException as e:
-        module.fail_json(msg=e.response.text, exception=format_exc())
-
-
 def main():
     argument_spec = dict()
     argument_spec.update(get_client_argument_spec())
@@ -203,7 +189,12 @@ def main():
         required_one_of=required_one_of,
         supports_check_mode=True
     )
-    find_ports(module)
+    try:
+        client = get_client(module)
+        ports = client.accounts.ports(get_account_id(module)).list()
+        module.exit_json(ports=[camel_dict_to_snake_dict(port) for port in ports])
+    except ClientHttpException as e:
+        module.fail_json(msg=e.response.text, exception=format_exc())
 
 
 if __name__ == '__main__':

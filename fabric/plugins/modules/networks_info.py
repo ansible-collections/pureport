@@ -90,20 +90,6 @@ from ..module_utils.pureport_client import \
     get_account_id
 
 
-def find_networks(module):
-    """
-    List networks
-    :param AnsibleModule module: the ansible module
-    """
-    client = get_client(module)
-    account_id = get_account_id(module)
-    try:
-        networks = client.accounts.networks(account_id).list()
-        module.exit_json(networks=[camel_dict_to_snake_dict(network) for network in networks])
-    except ClientHttpException as e:
-        module.fail_json(msg=e.response.text, exception=format_exc())
-
-
 def main():
     argument_spec = dict()
     argument_spec.update(get_client_argument_spec())
@@ -118,7 +104,12 @@ def main():
         required_one_of=required_one_of,
         supports_check_mode=True
     )
-    find_networks(module)
+    try:
+        client = get_client(module)
+        networks = client.accounts.networks(get_account_id(module)).list()
+        module.exit_json(networks=[camel_dict_to_snake_dict(network) for network in networks])
+    except ClientHttpException as e:
+        module.fail_json(msg=e.response.text, exception=format_exc())
 
 
 if __name__ == '__main__':
