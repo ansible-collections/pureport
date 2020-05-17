@@ -1,5 +1,5 @@
 
-1.0.0 / 2020-04-27
+1.0.0 / 2020-05-17
 ==================
 
   * Removes all older `pureport_*` modules in favor of the newer module names.
@@ -8,6 +8,8 @@
   * Correcting imports for ansible sanity tests
   * Add scripts for testing the collection
   * Removes 3rd party modules
+    * [`pureport.fabric.aws_direct_connect_confirm_connection -> `community.aws.aws_direct_connect_confirm_connection`](https://github.com/ansible-collections/community.aws/pull/53)
+    * [`pureport.fabric.pr_48711_aws_direct_connect_virtual_interface -> `community.aws.aws_direct_connect_virtual_interface`](https://github.com/ansible-collections/community.aws/pull/53)
   * Move the fabric collection into its own subdirectory
 
 | Pureport 1.X Name                     | Pureport 0.X Name                              |
