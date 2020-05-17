@@ -1,0 +1,108 @@
+---
+- hosts: localhost
+  collections:
+    - pureport.fabric
+  tasks:
+    - name: Retrieve the access token for an api key and secret
+      access_token_info:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+      register: result
+    - name: Set the access token as a fact
+      set_fact:
+        access_token: "{{ result.access_token }}"
+
+    - name: Test create network (without id)
+      network:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        account_href: "{{ account_href }}"
+        name: Create
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test update network (no changes)
+      network:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        account_href: "{{ account_href }}"
+        id: "{{ result.id }}"
+        name: "{{ result.name }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed == true
+
+    - name: Test update network (no id; no changes)
+      network:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        account_href: "{{ account_href }}"
+        name: "{{ result.name }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed == true
+
+    - name: Test update network
+      network:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        account_href: "{{ account_href }}"
+        id: "{{ result.id }}"
+        name: "{{ result.name }}"
+        description: Update
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test update network (no id; changes)
+      network:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        account_href: "{{ account_href }}"
+        name: "{{ result.name }}"
+        description: Update 2
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test update network (remove property)
+      network:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        account_href: "{{ account_href }}"
+        id: "{{ result.id }}"
+        name: "{{ result.name }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test update network (bad name)
+      network:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        account_href: "{{ account_href }}"
+        id: "{{ result.id }}"
+        name: "12341234123412341234123412341234123412341234123412341234123412341234123412341234123412341234123412341234123412341234123412341234"
+      register: bad_result
+      ignore_errors: yes
+    - debug: var=result
+
+    - name: Test delete network
+      network:
+        state: absent
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        account_href: "{{ account_href }}"
+        name: "{{ result.name }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true

@@ -1,0 +1,22 @@
+---
+- hosts: localhost
+  collections:
+    - pureport.fabric
+  tasks:
+    - name: Retrieve the access token for an api key and secret
+      access_token_info:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+      register: result
+    - name: Set the access token as a fact
+      set_fact:
+        access_token: "{{ result.access_token }}"
+
+    - name: List supported connections for an account
+      supported_connections_info:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        account_href: "{{ account_href }}"
+      register: result
+    - debug: var=result

@@ -1,0 +1,19 @@
+---
+- import_playbook: accounts_info.yml
+- import_playbook: aws_direct_connect_connection.yml
+- import_playbook: azure_express_route_connection.yml
+- import_playbook: cloud_regions_info.yml
+- import_playbook: cloud_services_info.yml
+- import_playbook: connections_info.yml
+- import_playbook: facilities_info.yml
+- import_playbook: google_cloud_interconnect_connection.yml
+- import_playbook: locations_info.yml
+- import_playbook: network.yml
+- import_playbook: networks_info.yml
+- import_playbook: options_info.yml
+- import_playbook: port.yml
+- import_playbook: port_connection.yml
+- import_playbook: ports_info.yml
+- import_playbook: site_ipsec_vpn_connection.yml
+- import_playbook: supported_connections_info.yml
+- import_playbook: supported_ports_info.yml

@@ -1,0 +1,282 @@
+---
+- hosts: localhost
+  collections:
+    - pureport.fabric
+  tasks:
+    - name: Retrieve the access token for an api key and secret
+      access_token_info:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+      register: result
+    - name: Set the access token as a fact
+      set_fact:
+        access_token: "{{ result.access_token }}"
+
+    - name: Test create Public AWS connection
+      aws_direct_connect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        name: "Test AWS Direct Connect"
+        speed: 50
+        high_availability: true
+        peering_type: PUBLIC
+        location_href: "{{ location_href }}"
+        billing_term: HOURLY
+        aws_account_id: "{{ aws_account_id }}"
+        aws_region: "{{ aws_region }}"
+        cloud_service_hrefs: "{{ cloud_service_hrefs }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test update Public AWS connection (no changes)
+      aws_direct_connect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        id: "{{ result.id }}"
+        name: "{{ result.name }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.high_availability }}"
+        peering_type: "{{ result.peering.type }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.billing_term }}"
+        aws_account_id: "{{ aws_account_id }}"
+        aws_region: "{{ result.aws_region }}"
+        cloud_service_hrefs: "{{ cloud_service_hrefs }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed == true
+
+    - name: Test update Public AWS connection (no id; no changes)
+      aws_direct_connect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        name: "{{ result.name }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.high_availability }}"
+        peering_type: "{{ result.peering.type }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.billing_term }}"
+        aws_account_id: "{{ aws_account_id }}"
+        aws_region: "{{ result.aws_region }}"
+        cloud_service_hrefs: "{{ cloud_service_hrefs }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed == true
+
+    - name: Test update Public AWS connection (changes)
+      aws_direct_connect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        id: "{{ result.id }}"
+        description: "Test"
+        name: "{{ result.name }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.high_availability }}"
+        peering_type: "{{ result.peering.type }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.billing_term }}"
+        aws_account_id: "{{ aws_account_id }}"
+        aws_region: "{{ result.aws_region }}"
+        cloud_service_hrefs: "{{ cloud_service_hrefs }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test update Public AWS connection (no id; changes)
+      aws_direct_connect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        name: "{{ result.name }}"
+        description: "Test123"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.high_availability }}"
+        peering_type: "{{ result.peering.type }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.billing_term }}"
+        aws_account_id: "{{ aws_account_id }}"
+        aws_region: "{{ result.aws_region }}"
+        cloud_service_hrefs: "{{ cloud_service_hrefs }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test delete Public AWS connection (no id)
+      aws_direct_connect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        state: 'absent'
+        wait_for_server: true
+        name: "{{ result.name }}"
+        description: "{{ result.description }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.high_availability }}"
+        peering_type: "{{ result.peering.type }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.billing_term }}"
+        aws_account_id: "{{ aws_account_id }}"
+        aws_region: "{{ result.aws_region }}"
+        cloud_service_hrefs: "{{ cloud_service_hrefs }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test create Private AWS connection
+      aws_direct_connect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        name: "Test AWS Direct Connect"
+        speed: 50
+        high_availability: true
+        peering_type: PRIVATE
+        location_href: "{{ location_href }}"
+        billing_term: HOURLY
+        customer_networks:
+          - address: 192.167.1.1/32
+            name: My Custom Address
+        nat_enabled: true
+        nat_mappings:
+          - 192.167.1.1/32
+        aws_account_id: "{{ aws_account_id }}"
+        aws_region: "{{ aws_region }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test update Private AWS connection (no changes)
+      aws_direct_connect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        id: "{{ result.id }}"
+        name: "{{ result.name }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.high_availability }}"
+        peering_type: "{{ result.peering.type }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.billing_term }}"
+        customer_networks: "{{ result.customer_networks }}"
+        nat_enabled: "{{ result.nat.enabled }}"
+        nat_mappings: "{{ result.nat.mappings | json_query('[*].native_cidr') }}"
+        aws_account_id: "{{ aws_account_id }}"
+        aws_region: "{{ result.aws_region }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed == true
+
+    - name: Test update Private AWS connection (no id, no changes)
+      aws_direct_connect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        name: "{{ result.name }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.high_availability }}"
+        peering_type: "{{ result.peering.type }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.billing_term }}"
+        customer_networks: "{{ result.customer_networks }}"
+        nat_enabled: "{{ result.nat.enabled }}"
+        nat_mappings: "{{ result.nat.mappings | json_query('[*].native_cidr') }}"
+        aws_account_id: "{{ aws_account_id }}"
+        aws_region: "{{ result.aws_region }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed == true
+
+    - name: Test update Private AWS connection (changes)
+      aws_direct_connect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        id: "{{ result.id }}"
+        name: "{{ result.name }}"
+        description: "Test"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.high_availability }}"
+        peering_type: "{{ result.peering.type }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.billing_term }}"
+        customer_networks: "{{ result.customer_networks }}"
+        nat_enabled: "{{ result.nat.enabled }}"
+        nat_mappings: "{{ result.nat.mappings | json_query('[*].native_cidr') }}"
+        aws_account_id: "{{ aws_account_id }}"
+        aws_region: "{{ result.aws_region }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test update Private AWS connection (no id, changes)
+      aws_direct_connect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        name: "{{ result.name }}"
+        description: "Test123"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.high_availability }}"
+        peering_type: "{{ result.peering.type }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.billing_term }}"
+        customer_networks: "{{ result.customer_networks }}"
+        nat_enabled: "{{ result.nat.enabled }}"
+        nat_mappings: "{{ result.nat.mappings | json_query('[*].native_cidr') }}"
+        aws_account_id: "{{ aws_account_id }}"
+        aws_region: "{{ result.aws_region }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test delete Private AWS connection
+      aws_direct_connect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        state: 'absent'
+        wait_for_server: true
+        id: "{{ result.id }}"
+        name: "{{ result.name }}"
+        description: "{{ result.description }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.high_availability }}"
+        peering_type: "{{ result.peering.type }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.billing_term }}"
+        customer_networks: "{{ result.customer_networks }}"
+        nat_enabled: "{{ result.nat.enabled }}"
+        nat_mappings: "{{ result.nat.mappings | json_query('[*].native_cidr') }}"
+        aws_account_id: "{{ aws_account_id }}"
+        aws_region: "{{ result.aws_region }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true

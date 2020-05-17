@@ -1,0 +1,332 @@
+---
+- hosts: localhost
+  collections:
+    - pureport.fabric
+  tasks:
+    - name: Retrieve the access token for an api key and secret
+      access_token_info:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+      register: result
+    - name: Set the access token as a fact
+      set_fact:
+        access_token: "{{ result.access_token }}"
+
+    - name: List facilities
+      facilities_info:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+      register: facilities
+    - name: Set Facility
+      set_fact:
+        facility: "{{ facilities.facilities | json_query('[?vendor!=`Pureport`]') | first() }}"
+
+    - name: List supported ports
+      supported_ports_info:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        account_href: "{{ account_href }}"
+        facility_href: "{{ facility.href }}"
+      register: supported_ports
+    - name: Set Supported Ports
+      set_fact:
+        supported_ports: "{{ supported_ports.supported_ports }}"
+
+    - name: Create Primary Port
+      pureport.fabric.port:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        account_href: "{{ account_href }}"
+        facility_href: "{{ facility.href }}"
+        name: "Primary Port"
+        provider: "{{ supported_ports[0].provider }}"
+        speed: "{{ supported_ports[0].speed }}"
+        availability_domain: "PRIMARY"
+        media_type: "{{ supported_ports[0].media_types[0] }}"
+        billing_term: "{{ supported_ports[0].billing_plans[0].term }}"
+      register: primary_port
+    - debug: var=primary_port
+
+    - name: Create Secondary Port
+      pureport.fabric.port:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        account_href: "{{ account_href }}"
+        facility_href: "{{ facility.href }}"
+        name: "Secondary Port"
+        provider: "{{ supported_ports[0].provider }}"
+        speed: "{{ supported_ports[0].speed }}"
+        availability_domain: "SECONDARY"
+        media_type: "{{ supported_ports[0].media_types[0] }}"
+        billing_term: "{{ supported_ports[0].billing_plans[0].term }}"
+      register: secondary_port
+    - debug: var=secondary_port
+
+    - name: Test create Non-HA Port connection
+      port_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        name: "Test Port Connection"
+        speed: 50
+        location_href: "{{ location_href }}"
+        billing_term: HOURLY
+        primary_port_href: "{{ primary_port.href }}"
+        primary_customer_vlan: 1
+        customer_asn: 123
+        customer_networks:
+          - address: 192.167.1.1/32
+            name: My Custom Address
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test update Non-HA Port connection (no changes)
+      port_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        id: "{{ result.id }}"
+        name: "{{ result.name }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.high_availability }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.billing_term }}"
+        primary_port_href: "{{ result.primary_port.href }}"
+        primary_customer_vlan: "{{ result.primary_customer_vlan }}"
+        customer_asn: "{{ result.customer_asn }}"
+        customer_networks: "{{ result.customer_networks }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed == true
+
+    - name: Test update Non-HA Port connection (no id, no changes)
+      port_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        name: "{{ result.name }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.high_availability }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.billing_term }}"
+        primary_port_href: "{{ result.primary_port.href }}"
+        primary_customer_vlan: "{{ result.primary_customer_vlan }}"
+        customer_asn: "{{ result.customer_asn }}"
+        customer_networks: "{{ result.customer_networks }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed == true
+
+    - name: Test update Non-HA Port connection (changes)
+      port_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        id: "{{ result.id }}"
+        name: "{{ result.name }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.high_availability }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.billing_term }}"
+        primary_port_href: "{{ result.primary_port.href }}"
+        primary_customer_vlan: "{{ result.primary_customer_vlan }}"
+        customer_asn: "{{ result.customer_asn }}"
+        customer_networks:
+          - address: 192.167.1.2/32
+            name: My Custom Address
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test update Non-HA Port connection (no id, changes)
+      port_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        name: "{{ result.name }}"
+        description: Test123
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.high_availability }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.billing_term }}"
+        primary_port_href: "{{ result.primary_port.href }}"
+        primary_customer_vlan: "{{ result.primary_customer_vlan }}"
+        customer_asn: "{{ result.customer_asn }}"
+        customer_networks: "{{ result.customer_networks }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test delete Non-HA Port connection (no id)
+      port_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        state: 'absent'
+        wait_for_server: true
+        name: "{{ result.name }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.high_availability }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.billing_term }}"
+        primary_port_href: "{{ result.primary_port.href }}"
+        primary_customer_vlan: "{{ result.primary_customer_vlan }}"
+        customer_asn: "{{ result.customer_asn }}"
+        customer_networks: "{{ result.customer_networks }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test create HA Port connection
+      port_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        name: "Test Port Connection"
+        speed: 50
+        high_availability: true
+        location_href: "{{ location_href }}"
+        billing_term: HOURLY
+        primary_port_href: "{{ primary_port.href }}"
+        primary_customer_vlan: 1
+        secondary_port_href: "{{ secondary_port.href }}"
+        secondary_customer_vlan: 2
+        customer_asn: 123
+        customer_networks:
+          - address: 192.167.1.1/32
+            name: My Custom Address
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test update HA Port connection (no changes)
+      port_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        id: "{{ result.id }}"
+        name: "{{ result.name }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.high_availability }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.billing_term }}"
+        primary_port_href: "{{ result.primary_port.href }}"
+        primary_customer_vlan: "{{ result.primary_customer_vlan }}"
+        secondary_port_href: "{{ result.secondary_port.href }}"
+        secondary_customer_vlan: "{{ result.secondary_customer_vlan }}"
+        customer_asn: "{{ result.customer_asn }}"
+        customer_networks: "{{ result.customer_networks }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed == true
+
+    - name: Test update HA Port connection (no id, no changes)
+      port_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        name: "{{ result.name }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.high_availability }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.billing_term }}"
+        primary_port_href: "{{ result.primary_port.href }}"
+        primary_customer_vlan: "{{ result.primary_customer_vlan }}"
+        secondary_port_href: "{{ result.secondary_port.href }}"
+        secondary_customer_vlan: "{{ result.secondary_customer_vlan }}"
+        customer_asn: "{{ result.customer_asn }}"
+        customer_networks: "{{ result.customer_networks }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed == true
+
+    - name: Test update HA Port connection (changes)
+      port_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        id: "{{ result.id }}"
+        name: "{{ result.name }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.high_availability }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.billing_term }}"
+        primary_port_href: "{{ result.primary_port.href }}"
+        primary_customer_vlan: "{{ result.primary_customer_vlan }}"
+        secondary_port_href: "{{ result.secondary_port.href }}"
+        secondary_customer_vlan: "{{ result.secondary_customer_vlan }}"
+        customer_asn: "{{ result.customer_asn }}"
+        customer_networks:
+          - address: 192.167.1.2/32
+            name: My Custom Address
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test update HA Port connection (no id, changes)
+      port_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        name: "{{ result.name }}"
+        description: Test123
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.high_availability }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.billing_term }}"
+        primary_port_href: "{{ result.primary_port.href }}"
+        primary_customer_vlan: "{{ result.primary_customer_vlan }}"
+        secondary_port_href: "{{ result.secondary_port.href }}"
+        secondary_customer_vlan: "{{ result.secondary_customer_vlan }}"
+        customer_asn: "{{ result.customer_asn }}"
+        customer_networks: "{{ result.customer_networks }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test delete HA Port connection
+      port_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        state: 'absent'
+        wait_for_server: true
+        id: "{{ result.id }}"
+        name: "{{ result.name }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.high_availability }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.billing_term }}"
+        primary_port_href: "{{ result.primary_port.href }}"
+        primary_customer_vlan: "{{ result.primary_customer_vlan }}"
+        secondary_port_href: "{{ result.secondary_port.href }}"
+        secondary_customer_vlan: "{{ result.secondary_customer_vlan }}"
+        customer_asn: "{{ result.customer_asn }}"
+        customer_networks: "{{ result.customer_networks }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true

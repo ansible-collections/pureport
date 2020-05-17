@@ -1,0 +1,252 @@
+---
+- hosts: localhost
+  collections:
+    - pureport.fabric
+  tasks:
+    - name: Retrieve the access token for an api key and secret
+      access_token_info:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+      register: result
+    - name: Set the access token as a fact
+      set_fact:
+        access_token: "{{ result.access_token }}"
+
+    - name: Test create Non-HA GCI connection
+      google_cloud_interconnect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        name: "Test Google Cloud Interconnect"
+        speed: 50
+        location_href: "{{ location_href }}"
+        billing_term: HOURLY
+        primary_pairing_key: "{{ gci_primary_pairing_key }}"
+        customer_networks:
+          - address: 192.167.1.1/32
+            name: My Custom Address
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test update Non-HA GCI connection (no changes)
+      google_cloud_interconnect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        id: "{{ result.id }}"
+        name: "{{ result.name }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.high_availability }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.billing_term }}"
+        primary_pairing_key: "{{ gci_primary_pairing_key }}"
+        customer_networks: "{{ result.customer_networks }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed == true
+
+    - name: Test update Non-HA GCI connection (no id, no changes)
+      google_cloud_interconnect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        name: "{{ result.name }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.high_availability }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.billing_term }}"
+        primary_pairing_key: "{{ gci_primary_pairing_key }}"
+        customer_networks: "{{ result.customer_networks }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed == true
+
+    - name: Test update Non-HA GCI connection (changes)
+      google_cloud_interconnect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        id: "{{ result.id }}"
+        name: "{{ result.name }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.high_availability }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.billing_term }}"
+        primary_pairing_key: "{{ gci_primary_pairing_key }}"
+        customer_networks:
+          - address: 192.167.1.2/32
+            name: My Custom Address
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test update Non-HA GCI connection (no id, changes)
+      google_cloud_interconnect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        name: "{{ result.name }}"
+        description: Test123
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.high_availability }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.billing_term }}"
+        primary_pairing_key: "{{ gci_primary_pairing_key }}"
+        customer_networks: "{{ result.customer_networks }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test delete Non-HA GCI connection (no id)
+      google_cloud_interconnect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        state: 'absent'
+        wait_for_server: true
+        name: "{{ result.name }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.high_availability }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.billing_term }}"
+        primary_pairing_key: "{{ gci_primary_pairing_key }}"
+        customer_networks: "{{ result.customer_networks }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test create HA GCI connection
+      google_cloud_interconnect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        name: "Test Google Cloud Interconnect"
+        speed: 50
+        high_availability: true
+        location_href: "{{ location_href }}"
+        billing_term: HOURLY
+        primary_pairing_key: "{{ gci_primary_pairing_key }}"
+        secondary_pairing_key: "{{ gci_secondary_pairing_key }}"
+        customer_networks:
+          - address: 192.167.1.1/32
+            name: My Custom Address
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test update Non-HA GCI connection (no changes)
+      google_cloud_interconnect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        id: "{{ result.id }}"
+        name: "{{ result.name }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.high_availability }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.billing_term }}"
+        primary_pairing_key: "{{ gci_primary_pairing_key }}"
+        secondary_pairing_key: "{{ gci_secondary_pairing_key }}"
+        customer_networks: "{{ result.customer_networks }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed == true
+
+    - name: Test update Non-HA GCI connection (no id, no changes)
+      google_cloud_interconnect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        name: "{{ result.name }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.high_availability }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.billing_term }}"
+        primary_pairing_key: "{{ gci_primary_pairing_key }}"
+        secondary_pairing_key: "{{ gci_secondary_pairing_key }}"
+        customer_networks: "{{ result.customer_networks }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed == true
+
+    - name: Test update Non-HA GCI connection (changes)
+      google_cloud_interconnect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        id: "{{ result.id }}"
+        name: "{{ result.name }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.high_availability }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.billing_term }}"
+        primary_pairing_key: "{{ gci_primary_pairing_key }}"
+        secondary_pairing_key: "{{ gci_secondary_pairing_key }}"
+        customer_networks:
+          - address: 192.167.1.2/32
+            name: My Custom Address
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test update Non-HA GCI connection (no id, changes)
+      google_cloud_interconnect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        name: "{{ result.name }}"
+        description: Test123
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.high_availability }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.billing_term }}"
+        primary_pairing_key: "{{ gci_primary_pairing_key }}"
+        secondary_pairing_key: "{{ gci_secondary_pairing_key }}"
+        customer_networks: "{{ result.customer_networks }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test delete Non-HA GCI connection
+      google_cloud_interconnect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        state: 'absent'
+        wait_for_server: true
+        id: "{{ result.id }}"
+        name: "{{ result.name }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.high_availability }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.billing_term }}"
+        primary_pairing_key: "{{ gci_primary_pairing_key }}"
+        secondary_pairing_key: "{{ gci_secondary_pairing_key }}"
+        customer_networks: "{{ result.customer_networks }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true

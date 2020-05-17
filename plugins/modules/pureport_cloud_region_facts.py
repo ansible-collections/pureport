@@ -1,1 +1,0 @@
-cloud_regions_info.py

@@ -1,0 +1,166 @@
+---
+- hosts: localhost
+  collections:
+    - pureport.fabric
+  tasks:
+    - name: Retrieve the access token for an api key and secret
+      access_token_info:
+        api_base_url: "{{ api_base_url }}"
+        api_key: "{{ api_key }}"
+        api_secret: "{{ api_secret }}"
+      register: result
+    - name: Set the access token as a fact
+      set_fact:
+        access_token: "{{ result.access_token }}"
+
+    - name: Test create Oracle Fast Connect connection
+      oracle_fast_connect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        name: "Test Oracle Fast Connect"
+        speed: 1000
+        high_availability: true
+        location_href: "{{ location_href }}"
+        billing_term: HOURLY
+        cloud_region_id: "oracle-us-ashburn-1"
+        primary_ocid: "1234"
+        secondary_ocid: "1235"
+        primary_remote_bgp_ip: "192.167.1.1/30"
+        primary_pureport_bgp_ip: "192.167.1.2/30"
+        secondary_remote_bgp_ip: "192.167.2.1/30"
+        secondary_pureport_bgp_ip: "192.167.2.2/30"
+        customer_networks:
+          - address: 192.167.1.1/32
+            name: My Custom Address
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test update Oracle Fast Connect connection (no changes)
+      oracle_fast_connect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        id: "{{ result.id }}"
+        name: "{{ result.name }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.high_availability }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.billing_term }}"
+        cloud_region_id: "{{ result.cloud_region.id }}"
+        primary_ocid: "{{ result.primary_ocid }}"
+        secondary_ocid: "{{ result.secondary_ocid }}"
+        primary_remote_bgp_ip: "{{ result.peering.primary_remote_bgp_ip }}"
+        primary_pureport_bgp_ip: "{{ result.peering.primary_pureport_bgp_ip }}"
+        secondary_remote_bgp_ip: "{{ result.peering.secondary_remote_bgp_ip }}"
+        secondary_pureport_bgp_ip: "{{ result.peering.secondary_pureport_bgp_ip }}"
+        customer_networks: "{{ result.customer_networks }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed == true
+
+    - name: Test update Oracle Fast Connect connection (no id, no changes)
+      oracle_fast_connect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        name: "{{ result.name }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.high_availability }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.billing_term }}"
+        cloud_region_id: "{{ result.cloud_region.id }}"
+        primary_ocid: "{{ result.primary_ocid }}"
+        secondary_ocid: "{{ result.secondary_ocid }}"
+        primary_remote_bgp_ip: "{{ result.peering.primary_remote_bgp_ip }}"
+        primary_pureport_bgp_ip: "{{ result.peering.primary_pureport_bgp_ip }}"
+        secondary_remote_bgp_ip: "{{ result.peering.secondary_remote_bgp_ip }}"
+        secondary_pureport_bgp_ip: "{{ result.peering.secondary_pureport_bgp_ip }}"
+        customer_networks: "{{ result.customer_networks }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed == true
+
+    - name: Test update Oracle Fast Connect connection (changes)
+      oracle_fast_connect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        id: "{{ result.id }}"
+        name: "{{ result.name }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.high_availability }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.billing_term }}"
+        cloud_region_id: "{{ result.cloud_region.id }}"
+        primary_ocid: "{{ result.primary_ocid }}"
+        secondary_ocid: "{{ result.secondary_ocid }}"
+        primary_remote_bgp_ip: "{{ result.peering.primary_remote_bgp_ip }}"
+        primary_pureport_bgp_ip: "{{ result.peering.primary_pureport_bgp_ip }}"
+        secondary_remote_bgp_ip: "{{ result.peering.secondary_remote_bgp_ip }}"
+        secondary_pureport_bgp_ip: "{{ result.peering.secondary_pureport_bgp_ip }}"
+        customer_networks:
+          - address: 192.167.1.2/32
+            name: My Custom Address
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test update Oracle Fast Connect connection (no id, changes)
+      oracle_fast_connect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        wait_for_server: true
+        name: "{{ result.name }}"
+        description: Test123
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.high_availability }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.billing_term }}"
+        cloud_region_id: "{{ result.cloud_region.id }}"
+        primary_ocid: "{{ result.primary_ocid }}"
+        secondary_ocid: "{{ result.secondary_ocid }}"
+        primary_remote_bgp_ip: "{{ result.peering.primary_remote_bgp_ip }}"
+        primary_pureport_bgp_ip: "{{ result.peering.primary_pureport_bgp_ip }}"
+        secondary_remote_bgp_ip: "{{ result.peering.secondary_remote_bgp_ip }}"
+        secondary_pureport_bgp_ip: "{{ result.peering.secondary_pureport_bgp_ip }}"
+        customer_networks: "{{ result.customer_networks }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
+
+    - name: Test delete Oracle Fast Connect connection (no id)
+      oracle_fast_connect_connection:
+        api_base_url: "{{ api_base_url }}"
+        api_access_token: "{{ access_token }}"
+        network_href: "{{ network_href }}"
+        state: 'absent'
+        wait_for_server: true
+        name: "{{ result.name }}"
+        speed: "{{ result.speed }}"
+        high_availability: "{{ result.high_availability }}"
+        location_href: "{{ location_href }}"
+        billing_term: "{{ result.billing_term }}"
+        cloud_region_id: "{{ result.cloud_region.id }}"
+        primary_ocid: "{{ result.primary_ocid }}"
+        secondary_ocid: "{{ result.secondary_ocid }}"
+        primary_remote_bgp_ip: "{{ result.peering.primary_remote_bgp_ip }}"
+        primary_pureport_bgp_ip: "{{ result.peering.primary_pureport_bgp_ip }}"
+        secondary_remote_bgp_ip: "{{ result.peering.secondary_remote_bgp_ip }}"
+        secondary_pureport_bgp_ip: "{{ result.peering.secondary_pureport_bgp_ip }}"
+        customer_networks: "{{ result.customer_networks }}"
+      register: result
+    - debug: var=result
+    - fail:
+      when: result.changed != true
