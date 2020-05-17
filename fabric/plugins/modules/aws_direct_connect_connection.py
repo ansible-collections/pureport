@@ -202,14 +202,15 @@ def construct_connection(module):
         'aws_account_id',
         'aws_region'
     ))
+    cloud_services = [dict(href='/cloudServices/%s' % cloud_service_id)
+                      for cloud_service_id in module.params.get('cloud_service_ids')]
+    cloud_services += [dict(href=cloud_service_href)
+                       for cloud_service_href in module.params.get('cloud_service_hrefs')]
     connection.update(dict(
         type='AWS_DIRECT_CONNECT',
         peering=dict(type=module.params.get('peering_type')),
         location=get_object_link(module, '/locations', 'location_id', 'location_href'),
-        cloud_services=[dict(href='/cloudServices/%s' % cloud_service_id)
-                        for cloud_service_id in module.params.get('cloud_service_ids')] +
-                       [dict(href=cloud_service_href)
-                        for cloud_service_href in module.params.get('cloud_service_hrefs')],
+        cloud_services=cloud_services,
         nat=dict(
             enabled=module.params.get('nat_enabled'),
             mappings=[dict(native_cidr=nat_mapping)
