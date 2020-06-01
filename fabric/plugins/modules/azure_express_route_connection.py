@@ -19,7 +19,7 @@ module: azure_express_route_connection
 short_description: Create, update or delete a Azure Express Route connection
 description:
     - "Create, update or delete a Azure Express Route connection"
-version_added: "2.8"
+version_added: "2.8.0"
 requirements: [ pureport-client ]
 author: Matt Traynham (@mtraynham)
 options:

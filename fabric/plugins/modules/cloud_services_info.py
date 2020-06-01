@@ -19,7 +19,7 @@ module: cloud_services_info
 short_description: Retrieve a list of cloud services
 description:
     - "Retrieve a list of cloud services"
-version_added: "2.8"
+version_added: "2.8.0"
 requirements: [ pureport-client ]
 author: Matt Traynham (@mtraynham)
 extends_documentation_fragment:

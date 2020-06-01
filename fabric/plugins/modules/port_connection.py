@@ -19,7 +19,7 @@ module: port_connection
 short_description: Create, update or delete a Port connection
 description:
     - "Create, update or delete a Port connection"
-version_added: "2.8"
+version_added: "2.8.0"
 requirements: [ pureport-client ]
 author: Matt Traynham (@mtraynham)
 options:

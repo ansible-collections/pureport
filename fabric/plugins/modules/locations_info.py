@@ -19,7 +19,7 @@ module: locations_info
 short_description: Retrieve a list of locations
 description:
     - "Retrieve a list of locations"
-version_added: "2.8"
+version_added: "2.8.0"
 requirements: [ pureport-client ]
 author: Matt Traynham (@mtraynham)
 extends_documentation_fragment:

@@ -19,7 +19,7 @@ module: cloud_regions_info
 short_description: Retrieve a list of cloud regions
 description:
     - "Retrieve a list of cloud regions"
-version_added: "2.8"
+version_added: "2.8.0"
 requirements: [ pureport-client ]
 author: Matt Traynham (@mtraynham)
 extends_documentation_fragment:
