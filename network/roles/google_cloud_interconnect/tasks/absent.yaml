@@ -1,0 +1,47 @@
+---
+- name: remove google cloud interconnect attachments
+  google.cloud.gcp_compute_interconnect_attachment:
+    name: "{{ item.name }}"
+    project: "{{ lookup('env', 'GCP_PROJECT') }}"
+    region: "{{ item.region.split('/')[-1] }}"
+    router: { selfLink: "{{ item.router }}" }
+    type: PARTNER
+    state: absent
+  loop: "{{ gcp_attachments.results }}"
+
+- name: remove google cloud routers
+  google.cloud.gcp_compute_router:
+    name: "{{ item.name }}"
+    project: "{{ lookup('env', 'GCP_PROJECT') }}"
+    region: "{{ item.region.split('/')[-1] }}"
+    network: { selfLink: "{{ item.network }}" }
+    state: absent
+  loop: "{{ gcp_routers.results }}"
+
+- name: remove google cloud network
+  google.cloud.gcp_compute_network:
+    name: "{{ gcp_network.name }}"
+    project: "{{ lookup('env', 'GCP_PROJECT') }}"
+    state: absent
+
+- name: remove google cloud interconnect connection to pureport
+  pureport.fabric.google_cloud_interconnect_connection:
+    name: "{{ pureport_connection.name }}"
+    network_href: "{{ pureport_connection.network.href }}"
+    location_href: "{{ pureport_connection.location.href }}"
+    speed: "{{ pureport_connection.speed }}"
+    primary_pairing_key: null
+    wait_for_server: true
+    state: absent
+
+- name: get all connections for pureport network
+  pureport.fabric.connections_info:
+    network_href: "{{ pureport_connection.network.href }}"
+  register: pureport_connections
+
+- name: remove pureport network (if not connections remain)
+  pureport.fabric.network:
+    name: "{{ pureport_connection.network.title }}"
+    account_href: "/accounts/{{ lookup('env', 'PUREPORT_ACCOUNT_ID') }}"
+    state: absent
+  when: pureport_connections.connections == []

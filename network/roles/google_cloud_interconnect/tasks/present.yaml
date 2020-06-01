@@ -1,0 +1,62 @@
+---
+- name: ensure google cloud network exist
+  google.cloud.gcp_compute_network:
+    name: "{{ gcp_network_name }}"
+    project: "{{ lookup('env', 'GCP_PROJECT') }}"
+  register: gcp_network
+
+- name: ensure google cloud routers exist
+  google.cloud.gcp_compute_router:
+    name: "{{ gcp_router_name }}-{{ index }}"
+    project: "{{ lookup('env', 'GCP_PROJECT') }}"
+    region: "{{ gcp_region }}"
+    network: "{{ gcp_network }}"
+    bgp:
+      asn: 16550  # Must be 16550
+  with_sequence: start=1 count=2
+  loop_control:
+    index_var: index
+  register: gcp_routers
+
+- name: ensure google cloud interconnect attachments (vlans) exist
+  google.cloud.gcp_compute_interconnect_attachment:
+    name: "{{ gcp_interconnect_name }}-{{ index + 1 }}"
+    project: "{{ lookup('env', 'GCP_PROJECT') }}"
+    region: "{{ gcp_region }}"
+    router: "{{ item }}"
+    type: PARTNER
+    admin_enabled: true
+    edge_availability_domain: "AVAILABILITY_DOMAIN_{{ index + 1 }}"
+  loop: "{{ gcp_routers.results }}"
+  loop_control:
+    index_var: index
+  register: gcp_attachments
+
+- name: create region_to_location fact
+  set_fact:
+    region_to_location:
+      us-west1: "/locations/us-sea"
+      us-west2: "/locations/us-sjc"
+      us-east1: "/locations/us-wdc"
+      us-east4: "/locations/us-wdc"
+      us-central1: "/locations/us-dal"
+
+- name: ensure pureport network is created
+  pureport.fabric.network:
+    name: "{{ pureport_network_name }}"
+    description: "{{ pureport_network_description | default(omit) }}"
+    account_href: "/accounts/{{ lookup('env', 'PUREPORT_ACCOUNT_ID') }}"
+  register: pureport_network
+
+- name: ensure pureport gcp connection exist
+  pureport.fabric.google_cloud_interconnect_connection:
+    name: "{{ pureport_connection_name }}"
+    network_href: "{{ pureport_network.href }}"
+    location_href: "{{ region_to_location[region] }}"
+    speed: "{{ pureport_connection_speed }}"
+    high_availability: true
+    billing_term: HOURLY
+    primary_pairing_key: "{{ gcp_attachments.results.0.pairingKey }}"
+    secondary_pairing_key: "{{ gcp_attachments.results.1.pairingKey }}"
+    wait_for_server: true
+  register: pureport_connection

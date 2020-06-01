@@ -1,0 +1,9 @@
+---
+state: present
+
+gcp_network_name: vpc
+gcp_router_name: router
+gcp_attachment_name: vlan
+
+pureport_network_name: default
+pureport_connection_name: gateway

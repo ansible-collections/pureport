@@ -4,4 +4,5 @@ for interaction with [Pureport](https://www.pureport.com/) & Pureport's ReST API
 
 Pureport provides the following collections:
 - [pureport.fabric](/fabric) - A collection of modules that directly interact with the Pureport ReST API.
+- [pureport.network](/network) - A collection of roles for building cloud native networks.
 - [pureport.aws](/aws) - A collection of AWS patched modules for handling DirectConnect automation.
