@@ -19,7 +19,7 @@ module: options_info
 short_description: Retrieve a list of option enumerations used for creating connections
 description:
     - "Retrieve a list of option enumerations used for creating connections"
-version_added: "2.8"
+version_added: "2.8.0"
 requirements: [ pureport-client ]
 author: Matt Traynham (@mtraynham)
 options:

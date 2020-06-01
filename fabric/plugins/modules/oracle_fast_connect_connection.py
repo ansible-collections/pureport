@@ -19,7 +19,7 @@ module: oracle_fast_connect_connection
 short_description: Create, update or delete an Oracle Fast Connect connection
 description:
     - "Create, update or delete an Oracle Fast Connect connection"
-version_added: "2.9"
+version_added: "2.9.0"
 requirements: [ pureport-client ]
 author: Matt Traynham (@mtraynham)
 options:

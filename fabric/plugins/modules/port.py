@@ -19,7 +19,7 @@ module: port
 short_description: Create, update or delete a port
 description:
     - "Create, update or delete a port"
-version_added: "2.8"
+version_added: "2.8.0"
 requirements: [ pureport-client ]
 author: Matt Traynham (@mtraynham)
 options:

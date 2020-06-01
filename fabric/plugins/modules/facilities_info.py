@@ -19,7 +19,7 @@ module: facilities_info
 short_description: Retrieve a list of facilities
 description:
     - "Retrieve a list of facilities"
-version_added: "2.8"
+version_added: "2.8.0"
 requirements: [ pureport-client ]
 author: Matt Traynham (@mtraynham)
 extends_documentation_fragment:

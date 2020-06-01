@@ -19,7 +19,7 @@ module: access_token_info
 short_description: Retrieve an access token to use with the Pureport API
 description:
     - "Retrieve an access token to use with the Pureport API"
-version_added: "2.8"
+version_added: "2.8.0"
 requirements: [ pureport-client ]
 author: Matt Traynham (@mtraynham)
 options:

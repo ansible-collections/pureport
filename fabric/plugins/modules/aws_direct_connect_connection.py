@@ -19,7 +19,7 @@ module: aws_direct_connect_connection
 short_description: Create, update or delete an AWS Direct Connect connection
 description:
     - "Create, update or delete an AWS Direct Connect connection"
-version_added: "2.8"
+version_added: "2.8.0"
 requirements: [ pureport-client ]
 author: Matt Traynham (@mtraynham)
 options:

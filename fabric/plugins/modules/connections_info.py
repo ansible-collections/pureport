@@ -19,7 +19,7 @@ module: connections_info
 short_description: Retrieve a list of connections for a account or network
 description:
     - "Retrieve a list of connections for a account or network"
-version_added: "2.8"
+version_added: "2.8.0"
 requirements: [ pureport-client ]
 author: Matt Traynham (@mtraynham)
 options:

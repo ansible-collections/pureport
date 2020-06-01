@@ -19,7 +19,7 @@ module: site_ipsec_vpn_connection
 short_description: Create, update or delete a Site IPSec VPN connection
 description:
     - "Create, update or delete a Site IPSec VPN connection"
-version_added: "2.8"
+version_added: "2.8.0"
 requirements: [ pureport-client ]
 author: Matt Traynham (@mtraynham)
 options:

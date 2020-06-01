@@ -19,7 +19,7 @@ module: network
 short_description: Create, update or delete a network
 description:
     - "Create, update or delete a network"
-version_added: "2.8"
+version_added: "2.8.0"
 requirements: [ pureport-client ]
 author: Matt Traynham (@mtraynham)
 options:

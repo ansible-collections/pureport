@@ -19,7 +19,7 @@ module: supported_ports_info
 short_description: Retrieve a list of supported ports for an account
 description:
     - "Retrieve a list of supported ports for an account"
-version_added: "2.8"
+version_added: "2.8.0"
 requirements: [ pureport-client ]
 author: Matt Traynham (@mtraynham)
 options:

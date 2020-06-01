@@ -19,7 +19,7 @@ module: google_cloud_interconnect_connection
 short_description: Create, update or delete a Google Cloud Interconnect connection
 description:
     - "Create, update or delete a Google Cloud Interconnect connection"
-version_added: "2.8"
+version_added: "2.8.0"
 requirements: [ pureport-client ]
 author: Matt Traynham (@mtraynham)
 options:
