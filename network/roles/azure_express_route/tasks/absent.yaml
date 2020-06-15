@@ -1,0 +1,102 @@
+---
+- name: check if the azure express route circuit peering configuration exists
+  azure_rm_resource:
+    url: "{{ azure_api_prefix }}/expressRouteCircuits/{{ azure_circuit_name }}/peerings/{{ azure_express_route_peering.response.name }}"
+    api_version: "{{ azure_api_version }}"
+    idempotency: true
+    method: GET
+  register: azure_peering_check_results
+  ignore_errors: yes
+
+- block:
+    # https://docs.microsoft.com/en-us/rest/api/expressroute/expressroutecircuitpeerings/delete
+    - name: delete the azure express route circuit peering configuration
+      azure_rm_resource:
+        url: "{{ azure_api_prefix }}/expressRouteCircuits/{{ azure_circuit_name }}/peerings/AzurePrivatePeering"
+        api_version: "{{ azure_api_version }}"
+        idempotency: true
+        method: DELETE
+
+    - name: wait for the azure express route circuit peering configuration delete operation to finish
+      azure_rm_resource:
+        url: "{{ azure_api_prefix }}/expressRouteCircuits/{{ azure_circuit_name }}/peerings/{{ azure_express_route_peering.response.name }}"
+        api_version: "{{ azure_api_version }}"
+        idempotency: true
+        method: GET
+      register: azure_peering_operation
+      until: azure_peering_operation is failed
+      retries: 30
+      delay: 10
+      ignore_errors: true
+  when: azure_peering_check_results is succeeded
+
+- name: delete the azure connection from the pureport network
+  pureport.fabric.azure_express_route_connection:
+    name: "{{ pureport_connection.name }}"
+    network_href: "{{ pureport_connection.network.href }}"
+    location_href: "{{ pureport_connection.location.href }}"
+    speed: "{{ pureport_connection.speed }}"
+    high_availability: true
+    billing_term: HOURLY
+    service_key: "{{ pureport_connection.service_key }}"
+    wait_for_server: true
+    state: absent
+
+- name: check if the azure express route circuit exists
+  azure_rm_resource:
+    url: "{{ azure_api_prefix }}/expressRouteCircuits/{{ azure_express_route_circuit.response.name }}"
+    api_version: "{{ azure_api_version }}"
+    idempotency: true
+    method: GET
+  register: azure_circuit_check_results
+  ignore_errors: yes
+
+- block:
+    # https://docs.microsoft.com/en-us/rest/api/expressroute/expressroutecircuits/delete
+    - name: delete the azure express route circuit
+      azure_rm_resource:
+        url: "{{ azure_api_prefix }}/expressRouteCircuits/{{ azure_express_route_circuit.response.name }}"
+        api_version: "{{ azure_api_version }}"
+        idempotency: true
+        method: DELETE
+
+    - name: wait for the azure express route circuit delete operation to be completed
+      azure_rm_resource:
+        url: "{{ azure_api_prefix }}/expressRouteCircuits/{{ azure_express_route_circuit.response.name }}"
+        api_version: "{{ azure_api_version }}"
+        idempotency: true
+        method: GET
+      register: azure_circuit_operation
+      until: azure_circuit_operation is failed
+      retries: 30
+      delay: 10
+      ignore_errors: true
+  when: azure_circuit_check_results is succeeded
+
+# https://docs.ansible.com/ansible/latest/modules/azure_rm_virtualnetwork_module.html#azure-rm-virtualnetwork-module
+- name: remove the azure virtual network
+  azure_rm_virtualnetwork:
+    name: "{{ azure_virtual_network.state.name }}"
+    resource_group: "{{ azure_resource_group.state.name }}"
+    location: "{{ azure_virtual_network.state.location }}"
+    state: absent
+
+# https://docs.ansible.com/ansible/latest/modules/azure_rm_resourcegroup_module.html
+- name: remove the azure resource group
+  azure_rm_resourcegroup:
+    name: "{{ azure_resource_group.state.name }}"
+    location: "{{ azure_resource_group.state.location }}"
+    force_delete_nonempty: true
+    state: absent
+
+- name: get all connections for pureport network
+  pureport.fabric.connections_info:
+    network_href: "{{ pureport_connection.network.href }}"
+  register: pureport_connections
+
+- name: remove pureport network (if no connections remain)
+  pureport.fabric.network:
+    name: "{{ pureport_connection.network.title }}"
+    account_href: "/accounts/{{ lookup('env', 'PUREPORT_ACCOUNT_ID') }}"
+    state: absent
+  when: pureport_connections.connections == []

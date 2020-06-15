@@ -1,0 +1,87 @@
+---
+- set_fact:
+    locations:
+      chicago: ["/locations/us-chi", "Chicago", "northcentralus"]
+      dallas: ["/locations/us-dal", "Dallas", "southcentralus"]
+      seattle: ["/locations/us-sea", "Seattle", "westus2"]
+      silicon_valley: ["/locations/us-sjc", "Silicon Valley", "westus"]
+      washington_dc: ["/locations/us-wdc", "Washington DC", "eastus"]
+
+- name: create the azure resource manager group
+  azure_rm_resourcegroup:
+    name: "{{ azure_rg_name }}"
+    location: "{{ locations[azure_location.replace(' ', '_').lower()].2 }}"
+  register: azure_resource_group
+
+# https://docs.ansible.com/ansible/latest/modules/azure_rm_virtualnetwork_module.html#azure-rm-virtualnetwork-module
+- name: create the azure virtual network
+  azure_rm_virtualnetwork:
+    name: "{{ azure_vnet_name }}"
+    resource_group: "{{ azure_resource_group.state.name }}"
+    location: "{{ azure_resource_group.state.location }}"
+    address_prefixes_cidr: "{{ azure_vnet_cidr }}"
+  register: azure_virtual_network
+
+# https://docs.microsoft.com/en-us/rest/api/expressroute/expressroutecircuits/createorupdate
+- name: create the azure express route circuit
+  azure_rm_resource:
+    url: "{{ azure_api_prefix }}/expressRouteCircuits/{{ azure_circuit_name }}"
+    api_version: "{{ azure_api_version }}"
+    idempotency: true
+    body:
+      location: "{{ azure_resource_group.state.location }}"
+      sku:
+        name: Standard_MeteredData
+        tier: Standard
+        family: MeteredData
+      properties:
+        serviceProviderProperties:
+          serviceProviderName: Equinix
+          peeringLocation: "{{ locations[azure_location.replace(' ', '_').lower()].1 }}"
+          bandwidthInMbps: "{{ pureport_connection_speed }}"
+  register: azure_express_route_circuit
+
+- name: wait until the azure express route circuit has been provisioned
+  azure_rm_resource:
+    url: "{{ azure_api_prefix }}/expressRouteCircuits/{{ azure_circuit_name }}"
+    api_version: "{{ azure_api_version }}"
+    method: GET
+  register: azure_express_route
+  until: azure_express_route.response.properties.serviceKey != '00000000-0000-0000-0000-000000000000'
+  retries: 30
+  delay: 10
+
+- name: create the pureport network
+  pureport.fabric.network:
+    name: "{{ pureport_network_name }}"
+    description: "{{ pureport_network_description | default(omit) }}"
+    account_href: "/accounts/{{ lookup('env', 'PUREPORT_ACCOUNT_ID') }}"
+  register: pureport_network
+
+- name: create the azure connection to the pureport network
+  pureport.fabric.azure_express_route_connection:
+    name: "{{ pureport_connection_name }}"
+    network_href: "{{ pureport_network.href }}"
+    location_href: "{{ locations[azure_location.replace(' ', '_').lower()].0 }}"
+    speed: "{{ pureport_connection_speed }}"
+    high_availability: true
+    billing_term: HOURLY
+    service_key: "{{ azure_express_route.response.properties.serviceKey }}"
+    wait_for_server: true
+  register: pureport_connection
+
+# https://docs.microsoft.com/en-us/rest/api/expressroute/expressroutecircuitpeerings/createorupdate
+- name: update the azure express route circuit peering configuration
+  azure_rm_resource:
+    url: "{{ azure_api_prefix }}/expressRouteCircuits/{{ azure_circuit_name }}/peerings/AzurePrivatePeering"
+    api_version: "{{ azure_api_version }}"
+    idempotency: true
+    body:
+      properties:
+        peeringType: AzurePrivatePeering
+        peerASN: "{{ pureport_connection.primary_gateway.bgp_config.pureport_asn }}"
+        primaryPeerAddressPrefix: "{{ pureport_connection.primary_gateway.bgp_config.peering_subnet }}"
+        secondaryPeerAddressPrefix: "{{ pureport_connection.secondary_gateway.bgp_config.peering_subnet }}"
+        vlanId: "{{ pureport_connection.primary_gateway.vlan }}"
+        sharedKey: "{{ pureport_connection.primary_gateway.bgp_config.password }}"
+  register: azure_express_route_peering

@@ -1,0 +1,17 @@
+---
+state: present
+
+azure_subscription_id: "{{ lookup('env', 'AZURE_SUBSCRIPTION_ID') }}"
+
+azure_api_version: "2018-11-01"
+azure_api_prefix: "/subscriptions/{{ azure_subscription_id }}/resourceGroups/{{ azure_resource_group.state.name }}/providers/Microsoft.Network"
+
+azure_rg_name: pureport-rg
+
+azure_vnet_name: pureport-vnet
+azure_vnet_cidr: "10.0.0.0/16"
+
+azure_circuit_name: pureport-circuit
+
+pureport_network_name: default
+pureport_connection_name: azure-gateway
