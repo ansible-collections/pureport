@@ -1,0 +1,88 @@
+---
+- block:
+    - name: ensure the aws vpc exists
+      ec2_vpc_net:
+        name: "{{ aws_vpc_name }}"
+        region: "{{ aws_region }}"
+        cidr_block: "{{ aws_vpc_cidr_block }}"
+      register: aws_vpc
+
+    - name: ensure the aws virtual gateway exists
+      ec2_vpc_vgw:
+        name: "{{ aws_vgw_name }}"
+        region: "{{ aws_region }}"
+        vpc_id: "{{ aws_vpc.vpc.id }}"
+      register: aws_virtual_gateway
+  when: aws_manage_vpc | bool == True
+
+- name: ensure the aws direct connect gateway exists
+  aws_direct_connect_gateway:
+    name: "{{ aws_dcg_name }}"
+    region: "{{ aws_region }}"
+    amazon_asn: "64512"
+    virtual_gateway_id: "{{ aws_vgw.vgw.id | default(omit) }}"
+  register: aws_direct_connect_gateway
+
+- set_fact:
+    region_to_location:
+      us-west-1: "/locations/us-sjc"
+      us-west-2: "/locations/us-sea"
+      us-east-1: "/locations/us-wdc"
+      us-east-2: "/locations/us-chi"
+
+- name: checking the value for pureport_connection_speed is valid
+  assert:
+    that:
+      - pureport_connection_speed in [50, 100, 200, 300, 400, 500, 1000, 2000, 5000, 10000]
+    fail_msg: "invalid connection speed"
+    quiet: yes
+
+- name: ensure the pureport network exists
+  pureport.fabric.network:
+    name: "{{ pureport_network_name }}"
+    description: "{{ pureport_network_description }}"
+    account_href: "/accounts/{{ lookup('env', 'PUREPORT_ACCOUNT_ID') }}"
+  register: pureport_network
+
+- name: ensure the aws connection to pureport exists
+  pureport.fabric.aws_direct_connect_connection:
+    name: "{{ pureport_connection_name }}"
+    network_href: "{{ pureport_network.href }}"
+    location_href: "{{ region_to_location[aws_region] }}"
+    speed: "{{ pureport_connection_speed }}"
+    high_availability: true
+    billing_term: HOURLY
+    aws_account_id: "{{ lookup('env', 'AWS_ACCOUNT_ID') }}"
+    aws_region: "{{ aws_region }}"
+    wait_for_server: true
+  register: pureport_connection
+
+- name: set value for 'pureport_gateways' fact
+  set_fact:
+    pureport_gateways: "{{ [pureport_connection.primary_gateway, pureport_connection.secondary_gateway] | select('defined') | list }}"
+
+- pureport.aws.direct_connect_confirm_connection:
+    connection_id: "{{ item.remote_id }}"
+    region: "{{ aws_region }}"
+  loop: "{{ pureport_gateways }}"
+
+- name: ensure the aws direct connect virtual interfaces exist
+  pureport.aws.direct_connect_virtual_interface:
+    name: "{{ aws_vif_name }}-{{ index + 1 }}"
+    region: "{{ aws_region }}"
+    direct_connect_gateway_id: "{{ aws_direct_connect_gateway.direct_connect_gateway_id }}"
+    id_to_associate: "{{ item.remote_id }}"
+    public: false
+    vlan: "{{ item.vlan }}"
+    bgp_asn: "{{ item.bgp_config.pureport_asn }}"
+    customer_address: "{{ item.bgp_config.pureport_ip }}"
+    amazon_address: "{{ item.bgp_config.customer_ip }}"
+    authentication_key: "{{ item.bgp_config.password }}"
+    state: present
+  loop: "{{ pureport_gateways }}"
+  loop_control:
+    index_var: index
+  delay: 30
+  until: aws_virtual_interfaces is not failed
+  retries: 10  # For some reason this seems to fail the first few times, but eventually works...
+  register: aws_virtual_interfaces

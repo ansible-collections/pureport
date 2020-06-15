@@ -1,0 +1,68 @@
+---
+- name: ensure aws virtual gateway does not exist
+  ec2_vpc_vgw:
+    name: "{{ aws_virtual_gateway.vgw.tags.Name }}"
+    region: "{{ aws_region }}"
+    state: absent
+  register: aws_vgw_result
+  delay: 30
+  until: aws_vgw_result is not failed
+  retries: 10
+  when: aws_virtual_gateway != {}
+
+- name: ensure aws virtual interfaces do not exist
+  aws_direct_connect_virtual_interface:
+    connection_id: "{{ item.connection_id }}"
+    virtual_interface_id: "{{ item.virtual_interface_id }}"
+    region: "{{ item.region }}"
+    state: absent
+  loop: "{{ aws_virtual_interfaces }}"
+
+- name: ensure aws direct connect connection does not exit
+  aws_direct_connect_connection:
+    connection_id: "{{ item.connection_id }}"
+    region: "{{ item.region }}"
+    state: absent
+  register: aws_dcg_result
+  delay: 30
+  until: aws_dcg_result is not failed
+  retries: 20
+  loop: "{{ aws_virtual_interfaces }}"
+
+- name: ensure the aws direct connect gateway does not exist
+  aws_direct_connect_gateway:
+    name: "{{ aws_direct_connect_gateway.direct_connect_gateway_name }}"
+    direct_connect_gateway_id: "{{ aws_direct_connect_gateway.direct_connect_gateway_id }}"
+    region: "{{ aws_region }}"
+    state: absent
+
+- name: ensure the aws vpc does not exist
+  ec2_vpc_net:
+    name: "{{ aws_vpc.vpc.tags.Name }}"
+    region: "{{ aws_region }}"
+    cidr_block: "{{ aws_vpc.vpc.cidr_block }}"
+    state: absent
+  when: aws_vpc != {}
+
+- name: ensure the aws connection to pureport does not exist
+  pureport.fabric.aws_direct_connect_connection:
+    name: "{{ pureport_connection.name }}"
+    network_href: "{{ pureport_connection.network.href }}"
+    location_href: "{{ pureport_connection.location.href }}"
+    speed: "{{ pureport_connection.speed }}"
+    aws_account_id: "{{ pureport_connection.aws_account_id }}"
+    aws_region: "{{ pureport_connection.aws_region }}"
+    wait_for_server: true
+    state: absent
+
+- name: get all connections for pureport network
+  pureport.fabric.connections_info:
+    network_href: "{{ pureport_connection.network.href }}"
+  register: pureport_connections
+
+- name: remove pureport network (if no connections remain)
+  pureport.fabric.network:
+    name: "{{ pureport_connection.network.title }}"
+    account_href: "/accounts/{{ lookup('env', 'PUREPORT_ACCOUNT_ID') }}"
+    state: absent
+  when: pureport_connections.connections == []
