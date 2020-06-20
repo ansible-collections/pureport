@@ -1,7 +1,6 @@
 # Google Cloud Interconnect Role
 
-Create connections between a Pureport Fabric cloud native network and Google
-Cloud using high speed, Google Cloud Interconnect connections.
+Add or remove connections between Google Cloud and Pureport.  
 
 ## Usage
 

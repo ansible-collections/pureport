@@ -5,6 +5,10 @@ removed.  If the connection does not exist, the role will quietly end.  For
 this role to operate correctly, the input values should be the results of a
 previous provisioning activity [see here](add_connection.md).
 
+In order for this role to execute properly, both Google Cloud and Pureport 
+credentials must be set.  Please see [Configuring Credentials](credentials.md)
+for more information.
+
 ## Example
 ```yaml
 ---

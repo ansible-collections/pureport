@@ -1,11 +1,11 @@
 ---
-- name: ensure google cloud network exist
+- name: create google cloud network
   google.cloud.gcp_compute_network:
     name: "{{ gcp_network_name }}"
     project: "{{ lookup('env', 'GCP_PROJECT') }}"
   register: gcp_network
 
-- name: ensure google cloud routers exist
+- name: create google cloud routers
   google.cloud.gcp_compute_router:
     name: "{{ gcp_router_name }}-{{ index }}"
     project: "{{ lookup('env', 'GCP_PROJECT') }}"
@@ -18,7 +18,7 @@
     index_var: index
   register: gcp_routers
 
-- name: ensure google cloud interconnect attachments (vlans) exist
+- name: create google cloud interconnect attachments
   google.cloud.gcp_compute_interconnect_attachment:
     name: "{{ gcp_interconnect_name }}-{{ index + 1 }}"
     project: "{{ lookup('env', 'GCP_PROJECT') }}"
@@ -41,14 +41,14 @@
       us-east4: "/locations/us-wdc"
       us-central1: "/locations/us-dal"
 
-- name: ensure pureport network is created
+- name: create pureport network
   pureport.fabric.network:
     name: "{{ pureport_network_name }}"
     description: "{{ pureport_network_description | default(omit) }}"
     account_href: "/accounts/{{ lookup('env', 'PUREPORT_ACCOUNT_ID') }}"
   register: pureport_network
 
-- name: ensure pureport gcp connection exist
+- name: create connection from google cloud to pureport
   pureport.fabric.google_cloud_interconnect_connection:
     name: "{{ pureport_connection_name }}"
     network_href: "{{ pureport_network.href }}"

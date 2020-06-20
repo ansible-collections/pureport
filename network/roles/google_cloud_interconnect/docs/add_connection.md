@@ -4,6 +4,10 @@ When setting the `state` value to `present` (default), a new connection will
 be added between Pureport and Google Cloud, if the connection does not already
 exist.  
 
+In order for this role to execute properly, both Google Cloud and Pureport 
+credentials must be set.  Please see [Configuring Credentials](credentials.md)
+for more information.
+
 ## Example
 
 ```yaml
