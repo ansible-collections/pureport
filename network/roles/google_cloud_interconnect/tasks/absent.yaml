@@ -18,6 +18,12 @@
     state: absent
   loop: "{{ gcp_routers.results }}"
 
+- name: rmeove google cloud subnetwork
+  google.cloude.gcp_compute_subnetwork:
+    name: "{{ gcp_subnetwork.name }}"
+    project: "{{ lookup('env', 'GCP_PROJECT') }}"
+    state: absent
+
 - name: remove google cloud network
   google.cloud.gcp_compute_network:
     name: "{{ gcp_network.name }}"

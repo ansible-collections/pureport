@@ -2,20 +2,32 @@
 - name: create google cloud network
   google.cloud.gcp_compute_network:
     name: "{{ gcp_network_name }}"
+    auto_create_subnetworks: "{{ gcp_network_auto_create_subnets }}"
+    routing_config: { routing_mode: "{{ gcp_network_routing_mode }}" }
     project: "{{ lookup('env', 'GCP_PROJECT') }}"
   register: gcp_network
 
-- name: create google cloud routers
+- name: create google cloud subnetwork
+  google.cloud.gcp_compute_subnetwork:
+    name: "{{ gcp_subnetwork_name }}"
+    network: "{{ gcp_network }}"
+    region: "{{ gcp_region }}"
+    ip_cidr_range: "{{ gcp_subnetwork_cidr }}"
+    project: "{{ lookup('env', 'GCP_PROJECT') }}"
+  when:
+    - gcp_subnetwork_cidr is defined
+    - gcp_subnetwork_cidr != omit
+  register: gcp_subnetwork
+
+- name: create google cloud router
   google.cloud.gcp_compute_router:
-    name: "{{ gcp_router_name }}-{{ index }}"
+    name: "{{ gcp_router_name }}-{{ item }}"
     project: "{{ lookup('env', 'GCP_PROJECT') }}"
     region: "{{ gcp_region }}"
     network: "{{ gcp_network }}"
     bgp:
       asn: 16550  # Must be 16550
   with_sequence: start=1 count=2
-  loop_control:
-    index_var: index
   register: gcp_routers
 
 - name: create google cloud interconnect attachments

@@ -1,9 +1,15 @@
 ---
 state: present
 
-gcp_network_name: vpc
-gcp_router_name: router
-gcp_attachment_name: vlan
+gcp_network_name: pureport-vpc
+gcp_network_routing_mode: REGIONAL
+gcp_network_auto_create_subnets: False
+gcp_network_cidr: null
+
+gcp_subnetwork_name: subnet
+
+gcp_router_name: pureport-router
+gcp_attachment_name: pureport-vlan
 
 pureport_network_name: default
-pureport_connection_name: gateway
+pureport_connection_name: gcp-connection
