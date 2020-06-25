@@ -1,4 +1,25 @@
 ---
+- name: create region_to_location fact
+  set_fact:
+    region_to_location:
+      us-west1: "/locations/us-sea"
+      us-west2: "/locations/us-sjc"
+      us-east1: "/locations/us-wdc"
+      us-east4: "/locations/us-wdc"
+      us-central1: "/locations/us-dal"
+
+- assert:
+    that:
+      - gcp_region in region_to_location.keys()
+    fail_msg: "invalid google cloud region"
+    quiet: yes
+
+- assert:
+    that:
+      - pureport_connection_speed | int in [50, 100, 200, 300, 400, 500, 1000, 5000, 10000]
+    fail_msg: "invalid connection speed"
+    quiet: yes
+
 - name: create google cloud network
   google.cloud.gcp_compute_network:
     name: "{{ gcp_network_name }}"
@@ -43,15 +64,6 @@
   loop_control:
     index_var: index
   register: gcp_attachments
-
-- name: create region_to_location fact
-  set_fact:
-    region_to_location:
-      us-west1: "/locations/us-sea"
-      us-west2: "/locations/us-sjc"
-      us-east1: "/locations/us-wdc"
-      us-east4: "/locations/us-wdc"
-      us-central1: "/locations/us-dal"
 
 - name: create pureport network
   pureport.fabric.network:

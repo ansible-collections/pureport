@@ -8,6 +8,9 @@
     type: PARTNER
     state: absent
   loop: "{{ gcp_attachments.results }}"
+  when:
+    - gcp_attachments is defined
+    - "'results' in gcp_attachments"
 
 - name: remove google cloud routers
   google.cloud.gcp_compute_router:
@@ -17,9 +20,12 @@
     network: { selfLink: "{{ item.network }}" }
     state: absent
   loop: "{{ gcp_routers.results }}"
+  when:
+    - gcp_routers is defined
+    - "'results' in gcp_routers"
 
 - name: rmeove google cloud subnetwork
-  google.cloude.gcp_compute_subnetwork:
+  google.cloud.gcp_compute_subnetwork:
     name: "{{ gcp_subnetwork.name }}"
     project: "{{ lookup('env', 'GCP_PROJECT') }}"
     state: absent

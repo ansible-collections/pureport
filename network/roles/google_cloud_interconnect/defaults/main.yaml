@@ -3,7 +3,7 @@ state: present
 
 gcp_network_name: pureport-vpc
 gcp_network_routing_mode: REGIONAL
-gcp_network_auto_create_subnets: False
+gcp_network_auto_create_subnets: True
 gcp_network_cidr: null
 
 gcp_subnetwork_name: subnet
