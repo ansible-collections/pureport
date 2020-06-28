@@ -24,11 +24,17 @@
     - gcp_routers is defined
     - "'results' in gcp_routers"
 
-- name: rmeove google cloud subnetwork
+- name: remove google cloud subnetwork
   google.cloud.gcp_compute_subnetwork:
     name: "{{ gcp_subnetwork.name }}"
     project: "{{ lookup('env', 'GCP_PROJECT') }}"
+    region: "{{ item.region.split('/')[-1] }}"
+    network: "{{ gcp_network }}"
+    ip_cidr_range: "{{ gcp_subnetwork.ipCidrRange }}"
     state: absent
+  when:
+    - gcp_subnetwork is defined
+    - "'name' in gcp_subnetwork"
 
 - name: remove google cloud network
   google.cloud.gcp_compute_network:
@@ -43,7 +49,7 @@
     location_href: "{{ pureport_connection.location.href }}"
     speed: "{{ pureport_connection.speed }}"
     primary_pairing_key: null
-    wait_for_server: true
+    wait_for_server: "{{ pureport_connection_wait_for_server | default(omit) }}"
     state: absent
 
 - name: get all connections for pureport network

@@ -1,16 +1,16 @@
 ---
-- name: create region_to_location fact
+- name: create pureport_region_map fact
   set_fact:
-    region_to_location:
+    pureport_region_map:
       us-west1: "/locations/us-sea"
       us-west2: "/locations/us-sjc"
       us-east1: "/locations/us-wdc"
       us-east4: "/locations/us-wdc"
-      us-central1: "/locations/us-dal"
+      us-central1: "/locations/us-chi"
 
 - assert:
     that:
-      - gcp_region in region_to_location.keys()
+      - gcp_region in pureport_region_map.keys()
     fail_msg: "invalid google cloud region"
     quiet: yes
 
@@ -76,11 +76,11 @@
   pureport.fabric.google_cloud_interconnect_connection:
     name: "{{ pureport_connection_name }}"
     network_href: "{{ pureport_network.href }}"
-    location_href: "{{ region_to_location[region] }}"
+    location_href: "{{ pureport_region_map[region] }}"
     speed: "{{ pureport_connection_speed }}"
     high_availability: true
     billing_term: HOURLY
     primary_pairing_key: "{{ gcp_attachments.results.0.pairingKey }}"
     secondary_pairing_key: "{{ gcp_attachments.results.1.pairingKey }}"
-    wait_for_server: true
+    wait_for_server: "{{ pureport_connection_wait_for_server | default(omit) }}"
   register: pureport_connection
