@@ -1,0 +1,54 @@
+---
+- set_fact:
+    vpc_id: "{{ vpc | default('default') | hash('sha1') }}"
+
+- name: create google cloud network
+  google.cloud.gcp_compute_network:
+    name: "vpc-{{ vpc_id[0:6] }}"
+    auto_create_subnetworks: "{{ gcp_network_auto_create_subnets | default(True) }}"
+    routing_config: { routing_mode: "{{ gcp_network_routing_mode | default('REGIONAL') }}" }
+    project: "{{ lookup('env', 'GCP_PROJECT') }}"
+  register: gcp_network
+
+- name: create google cloud subnets
+  google.cloud.gcp_compute_subnetwork:
+    name: "{{ item.name | default(gcp_network.name) }}"
+    network: { selfLink: "{{ gcp_network.selfLink }}" }
+    region: "{{ item.region }}"
+    ip_cidr_range: "{{ item.cidr_block }}"
+    project: "{{ lookup('env', 'GCP_PROJECT') }}"
+  with_items: "{{ gcp_subnets | default([]) }}"
+  register: gcp_network_subnets
+
+- name: manage gcp firewall rule allow ssh
+  google.cloud.gcp_compute_firewall:
+    name: "{{ gcp_network.name }}-allow-ssh"
+    source_ranges: "{{ gcp_firewall_ssh_source_ranges | default(omit) }}"
+    allowed:
+      - ip_protocol: tcp
+        ports: [ "22" ]
+    network: { selfLink: "{{ gcp_network.selfLink }}" }
+    project: "{{ lookup('env', 'GCP_PROJECT') }}"
+    state: "{{ gcp_firewall_allow_ssh | default(False) | ternary('present', 'absent') }}"
+  register: gcp_firewall_rule_allow_ssh
+
+- name: manage gcp firewall rule allow icmp
+  google.cloud.gcp_compute_firewall:
+    name: "{{ gcp_network.name }}-allow-icmp"
+    source_ranges: "{{ gpc_firewall_icmp_source_ranges | default(omit) }}"
+    allowed:
+      - ip_protocol: icmp
+    network: { selfLink: "{{ gcp_network.selfLink }}" }
+    project: "{{ lookup('env', 'GCP_PROJECT') }}"
+    state: "{{ gcp_firewall_allow_icmp | default(False) | ternary('present', 'absent') }}"
+  register: gcp_firewall_rule_allow_icmp
+
+- name: create google cloud vpc firewall rules
+  gcp_compute_firewall:
+    name: "{{ item.name }}"
+    allowed: "{{ item.allowed }}"
+    source_ranges: "{{ item.source_ranges | default(omit) }}"
+    network: { selfLink: "{{ gcp_network.selfLink }}" }
+    project: "{{ lookup('env', 'GCP_PROJECT') }}"
+  loop: "{{ gcp_vpc_firewall_rules | default([]) }}"
+  register: gcp_firewall_rules
