@@ -1,0 +1,25 @@
+---
+- name: remove aws virtual gateway
+  community.aws.ec2_vpc_vgw:
+    name: "{{ aws_vpc_vgw.vgw.tags.Name }}"
+    region: "{{ aws_region }}"
+    state: absent
+
+- name: remove aws vpc subnet
+  amazon.aws.ec2_vpc_subnet:
+    vpc_id: "{{ item.subnet.vpc_id }}"
+    region: "{{ aws_region }}"
+    cidr: "{{ item.subnet.cidr_block }}"
+    state: absent
+  with_items: "{{ aws_vpc_subnets.results }}"
+
+- name: remove aws vpc
+  amazon.aws.ec2_vpc_net:
+    name: "{{ aws_vpc.vpc.tags.Name }}"
+    region: "{{ aws_region }}"
+    cidr_block: "{{ aws_vpc.vpc.cidr_block }}"
+    state: absent
+  register: result
+  delay: 30
+  until: result is not failed
+  retries: 10

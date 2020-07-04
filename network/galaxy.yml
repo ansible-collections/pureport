@@ -58,9 +58,10 @@ dependencies:
   pureport.fabric: ">=1.0.0"
   pureport.aws: ">=0.1.0"
   google.cloud: ">=0.0.9"
+  amazon.aws: ">=1.0.0"
   azure.azcollection: ">=0.1.3"
-  community.general: ">=0.2.0"
   community.aws: ">=1.0.0"
+  community.general: ">=0.2.0"
 
 
 # The URL of the originating SCM repository
