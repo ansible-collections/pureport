@@ -1,4 +1,7 @@
 ---
+- set_fact:
+    id: "{{ fabric | default('default') | hash('sha1') }}"
+
 - name: create pureport_region_map fact
   set_fact:
     pureport_region_map:
@@ -10,42 +13,36 @@
 
 - assert:
     that:
+      - gcp_region is defined
       - gcp_region in pureport_region_map.keys()
-    fail_msg: "invalid google cloud region"
+    fail_msg: "missing or invalid google cloud region"
     quiet: yes
 
 - assert:
     that:
+      - pureport_connection_speed is defined
       - pureport_connection_speed | int in [50, 100, 200, 300, 400, 500, 1000, 5000, 10000]
-    fail_msg: "invalid connection speed"
+    fail_msg: "missing or invalid value for `pureport_connection_speed`"
     quiet: yes
 
-- name: create google cloud network
-  google.cloud.gcp_compute_network:
-    name: "{{ gcp_network_name }}"
-    auto_create_subnetworks: "{{ gcp_network_auto_create_subnets }}"
-    routing_config: { routing_mode: "{{ gcp_network_routing_mode }}" }
-    project: "{{ lookup('env', 'GCP_PROJECT') }}"
-  register: gcp_network
+- block:
+    - assert:
+        that:
+          - gcp_network is defined
+          - "'selfLink' in gcp_network"
+        fail_msg: "missing required value for gcp_network"
+        quiet: yes
 
-- name: create google cloud subnetwork
-  google.cloud.gcp_compute_subnetwork:
-    name: "{{ gcp_subnetwork_name }}"
-    network: "{{ gcp_network }}"
-    region: "{{ gcp_region }}"
-    ip_cidr_range: "{{ gcp_subnetwork_cidr }}"
-    project: "{{ lookup('env', 'GCP_PROJECT') }}"
-  when:
-    - gcp_subnetwork_cidr is defined
-    - gcp_subnetwork_cidr != omit
-  register: gcp_subnetwork
+    - set_fact:
+        gcp_network_link: "{{ gcp_network.selfLink }}"
+  when: gcp_network_link is undefined
 
 - name: create google cloud router
   google.cloud.gcp_compute_router:
-    name: "{{ gcp_router_name }}-{{ item }}"
+    name: "router-{{ id[0:6] }}-{{ item }}"
     project: "{{ lookup('env', 'GCP_PROJECT') }}"
     region: "{{ gcp_region }}"
-    network: "{{ gcp_network }}"
+    network: { selfLink: "{{ gcp_network_link }}" }
     bgp:
       asn: 16550  # Must be 16550
   with_sequence: start=1 count=2
@@ -53,10 +50,10 @@
 
 - name: create google cloud interconnect attachments
   google.cloud.gcp_compute_interconnect_attachment:
-    name: "{{ gcp_interconnect_name }}-{{ index + 1 }}"
+    name: "vlan-{{ id[0:6] }}-{{ index + 1 }}"
     project: "{{ lookup('env', 'GCP_PROJECT') }}"
     region: "{{ gcp_region }}"
-    router: "{{ item }}"
+    router: { selfLink: "{{ item.selfLink }}" }
     type: PARTNER
     admin_enabled: true
     edge_availability_domain: "AVAILABILITY_DOMAIN_{{ index + 1 }}"
@@ -67,14 +64,17 @@
 
 - name: create pureport network
   pureport.fabric.network:
-    name: "{{ pureport_network_name }}"
+    name: "network-{{ id[0:6] }}"
     description: "{{ pureport_network_description | default(omit) }}"
     account_href: "/accounts/{{ lookup('env', 'PUREPORT_ACCOUNT_ID') }}"
   register: pureport_network
 
+- set_fact:
+    connection_id: "{{ gcp_attachments.results.0.id | hash('sha1') }}"
+
 - name: create connection from google cloud to pureport
   pureport.fabric.google_cloud_interconnect_connection:
-    name: "{{ pureport_connection_name }}"
+    name: "conn-{{ connection_id[0:6] }}"
     network_href: "{{ pureport_network.href }}"
     location_href: "{{ pureport_region_map[region] }}"
     speed: "{{ pureport_connection_speed }}"

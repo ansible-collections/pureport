@@ -20,7 +20,7 @@ This collection is designed for use with Ansible 2.9 or later.
 
 ## Roles
 
-* `pureport.network.google_cloud_interconnect` - [README](roles/google_cloud_interconnect/README.md)
+* `pureport.network.google_cloud_interconnect` 
 * `pureport.network.aws_direct_connect` - [README](roles/aws_direct_connect/README.md)
 * `pureport.network.azure_express_route` - [README](roles/azure_express_route/README.md)
 
