@@ -1,14 +1,14 @@
 ---
 - name: ensure aws virtual gateway does not exist
   ec2_vpc_vgw:
-    name: "{{ aws_virtual_gateway.vgw.tags.Name }}"
+    name: "{{ aws_vgw.vgw.tags.Name }}"
     region: "{{ aws_region }}"
     state: absent
   register: aws_vgw_result
   delay: 30
   until: aws_vgw_result is not failed
   retries: 10
-  when: aws_virtual_gateway != {}
+  when: aws_vgw != {}
 
 - name: ensure aws virtual interfaces do not exist
   aws_direct_connect_virtual_interface:
@@ -35,6 +35,8 @@
     direct_connect_gateway_id: "{{ aws_direct_connect_gateway.direct_connect_gateway_id }}"
     region: "{{ aws_region }}"
     state: absent
+
+# ec2_vpc_subnet:
 
 - name: ensure the aws vpc does not exist
   ec2_vpc_net:

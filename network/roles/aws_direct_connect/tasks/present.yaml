@@ -1,30 +1,9 @@
 ---
-- block:
-    - name: ensure the aws vpc exists
-      ec2_vpc_net:
-        name: "{{ aws_vpc_name }}"
-        region: "{{ aws_region }}"
-        cidr_block: "{{ aws_vpc_cidr_block }}"
-      register: aws_vpc
-
-    - name: ensure the aws virtual gateway exists
-      ec2_vpc_vgw:
-        name: "{{ aws_vgw_name }}"
-        region: "{{ aws_region }}"
-        vpc_id: "{{ aws_vpc.vpc.id }}"
-      register: aws_virtual_gateway
-  when: aws_manage_vpc | bool == True
-
-- name: ensure the aws direct connect gateway exists
-  aws_direct_connect_gateway:
-    name: "{{ aws_dcg_name }}"
-    region: "{{ aws_region }}"
-    amazon_asn: "64512"
-    virtual_gateway_id: "{{ aws_vgw.vgw.id | default(omit) }}"
-  register: aws_direct_connect_gateway
+- set_fact:
+    id: "{{ fabric | default('default') | hash('sha1') }}"
 
 - set_fact:
-    region_to_location:
+    pureport_location_map:
       us-west-1: "/locations/us-sjc"
       us-west-2: "/locations/us-sea"
       us-east-1: "/locations/us-wdc"
@@ -33,42 +12,67 @@
 - name: checking the value for pureport_connection_speed is valid
   assert:
     that:
-      - pureport_connection_speed in [50, 100, 200, 300, 400, 500, 1000, 2000, 5000, 10000]
-    fail_msg: "invalid connection speed"
+      - pureport_connection_speed | int in [50, 100, 200, 300, 400, 500, 1000, 2000, 5000, 10000]
+    fail_msg: "invalid speed for this connection type"
     quiet: yes
 
-- name: ensure the pureport network exists
+- assert:
+    that:
+      - aws_region.lower() in pureport_location_map.keys()
+    fail_msg: "invalid aws region"
+    quiet: yes
+
+- set_fact:
+    aws_vgw_id: "{{ aws_vgw.vgw.id }}"
+  when:
+    - aws_vgw_id is undefined
+    - aws_vgw is defined
+    - "'vgw' in aws_vgw"
+
+- name: create aws direct connect gateway
+  aws_direct_connect_gateway:
+    name: "dcg-{{ id[0:6] }}"
+    region: "{{ aws_region }}"
+    amazon_asn: "64512"
+    virtual_gateway_id: "{{ aws_vgw_id | default(omit) }}"
+  register: aws_direct_connect_gateway
+
+- name: create pureport network
   pureport.fabric.network:
-    name: "{{ pureport_network_name }}"
-    description: "{{ pureport_network_description }}"
+    name: "network-{{ id[0:6] }}"
+    description: "{{ pureport_network_description | default(omit) }}"
     account_href: "/accounts/{{ lookup('env', 'PUREPORT_ACCOUNT_ID') }}"
   register: pureport_network
 
-- name: ensure the aws connection to pureport exists
+- set_fact:
+    connection_id: "{{ aws_direct_connect_gateway.id | hash('sha1') }}"
+
+- name: create aws connection to pureport network
   pureport.fabric.aws_direct_connect_connection:
-    name: "{{ pureport_connection_name }}"
+    name: "conn-{{ connection_id[0:6] }}"
     network_href: "{{ pureport_network.href }}"
-    location_href: "{{ region_to_location[aws_region] }}"
+    location_href: "{{ pureport_location_map[aws_region] }}"
     speed: "{{ pureport_connection_speed }}"
     high_availability: true
     billing_term: HOURLY
     aws_account_id: "{{ lookup('env', 'AWS_ACCOUNT_ID') }}"
     aws_region: "{{ aws_region }}"
-    wait_for_server: true
+    wait_for_server: "{{ pureport_connection_wait_for_server | default(omit) }}"
   register: pureport_connection
 
 - name: set value for 'pureport_gateways' fact
   set_fact:
     pureport_gateways: "{{ [pureport_connection.primary_gateway, pureport_connection.secondary_gateway] | select('defined') | list }}"
 
-- pureport.aws.direct_connect_confirm_connection:
+- name: confirm aws direct connect connections
+  pureport.aws.direct_connect_confirm_connection:
     connection_id: "{{ item.remote_id }}"
     region: "{{ aws_region }}"
   loop: "{{ pureport_gateways }}"
 
-- name: ensure the aws direct connect virtual interfaces exist
+- name: create aws direct connect virtual interfaces
   pureport.aws.direct_connect_virtual_interface:
-    name: "{{ aws_vif_name }}-{{ index + 1 }}"
+    name: "vif-{{ aws_vif_name }}-{{ index + 1 }}"
     region: "{{ aws_region }}"
     direct_connect_gateway_id: "{{ aws_direct_connect_gateway.direct_connect_gateway_id }}"
     id_to_associate: "{{ item.remote_id }}"
